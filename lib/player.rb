@@ -1,4 +1,4 @@
-require '../board/lib/board'
+require './lib/board'
 
 class Player
 

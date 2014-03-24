@@ -1,4 +1,4 @@
-require '../board/lib/board'
+require './lib/board'
 
 class Ai
 
@@ -8,7 +8,14 @@ class Ai
   end
 
   def ai_make_move(value)
+    until @board.sample == 0
+    end
+    random_move =
     @board.fill_cell(value, @ai_sign)
+  end
+
+  def random_move
+    @board
   end
 
 end

@@ -7,6 +7,7 @@ class Board
   def fill_cell(value, sign)
     @cells[value - 1] = sign
     display_board
+    @cells
   end
 
   def display_board
