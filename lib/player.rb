@@ -4,7 +4,7 @@ class Player
 
   def initialize(board)
     @board = board
-    @player_sign = 1
+    @player_sign = -1
   end
 
   def player_make_move(value)

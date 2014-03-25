@@ -5,7 +5,7 @@ require './player/lib/player'
 board = Board.new
 player = Player.new
 
-game = Game.new()
+game = Game.new(board, player)
 
 game.run
 

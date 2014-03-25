@@ -2,20 +2,19 @@ require './lib/board'
 
 class Ai
 
-  def initialize(board)
-    @board = board
-    @ai_sign = -1
+  def initialize(cells)
+    @cells = cells
+    @ai_sign = 1
   end
 
-  def ai_make_move(value)
-    until @board.sample == 0
+  def find_move
+    empty_spots = []
+    @cells.each_with_index do |value, index|
+      if value == 0
+        empty_spots << index
+      end
     end
-    random_move =
-    @board.fill_cell(value, @ai_sign)
-  end
-
-  def random_move
-    @board
+    empty_spots.sample + 1
   end
 
 end

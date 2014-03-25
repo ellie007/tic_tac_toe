@@ -1,15 +1,17 @@
 require './lib/board'
-
 require './lib/ai'
+
 
 describe Ai do
 
   let(:board) { Board.new }
 
-  let(:ai) { Ai.new(board) }
+  let(:ai) { Ai.new(board.cells) }
 
-  it "should send the board a move and record it" do
-    ai.ai_make_move(2).should == [0,-1,0,0,0,0,0,0,0]
+
+  it "find a random move" do
+    move = ai.find_move
+    expect([1,2,3,4,5,6,7,8,9].include?(move)).to eq(true)
   end
 
 end
