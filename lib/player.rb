@@ -5,10 +5,10 @@ class Player
   attr_accessor :player_sign
 
   def initialize
-    @player_sign = -1
+    @player_sign = "X"
   end
 
-  def make_move
+  def receive_move_input
     user_value = gets.chomp.to_i
   end
 

@@ -8,8 +8,4 @@ describe Player do
 
   let(:player) { Player.new }
 
-  xit "sends a player move to the board and record" do
-    player.player_make_move(8).should == [0,0,0,0,0,0,0,-1,0]
-  end
-
 end

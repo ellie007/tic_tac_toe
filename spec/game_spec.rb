@@ -15,8 +15,6 @@ describe Game do
   end
 
   it "the ai wins the game with a row" do
-    # make board with three O's in a row
-    # make sure that ai is the winner
     board.fill_cell(1, ai.ai_sign)
     board.fill_cell(2, ai.ai_sign)
     board.fill_cell(3, ai.ai_sign)

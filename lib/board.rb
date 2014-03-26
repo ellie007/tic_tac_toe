@@ -3,22 +3,22 @@ class Board
   attr_accessor :cells
 
   def initialize
-    @cells = Array.new(9) {0}
+    @cells = Array.new(9,"   ")
   end
 
-  def fill_cell(value, sign)
-    @cells[value - 1] = sign
+  def fill_cell(value, token)
+    @cells[value - 1] = token
     @cells
   end
 
   def display_board
     line_counter = 0
     @cells.each_with_index do |element, index|
-      if element == 1
-        print " O "
-        line_counter += 1
-      elsif element == -1
+      if element == "X"
         print " X "
+        line_counter += 1
+      elsif element == " O "
+        print " O "
         line_counter += 1
       else
         print " #{index + 1} "

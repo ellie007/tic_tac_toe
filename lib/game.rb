@@ -1,6 +1,6 @@
 class Game
 
-  WELCOME = "Welcome to the Tic Tac Toe"
+  WELCOME = "Welcome to the Tic Tac Toe\n"
   USER_TURN  = "Your Turn: "
   AI_TURN = "Watson's Turn: "
 
@@ -19,19 +19,17 @@ class Game
   end
 
   def human_move
-    puts USER_TURN
-    move = @player.make_move
+    print USER_TURN
+    move = @player.receive_move_input
     @board.fill_cell(move, @player.player_sign)
-    #win?
     @board.display_board
     ais_move
   end
 
   def ais_move
-    puts AI_TURN
     rand_move = @ai.find_move
+    puts AI_TURN + "#{ rand_move}"
     @board.fill_cell(rand_move, @ai.ai_sign)
-    #win?
     @board.display_board
     human_move
   end
