@@ -2,6 +2,8 @@ require './lib/board'
 
 class Ai
 
+  attr_accessor :ai_sign
+
   def initialize(cells)
     @cells = cells
     @ai_sign = 1
@@ -15,6 +17,10 @@ class Ai
       end
     end
     empty_spots.sample + 1
+  end
+
+  def win
+
   end
 
 end

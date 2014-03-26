@@ -11,7 +11,7 @@ describe Board do
     board.fill_cell(1,1).should == [1, 0, 0, 0, 0, 0, 0, 0, 0]
   end
 
-  it "prints the display board" do
+  xit "prints the display board" do
     board.fill_cell(2,-1)
     board.fill_cell(5,1)
     board.display_board.should == [0, -1, 0, 0, 1, 0, 0, 0, 0]
