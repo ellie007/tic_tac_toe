@@ -21,15 +21,19 @@ class Game
   def human_move
     print USER_TURN
     move = @player.receive_move_input
+    valid_input(move)
+    valid_cell(move)
     @board.fill_cell(move, @player.player_sign)
+    winner
     @board.display_board
     ais_move
   end
 
   def ais_move
     rand_move = @ai.find_move
-    puts AI_TURN + "#{ rand_move}"
+    puts AI_TURN + "#{rand_move}"
     @board.fill_cell(rand_move, @ai.ai_sign)
+    winner
     @board.display_board
     human_move
   end
@@ -52,11 +56,29 @@ class Game
     end
 
     if @sum == 3
-      return @ai.ai_sign
+      return @ai.ai_sign && exit
     elsif @sum == -3
-      return @player.player_sign
+      return @player.player_sign && exit
     else
       return nil
+    end
+  end
+
+  def valid_input(move)
+    valid_move = [1,2,3,4,5,6,7,8,9]
+    if !valid_move.include?(move)
+      puts "Please enter a valid input.  Only values 1 to 9."
+      human_move
+    end
+  end
+
+  def valid_cell(move)
+    if @board.cells[move - 1] == "   "
+      return true
+    else
+      puts "That spot is already taken.  Please choose an empty spot."
+      @board.display_board
+      human_move
     end
   end
 

@@ -14,7 +14,7 @@ class Board
   def display_board
     line_counter = 0
     @cells.each_with_index do |element, index|
-      if element == "X"
+      if element == " X "
         print " X "
         line_counter += 1
       elsif element == " O "
