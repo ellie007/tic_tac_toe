@@ -10,7 +10,6 @@ class Player
 
   def receive_move_input
     user_value = gets.chomp.to_i
-
   end
 
 end

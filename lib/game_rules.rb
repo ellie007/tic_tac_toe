@@ -26,5 +26,21 @@ class GameRules
     end
   end
 
+   def valid_input(move)
+    valid_move = [1,2,3,4,5,6,7,8,9]
+    if !valid_move.include?(move)
+      puts "Please enter a valid input.  Only values 1 to 9."
+      human_move
+    end
+  end
+
+  def valid_cell(move)
+    if @board.cells[move - 1] == " X " || @board.cells[move -1] == " O "
+      puts "That spot is already taken.  Please choose an empty spot."
+      @board.display_board
+      human_move
+    end
+  end
+
 end
 

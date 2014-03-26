@@ -56,8 +56,12 @@ class Game
     end
 
     if @sum == 3
+      puts "Watson Wins!"
+      @board.display_board
       return @ai.ai_sign && exit
     elsif @sum == -3
+      puts "You Win!"
+      @board.display_board
       return @player.player_sign && exit
     else
       return nil
@@ -73,9 +77,7 @@ class Game
   end
 
   def valid_cell(move)
-    if @board.cells[move - 1] == "   "
-      return true
-    else
+    if @board.cells[move - 1] == " X " || @board.cells[move -1] == " O "
       puts "That spot is already taken.  Please choose an empty spot."
       @board.display_board
       human_move

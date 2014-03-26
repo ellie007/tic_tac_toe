@@ -1,8 +1,9 @@
-class CommandLine
+class CommandLineInterface
 
   WELCOME = "Welcome to the Tic Tac Toe\n"
   USER_TURN  = "Your Turn: "
   AI_TURN = "Watson's Turn: "
+
 
   def display_board
     line_counter = 0
