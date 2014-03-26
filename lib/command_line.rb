@@ -1,15 +1,8 @@
-class Board
+class CommandLine
 
-  attr_accessor :cells
-
-  def initialize
-    @cells = Array.new(9, "   ")
-  end
-
-  def fill_cell(value, token)
-    @cells[value - 1] = token
-    @cells
-  end
+  WELCOME = "Welcome to the Tic Tac Toe\n"
+  USER_TURN  = "Your Turn: "
+  AI_TURN = "Watson's Turn: "
 
   def display_board
     line_counter = 0
@@ -33,7 +26,3 @@ class Board
   end
 
 end
-
-
-
-

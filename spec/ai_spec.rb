@@ -4,6 +4,7 @@ require './lib/ai'
 
 describe Ai do
 
+  let(:board) { Board.new }
   let(:ai) { Ai.new(board.cells) }
 
 
