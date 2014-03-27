@@ -46,7 +46,7 @@ class Game
     win_possibilities.each do |set|
       @sum = 0
       set.each do |cell|
-        if board.cells[cell] == @player.token
+        if board.cells[cell] == @ai.token
           @sum += 1
         elsif board.cells[cell] == @player.token
           @sum -= 1
@@ -60,7 +60,7 @@ class Game
       return @ai.token
     elsif @sum == -3
       puts "You Win!"
-      return @player.token && exit
+      return @player.token
     else
       return nil
     end
