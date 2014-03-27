@@ -4,7 +4,6 @@ class CommandLineInterface
   USER_TURN  = "Your Turn: "
   AI_TURN = "Watson's Turn: "
 
-
   def display_board
     line_counter = 0
     @cells.each_with_index do |element, index|

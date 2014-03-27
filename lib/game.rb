@@ -23,8 +23,8 @@ class Game
     move = @player.receive_move_input
     valid_input(move)
     valid_cell(move)
-    @board.fill_cell(move, @player.player_sign)
-    winner
+    @board.fill_cell(move, @player.token)
+    winner && winner_exit
     @board.display_board
     ais_move
   end
@@ -32,8 +32,8 @@ class Game
   def ais_move
     rand_move = @ai.find_move
     puts AI_TURN + "#{rand_move}"
-    @board.fill_cell(rand_move, @ai.ai_sign)
-    winner
+    @board.fill_cell(rand_move, @ai.token)
+    winner && winner_exit
     @board.display_board
     human_move
   end
@@ -46,9 +46,9 @@ class Game
     win_possibilities.each do |set|
       @sum = 0
       set.each do |cell|
-        if board.cells[cell] == " O "
+        if board.cells[cell] == @player.token
           @sum += 1
-        elsif board.cells[cell] == " X "
+        elsif board.cells[cell] == @player.token
           @sum -= 1
         end
       end
@@ -57,15 +57,18 @@ class Game
 
     if @sum == 3
       puts "Watson Wins!"
-      @board.display_board
-      return @ai.ai_sign && exit
+      return @ai.token
     elsif @sum == -3
       puts "You Win!"
-      @board.display_board
-      return @player.player_sign && exit
+      return @player.token && exit
     else
       return nil
     end
+  end
+
+  def winner_exit
+    @board.display_board
+    exit if winner == @ai.token || winner == @player.token
   end
 
   def valid_input(move)
@@ -77,7 +80,7 @@ class Game
   end
 
   def valid_cell(move)
-    if @board.cells[move - 1] == " X " || @board.cells[move -1] == " O "
+    if @board.cells[move - 1] == @player.token || @board.cells[move -1] == @ai.token
       puts "That spot is already taken.  Please choose an empty spot."
       @board.display_board
       human_move

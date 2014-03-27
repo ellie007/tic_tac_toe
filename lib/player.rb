@@ -2,10 +2,10 @@ require './lib/board'
 
 class Player
 
-  attr_accessor :player_sign
+  attr_accessor :token
 
   def initialize
-    @player_sign = " X "
+    @token = " X "
   end
 
   def receive_move_input

@@ -2,11 +2,11 @@ require './lib/board'
 
 class Ai
 
-  attr_accessor :ai_sign
+  attr_accessor :token
 
   def initialize(cells)
     @cells = cells
-    @ai_sign = " O "
+    @token = " O "
   end
 
   def find_move
@@ -18,6 +18,5 @@ class Ai
     end
     empty_spots.sample + 1
   end
-
 
 end
