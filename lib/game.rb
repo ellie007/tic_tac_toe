@@ -2,6 +2,11 @@ class Game
 
   attr_accessor :board, :winner
 
+  WIN_POSSIBILITIES =
+    [[0,1,2], [3,4,5], [6,7,8],
+     [0,3,6], [1,4,7], [2,5,8],
+     [0,4,8], [2,4,6]]
+
   def initialize(board, ai, player)
     @board = board
     @ai = ai
@@ -17,33 +22,26 @@ class Game
     @board.fill_cell(rand_move, @ai.token)
   end
 
-  def winner
-    win_possibilities =
-    [[0,1,2], [3,4,5], [6,7,8],
-    [0,3,6], [1,4,7], [2,5,8],
-    [0,4,8],[2,4,6]]
+  def calculate_sum(cell)
+     @sum += 1 if cell == @ai.token
+     @sum -= 1 if cell == @player.token
+  end
 
-    win_possibilities.each do |set|
+  def set_winner
+    @winner = @ai.token if @sum == 3
+    @winner = @player.token if @sum == -3
+    @winner
+  end
+
+  def is_winner
+    WIN_POSSIBILITIES.each do |set|
       @sum = 0
       set.each do |cell|
-        if @board.cells[cell] == @ai.token
-          @sum += 1
-        elsif @board.cells[cell] == @player.token
-          @sum -= 1
-        end
+        calculate_sum(@board.cells[cell])
       end
       break if @sum == 3 || @sum == -3
     end
-
-    if @sum == 3
-      @winner = @ai.token
-      return @winner
-    elsif @sum == -3
-      @winner = @player.token
-      return @winner
-    else
-      return nil
-    end
+    set_winner
   end
 
   def valid_input?(move)

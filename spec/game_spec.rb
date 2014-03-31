@@ -1,5 +1,7 @@
 require 'game'
 require 'board'
+require 'ai'
+require 'player'
 
 describe Game do
 
@@ -19,7 +21,7 @@ describe Game do
 
   context "game winner determination" do
     it "has no winner at the beginning of the game" do
-      game.winner.should == nil
+      game.is_winner.should == nil
     end
 
     it "the ai wins the game with a diagonal" do
@@ -27,21 +29,21 @@ describe Game do
       board.fill_cell(5, ai.token)
       board.fill_cell(9, ai.token)
 
-      game.winner.should == ai.token
+      game.is_winner.should == ai.token
     end
     it "the ai wins the game with a row" do
       board.fill_cell(1, ai.token)
       board.fill_cell(2, ai.token)
       board.fill_cell(3, ai.token)
 
-      game.winner.should == ai.token
+      game.is_winner.should == ai.token
     end
     it "the ai wins the game with a column" do
       board.fill_cell(1, ai.token)
       board.fill_cell(4, ai.token)
       board.fill_cell(7, ai.token)
 
-      game.winner.should == ai.token
+      game.is_winner.should == ai.token
     end
 
     it "the player wins the game with a diagonal" do
@@ -49,21 +51,21 @@ describe Game do
       board.fill_cell(5, player.token)
       board.fill_cell(9, player.token)
 
-      game.winner.should == player.token
+      game.is_winner.should == player.token
     end
     it "the player wins the game with a row" do
       board.fill_cell(1, player.token)
       board.fill_cell(2, player.token)
       board.fill_cell(3, player.token)
 
-      game.winner.should == player.token
+      game.is_winner.should == player.token
     end
     it "the player wins the game with a column" do
       board.fill_cell(1, player.token)
       board.fill_cell(4, player.token)
       board.fill_cell(7, player.token)
 
-      game.winner.should == player.token
+      game.is_winner.should == player.token
     end
   end
 

@@ -10,13 +10,11 @@ class Ai
   end
 
   def find_move
-    empty_spots = []
+    available_cells = []
     @cells.each_with_index do |value, index|
-      if value == "   "
-        empty_spots << index
-      end
+      available_cells << index if value == "   "
     end
-    empty_spots.sample + 1
+    available_cells.sample + 1
   end
 
 end

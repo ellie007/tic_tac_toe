@@ -9,7 +9,6 @@ class CommandLine
   INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to 9."
   INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
 
-
   def initialize(game, cells, ai, player)
     @game = game
     @cells = cells
@@ -17,24 +16,21 @@ class CommandLine
     @player = player
   end
 
+  def display_board_element(element, index)
+    if element != "   "
+      print element
+    else
+      print " #{index + 1} "
+    end
+  end
+
   def display_board
     line_counter = 0
     @cells.each_with_index do |element, index|
-      if element == @player.token
-        print @player.token
-        line_counter += 1
-      elsif element == @ai.token
-        print @ai.token
-        line_counter += 1
-      else
-        print " #{index + 1} "
-        line_counter += 1
-      end
-      if line_counter % 3 == 0
-        print "\n"
-      end
+      display_board_element(element, index)
+      line_counter += 1
+      print "\n" if line_counter % 3 == 0
     end
-    return @cells
   end
 
   def player_move_input
@@ -42,11 +38,9 @@ class CommandLine
   end
 
   def winner_display
-    if @game.winner == @ai.token
-      puts "Watson Won!"
-    elsif @game.winner == @player.token
-      puts "You Won!"
-    end
+    winner = @game.winner
+    puts "Watson Won!" if winner == @ai.token
+    puts "You Won!" if winner == @player.token
   end
 
 end

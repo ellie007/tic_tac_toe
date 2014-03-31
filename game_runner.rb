@@ -13,7 +13,7 @@ cl = CommandLine.new(game, board.cells, ai, player)
 puts CommandLine::WELCOME
 cl.display_board
 
-while !game.winner do
+while !game.is_winner do
   print "\n"
   print CommandLine::USER_TURN
   player_move = cl.player_move_input
@@ -29,13 +29,12 @@ while !game.winner do
   end
   game.human_turn(player_move)
   cl.display_board
-  break if game.winner
+  break if game.is_winner
 
   ai_move = ai.find_move
   puts CommandLine::AI_TURN + "#{ai_move}"
   game.ai_turn(ai_move)
   cl.display_board
-  game.winner
 end
 
 cl.winner_display
