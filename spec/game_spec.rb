@@ -8,6 +8,13 @@ describe Game do
   let(:player) { Player.new }
   let(:game)  { Game.new(board, ai, player) }
 
+  it "makes a move for a human" do
+    game.human_turn(1).should == [" X ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "]
+  end
+  it "makes a move for ai" do
+    game.ai_turn(2).should == ["   ", " O ", "   ", "   ", "   ", "   ", "   ", "   ", "   "]
+  end
+
   it "has no winner at the beginning of the game" do
     game.winner.should == nil
   end
@@ -34,7 +41,6 @@ describe Game do
     game.winner.should == ai.token
   end
 
-
   it "the player wins the game with a diagonal" do
     board.fill_cell(1, player.token)
     board.fill_cell(5, player.token)
@@ -56,6 +62,18 @@ describe Game do
 
     game.winner.should == player.token
   end
+
+  it "should return a false value for an invalid input type" do
+    game.valid_input?('123').should == false
+  end
+  it "should not allow the player to place in a taken cell" do
+    board.fill_cell(5, player.token)
+    game.valid_cell?(5).should == true
+  end
+  it "should allow the player to place in an empty cell" do
+    game.valid_cell?(5).should == false
+  end
+
 end
 
 

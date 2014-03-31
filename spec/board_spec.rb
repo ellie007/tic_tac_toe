@@ -9,7 +9,7 @@ describe Board do
   it "places a move for the player on the board" do
     board.fill_cell(4, player.token).should == ["   ","   ","   "," X ","   ","   ","   ","   ","   "]
   end
-  it "places a move for the computer on the board" do
+  it "places a move for the ai on the board" do
     board.fill_cell(1, ai.token).should == [" O ","   ","   ","   ","   ","   ","   ","   ","   "]
   end
 
