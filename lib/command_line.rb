@@ -10,11 +10,11 @@ class CommandLine
   INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
 
 
-  def initialize(cells, ai, player, game_rules)
+  def initialize(game, cells, ai, player)
+    @game = game
     @cells = cells
     @ai = ai
     @player = player
-    @game_rules = game_rules
   end
 
   def display_board
@@ -42,9 +42,9 @@ class CommandLine
   end
 
   def winner_display
-    if @game_rules.winner == @ai.token
+    if @game.winner == @ai.token
       puts "Watson Won!"
-    elsif @game_rules.winner == @player.token
+    elsif @game.winner == @player.token
       puts "You Won!"
     end
   end

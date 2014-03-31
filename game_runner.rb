@@ -7,8 +7,8 @@ require './lib/command_line'
 board = Board.new
 ai = Ai.new(board.cells)
 player = Player.new
-cl = CommandLine.new(board.cells, ai, player)
 game = Game.new(board, ai, player)
+cl = CommandLine.new(game, board.cells, ai, player)
 
 puts CommandLine::WELCOME
 cl.display_board
@@ -35,8 +35,8 @@ while !game.winner do
   puts CommandLine::AI_TURN + "#{ai_move}"
   game.ai_turn(ai_move)
   cl.display_board
-  game_rules.winner
+  game.winner
 end
 
-game.winner_display
+cl.winner_display
 

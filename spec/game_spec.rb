@@ -8,7 +8,7 @@ describe Game do
   let(:player) { Player.new }
   let(:game)  { Game.new(board, ai, player) }
 
-  context "placement of moves on the board"
+  context "placement of moves on the board" do
     it "makes a move for a human" do
       game.human_turn(1).should == [" X ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "]
     end
