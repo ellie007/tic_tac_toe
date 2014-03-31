@@ -1,25 +1,30 @@
-require './ai'
-require './player'
+require './lib/ai'
+require './lib/player'
 
-class CommandLineInterface
+class CommandLine
 
-  WELCOME = "Welcome to the Tic Tac Toe\n"
+  WELCOME = "Welcome to Tic Tac Toe"
   USER_TURN  = "Your Turn: "
   AI_TURN = "Watson's Turn: "
+  INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to 9."
+  INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
 
-  def initialize(ai, player)
+
+  def initialize(cells, ai, player, game_rules)
+    @cells = cells
     @ai = ai
     @player = player
+    @game_rules = game_rules
   end
 
   def display_board
     line_counter = 0
     @cells.each_with_index do |element, index|
-      if element == @ai.token
-        print @ai.token
-        line_counter += 1
-      elsif element == @player.token
+      if element == @player.token
         print @player.token
+        line_counter += 1
+      elsif element == @ai.token
+        print @ai.token
         line_counter += 1
       else
         print " #{index + 1} "
@@ -29,8 +34,19 @@ class CommandLineInterface
         print "\n"
       end
     end
-    print "\n"
     return @cells
+  end
+
+  def player_move_input
+    user_value = gets.chomp.to_i
+  end
+
+  def winner_display
+    if @game_rules.winner == @ai.token
+      puts "Watson Won!"
+    elsif @game_rules.winner == @player.token
+      puts "You Won!"
+    end
   end
 
 end
