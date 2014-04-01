@@ -30,6 +30,10 @@ while !game.is_winner do
   game.human_turn(player_move)
   cl.display_board
   break if game.is_winner
+  if game.is_tie?
+    puts CommandLine::TIE
+    break
+  end
 
   ai_move = ai.find_move
   puts CommandLine::AI_TURN + "#{ai_move}"

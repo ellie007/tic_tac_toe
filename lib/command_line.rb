@@ -8,6 +8,9 @@ class CommandLine
   AI_TURN = "Watson's Turn: "
   INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to 9."
   INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
+  TIE = "It is a tie game."
+  WATSON_WON = "Watson Won!"
+  YOU_WON = "You Won!"
 
   def initialize(game, cells, ai, player)
     @game = game
@@ -39,8 +42,8 @@ class CommandLine
 
   def winner_display
     winner = @game.winner
-    puts "Watson Won!" if winner == @ai.token
-    puts "You Won!" if winner == @player.token
+    puts WATSON_WON if winner == @ai.token
+    puts YOU_WON if winner == @player.token
   end
 
 end

@@ -44,6 +44,10 @@ class Game
     set_winner
   end
 
+  def is_tie?
+    @board.cells.select { |cell| cell == "   " }.empty? if @winner == nil
+  end
+
   def valid_input?(move)
     valid_move = [1,2,3,4,5,6,7,8,9]
     valid_move.include?(move)

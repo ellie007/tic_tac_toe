@@ -67,10 +67,24 @@ describe Game do
 
       game.is_winner.should == player.token
     end
+
+    it "is a tie game" do
+      board.fill_cell(1, player.token)
+      board.fill_cell(2, player.token)
+      board.fill_cell(3, ai.token)
+      board.fill_cell(4, ai.token)
+      board.fill_cell(5, ai.token)
+      board.fill_cell(6, player.token)
+      board.fill_cell(7, player.token)
+      board.fill_cell(8, ai.token)
+      board.fill_cell(9, player.token)
+
+      game.is_tie?.should == true
+    end
   end
 
   context "player input validation" do
-    it "should return a false value for an invalid input type" do
+    xit "should return a false value for an invalid input type" do
       game.valid_input?('123').should == false
     end
     it "should not allow the player to place in a taken cell" do
