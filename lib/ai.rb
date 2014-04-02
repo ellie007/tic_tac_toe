@@ -1,4 +1,4 @@
-require './lib/board'
+# require './lib/board'
 
 class Ai
 

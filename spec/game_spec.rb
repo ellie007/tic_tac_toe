@@ -8,12 +8,13 @@ describe Game do
   let(:board) { Board.new }
   let(:ai)    { Ai.new(board.cells) }
   let(:player) { Player.new }
-  let(:game)  { Game.new(board, ai, player) }
+  let(:game)  { Game.new(board, ai, player, {}) }
 
   context "placement of moves on the board" do
     it "makes a move for a human" do
       game.human_turn(1).should == [" X ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "]
     end
+
     it "makes a move for ai" do
       game.ai_turn(2).should == ["   ", " O ", "   ", "   ", "   ", "   ", "   ", "   ", "   "]
     end
@@ -84,15 +85,15 @@ describe Game do
   end
 
   context "player input validation" do
-    xit "should return a false value for an invalid input type" do
+    it "should return a false value for an invalid input type" do
       game.valid_input?('123').should == false
     end
     it "should not allow the player to place in a taken cell" do
       board.fill_cell(5, player.token)
-      game.valid_cell?(5).should == true
+      game.valid_cell?(5).should == false
     end
     it "should allow the player to place in an empty cell" do
-      game.valid_cell?(5).should == false
+      game.valid_cell?(5).should == true
     end
   end
 
