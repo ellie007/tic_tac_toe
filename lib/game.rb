@@ -27,6 +27,10 @@ class Game
   def run
     @io.output_message WELCOME
     @io.display_board
+    game_loop
+  end
+
+  def game_loop
     until game_over do
       human_turn
       @io.display_board
@@ -84,9 +88,11 @@ class Game
   def valid_move_check(move)
     if !valid_input?(move)
       @io.output_message INVALID_INPUT
+      @io.display_board
       false
     elsif !valid_cell?(move)
       @io.output_message INVALID_CELL
+      @io.display_board
       false
     else
       true
