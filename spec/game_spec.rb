@@ -10,16 +10,6 @@ describe Game do
   let(:player) { Player.new }
   let(:game)  { Game.new(board, ai, player, {}) }
 
-  context "place move on the board:" do
-    it "makes a move for a human" do
-      game.human_turn(1).should == [" X ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "]
-    end
-
-    it "makes a move for ai" do
-      game.ai_turn(2).should == ["   ", " O ", "   ", "   ", "   ", "   ", "   ", "   ", "   "]
-    end
-  end
-
   context "game winner determination:" do
     it "has no winner at the beginning of the game" do
       game.is_winner.should == nil
