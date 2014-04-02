@@ -1,6 +1,3 @@
-# require './lib/ai'
-# require './lib/player'
-
 class CommandLine
 
   def initialize(cells, ai, player)

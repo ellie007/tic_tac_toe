@@ -1,5 +1,3 @@
-# require './lib/board'
-
 class Ai
 
   attr_accessor :token

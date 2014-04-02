@@ -12,14 +12,3 @@ game = Game.new(board, ai, player, cl)
 
 game.run
 
-# cl.welcome
-
-# while !game.is_winner || game.is_tie? do
-#   cl.player_turn
-#   break if game.is_winner || game.is_tie?
-#   cl.ai_turn
-# end
-
-# cl.winner_display
-
-#

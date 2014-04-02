@@ -1,5 +1,3 @@
-# require './lib/board'
-
 class Player
 
   attr_accessor :token
