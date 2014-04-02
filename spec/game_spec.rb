@@ -10,7 +10,7 @@ describe Game do
   let(:player) { Player.new }
   let(:game)  { Game.new(board, ai, player, {}) }
 
-  context "placement of moves on the board" do
+  context "place move on the board:" do
     it "makes a move for a human" do
       game.human_turn(1).should == [" X ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "]
     end
@@ -20,26 +20,26 @@ describe Game do
     end
   end
 
-  context "game winner determination" do
+  context "game winner determination:" do
     it "has no winner at the beginning of the game" do
       game.is_winner.should == nil
     end
 
-    it "the ai wins the game with a diagonal" do
+    it "ai wins the game with a diagonal" do
       board.fill_cell(1, ai.token)
       board.fill_cell(5, ai.token)
       board.fill_cell(9, ai.token)
 
       game.is_winner.should == ai.token
     end
-    it "the ai wins the game with a row" do
+    it "ai wins the game with a row" do
       board.fill_cell(1, ai.token)
       board.fill_cell(2, ai.token)
       board.fill_cell(3, ai.token)
 
       game.is_winner.should == ai.token
     end
-    it "the ai wins the game with a column" do
+    it "ai wins the game with a column" do
       board.fill_cell(1, ai.token)
       board.fill_cell(4, ai.token)
       board.fill_cell(7, ai.token)
@@ -47,21 +47,21 @@ describe Game do
       game.is_winner.should == ai.token
     end
 
-    it "the player wins the game with a diagonal" do
+    it "player wins the game with a diagonal" do
       board.fill_cell(1, player.token)
       board.fill_cell(5, player.token)
       board.fill_cell(9, player.token)
 
       game.is_winner.should == player.token
     end
-    it "the player wins the game with a row" do
+    it "player wins the game with a row" do
       board.fill_cell(1, player.token)
       board.fill_cell(2, player.token)
       board.fill_cell(3, player.token)
 
       game.is_winner.should == player.token
     end
-    it "the player wins the game with a column" do
+    it "player wins the game with a column" do
       board.fill_cell(1, player.token)
       board.fill_cell(4, player.token)
       board.fill_cell(7, player.token)

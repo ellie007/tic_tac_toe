@@ -1,7 +1,7 @@
 class Game
 
   WELCOME = "Welcome to Tic Tac Toe\n"
-  USER_TURN  = "Your Turn: "
+  USER_TURN  = "\nYour Turn: "
   AI_TURN = "Watson's Turn: "
   INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to 9.\n"
   INVALID_CELL = "That spot is already taken.  Please choose an empty spot.\n"
@@ -27,29 +27,31 @@ class Game
   def run
     @io.output_message WELCOME
     @io.display_board
-    until @winner || is_tie? do
-      player_turn
-      ai_turn unless @winner || is_tie?
+    until game_over do
+      human_turn
+      @io.display_board
+      is_winner
+
+      break if game_over
+
+      ai_turn
+      @io.display_board
+      is_winner
     end
     winner_display
   end
 
-  def player_turn
-    print"\n"
+  def human_turn
     @io.output_message USER_TURN
     move = @io.player_input
     valid_move_check(move)
     @board.fill_cell(move, @player.token)
-    is_winner
-    @io.display_board
   end
 
   def ai_turn
     move = @ai.find_move
     @io.output_message AI_TURN + "#{move}\n"
     @board.fill_cell(move, @ai.token)
-    is_winner
-    @io.display_board
   end
 
   def calculate_sum(cell)
@@ -60,6 +62,7 @@ class Game
   def set_winner
     @winner = @ai.token if @sum == 3
     @winner = @player.token if @sum == -3
+    @winner
   end
 
   def is_winner
@@ -80,10 +83,10 @@ class Game
   def valid_move_check(move)
     if !valid_input?(move)
       @io.output_message INVALID_INPUT
-      player_turn
+      human_turn
     elsif !valid_cell?(move)
       @io.output_message INVALID_CELL
-      player_turn
+      human_turn
     end
   end
 
@@ -93,6 +96,10 @@ class Game
 
   def valid_cell?(move)
     @board.cells[move - 1] == "   "
+  end
+
+  def game_over
+    @winner!= nil || is_tie?
   end
 
   def winner_display
