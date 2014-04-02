@@ -31,9 +31,7 @@ class Game
       human_turn
       @io.display_board
       is_winner
-
       break if game_over
-
       ai_turn
       @io.display_board
       is_winner
@@ -44,8 +42,11 @@ class Game
   def human_turn
     @io.output_message USER_TURN
     move = @io.player_input
-    valid_move_check(move)
-    @board.fill_cell(move, @player.token)
+    if valid_move_check(move)
+      @board.fill_cell(move, @player.token)
+    else
+      human_turn
+    end
   end
 
   def ai_turn
@@ -83,10 +84,12 @@ class Game
   def valid_move_check(move)
     if !valid_input?(move)
       @io.output_message INVALID_INPUT
-      human_turn
+      false
     elsif !valid_cell?(move)
       @io.output_message INVALID_CELL
-      human_turn
+      false
+    else
+      true
     end
   end
 
