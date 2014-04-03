@@ -114,7 +114,7 @@ describe Game do
     end
   end
 
-  context "determines the game is over or not" do
+  context "determines whether the game is over or not" do
     it "game over is true with tie game" do
       board.fill_cell(1, player.token)
       board.fill_cell(2, player.token)

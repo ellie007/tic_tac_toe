@@ -1,13 +1,13 @@
 class Game
 
-  WELCOME = "Welcome to Tic Tac Toe\n"
-  USER_TURN  = "\nYour Turn: "
+  WELCOME = "Welcome to Tic Tac Toe"
+  USER_TURN  = "Your Turn: "
   AI_TURN = "Watson's Turn: "
-  INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to 9.\n"
-  INVALID_CELL = "That spot is already taken.  Please choose an empty spot.\n"
-  TIE = "It is a tie game.\n"
-  WATSON_WON = "Watson Won!\n"
-  YOU_WON = "You Won!\n"
+  INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to 9."
+  INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
+  TIE = "It is a tie game."
+  WATSON_WON = "Watson Won!"
+  YOU_WON = "You Won!"
 
   attr_accessor :board, :winner, :sum
 
@@ -43,8 +43,7 @@ class Game
   end
 
   def human_turn
-    @io.output_message USER_TURN
-    move = @io.player_input
+    move = @io.player_input(USER_TURN)
     if valid_move_check(move)
       @board.fill_cell(move, @player.token)
     else
@@ -54,7 +53,7 @@ class Game
 
   def ai_turn
     move = @ai.find_move
-    @io.output_message AI_TURN + "#{move}\n"
+    @io.output_message AI_TURN + "#{move}"
     @board.fill_cell(move, @ai.token)
   end
 

@@ -7,7 +7,7 @@ class CommandLine
   end
 
   def output_message(message)
-    print message
+    puts "\n" + message
   end
 
   def display_board_row(element, index)
@@ -27,7 +27,8 @@ class CommandLine
     end
   end
 
-  def player_input
+  def player_input(message)
+    print "\n" + message
     move = gets.chomp.to_i
   end
 
