@@ -9,7 +9,7 @@ class Game
   WATSON_WON = "Watson Won!\n"
   YOU_WON = "You Won!\n"
 
-  attr_accessor :board, :winner
+  attr_accessor :board, :winner, :sum
 
   WIN_POSSIBILITIES =
     [[0,1,2], [3,4,5], [6,7,8],
@@ -21,7 +21,6 @@ class Game
     @ai = ai
     @player = player
     @io = io
-    @winner
   end
 
   def run
@@ -108,7 +107,7 @@ class Game
   end
 
   def game_over
-    @winner!= nil || is_tie?
+    @winner != nil || is_tie?
   end
 
   def winner_display
