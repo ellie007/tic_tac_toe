@@ -2,14 +2,37 @@ require 'game'
 require 'board'
 require 'ai'
 require 'player'
+require 'mock_output'
 
 describe Game do
 
   let(:board) { Board.new }
   let(:ai)    { Ai.new(board.cells) }
   let(:player) { Player.new }
-  let(:game)  { Game.new(board, ai, player, {}) }
+  let(:mock_io) { MockOutput.new(board.cells, ai, player) }
+  let(:game)  { Game.new(board, ai, player, mock_io) }
 
+  describe '#run' do
+    it 'prints the welcome message and displays the board', t:true do
+      game.stub(:game_loop)
+      game.run
+
+      expect(mock_io.printed_strings[0]).to match /welcome/i
+      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
+    end
+
+    xit "plays the game" do
+      game.run
+      expect(mock_io.first).to eq("Welcome to Tic Tac Toe")
+    end
+    it 'displays the result' do # ??
+      game.stub(:game_loop)
+      game.run
+      game.winner == ai.token
+
+      expect(mock_io.printed_strings[2]).to match /watson/i
+    end
+  end
 
   context "calculates sum" do
     it "adds one for an ai token" do

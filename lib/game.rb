@@ -1,3 +1,11 @@
+# the data that represents the board
+# contains presentation logic
+# e.g. three spaces for an empty cell,
+# not because that is meaningful in the board representation,
+# but because that prints to a console conveniently.
+# would be better to represent the board independently
+# of the presentation logic.
+
 class Game
 
   WELCOME = "Welcome to Tic Tac Toe"
@@ -27,6 +35,7 @@ class Game
     @io.output_message WELCOME
     @io.display_board
     game_loop
+    winner_display
   end
 
   def game_loop
@@ -39,7 +48,6 @@ class Game
       @io.display_board
       is_winner
     end
-    winner_display
   end
 
   def human_turn
@@ -68,6 +76,7 @@ class Game
     @winner
   end
 
+  # needs a better name
   def is_winner
     WIN_POSSIBILITIES.each do |set|
       @sum = 0
@@ -79,8 +88,9 @@ class Game
     set_winner
   end
 
+  # rename to tie?
   def is_tie?
-    @winner == nil && @board.cells.select { |cell| cell == "   " }.empty?
+    @winner == nil && @board.cells.select { |cell| cell == nil }.empty?
   end
 
   def valid_move_check(move)
@@ -102,7 +112,7 @@ class Game
   end
 
   def valid_cell?(move)
-    @board.cells[move - 1] == "   "
+    @board.cells[move - 1] == nil
   end
 
   def game_over

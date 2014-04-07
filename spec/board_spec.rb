@@ -7,10 +7,10 @@ describe Board do
   let(:board) { Board.new }
 
   it "places a move for the player on the board" do
-    board.fill_cell(4, player.token).should == ["   ","   ","   "," X ","   ","   ","   ","   ","   "]
+    board.fill_cell(4, player.token).should == [nil,nil,nil," X ",nil,nil,nil,nil,nil]
   end
   it "places a move for the ai on the board" do
-    board.fill_cell(1, ai.token).should == [" O ","   ","   ","   ","   ","   ","   ","   ","   "]
+    board.fill_cell(1, ai.token).should == [" O ",nil,nil,nil,nil,nil,nil,nil,nil]
   end
 
 end
