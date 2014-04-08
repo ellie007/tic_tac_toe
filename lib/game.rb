@@ -1,12 +1,7 @@
-# the data that represents the board
-# contains presentation logic
-# e.g. three spaces for an empty cell,
-# not because that is meaningful in the board representation,
-# but because that prints to a console conveniently.
-# would be better to represent the board independently
-# of the presentation logic.
+require 'pry'
 
 class Game
+  PLAY_AGAIN = "Would you like to play again (y/n)?: "
 
   WELCOME = "Welcome to Tic Tac Toe"
   USER_TURN  = "Your Turn: "
@@ -36,23 +31,32 @@ class Game
     @io.display_board
     game_loop
     winner_display
+    #play_again
   end
 
   def game_loop
     until game_over do
       human_turn
       @io.display_board
-      is_winner
+      winner?
       break if game_over
+
       ai_turn
       @io.display_board
-      is_winner
+      winner?
     end
   end
 
+  # def play_again
+  #   response = @io.play_again PLAY_AGAIN
+  #   if response == "y"
+  #     new_game = 'ruby ./game_runner.rb'
+  #   end
+  # end
+
   def human_turn
-    move = @io.player_input(USER_TURN)
-    if valid_move_check(move)
+    move = @io.player_input USER_TURN
+    if valid_move_check?(move)
       @board.fill_cell(move, @player.token)
     else
       human_turn
@@ -77,7 +81,7 @@ class Game
   end
 
   # needs a better name
-  def is_winner
+  def winner?
     WIN_POSSIBILITIES.each do |set|
       @sum = 0
       set.each do |cell|
@@ -93,7 +97,7 @@ class Game
     @winner == nil && @board.cells.select { |cell| cell == nil }.empty?
   end
 
-  def valid_move_check(move)
+  def valid_move_check?(move)
     if !valid_input?(move)
       @io.output_message INVALID_INPUT
       @io.display_board

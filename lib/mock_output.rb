@@ -1,5 +1,5 @@
 # rename to MockCommandLine
-class MockOutput
+class MockCommandLine
 
   def initialize(cells, ai, player)
     @cells = cells
@@ -22,6 +22,11 @@ class MockOutput
   end
 
   def display_board_message
-    'DISPLAY BOARD'
+    "DISPLAY BOARD"
   end
+
+  def player_input(message)
+    @printed_strings << message
+  end
+
 end

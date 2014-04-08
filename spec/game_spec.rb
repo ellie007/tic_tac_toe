@@ -9,10 +9,10 @@ describe Game do
   let(:board) { Board.new }
   let(:ai)    { Ai.new(board.cells) }
   let(:player) { Player.new }
-  let(:mock_io) { MockOutput.new(board.cells, ai, player) }
+  let(:mock_io) { MockCommandLine.new(board.cells, ai, player) }
   let(:game)  { Game.new(board, ai, player, mock_io) }
 
-  describe '#run' do
+  context 'run' do
     it 'prints the welcome message and displays the board', t:true do
       game.stub(:game_loop)
       game.run
@@ -25,12 +25,57 @@ describe Game do
       game.run
       expect(mock_io.first).to eq("Welcome to Tic Tac Toe")
     end
-    it 'displays the result' do # ??
+    it 'displays that watson is the winner of the game if watson wins' do # ??
       game.stub(:game_loop)
+      game.winner = ai.token
       game.run
-      game.winner == ai.token
 
-      expect(mock_io.printed_strings[2]).to match /watson/i
+      expect(mock_io.printed_strings[2]).to match /watson won/i
+    end
+    it 'displays that player is the winner of the game if player wins' do
+      game.stub(:game_loop)
+      game.winner = player.token
+      game.run
+
+      expect(mock_io.printed_strings[2]).to match /you won/i
+    end
+    it 'displayer that it was a tie game' do
+      game.stub(:game_loop)
+
+      board.fill_cell(1, player.token)
+      board.fill_cell(2, player.token)
+      board.fill_cell(3, ai.token)
+      board.fill_cell(4, ai.token)
+      board.fill_cell(5, ai.token)
+      board.fill_cell(6, player.token)
+      board.fill_cell(7, player.token)
+      board.fill_cell(8, ai.token)
+      board.fill_cell(9, player.token)
+
+      game.run
+
+      expect(mock_io.printed_strings[2]).to match /tie game/
+    end
+  end
+
+  context "human turn" do
+    it "makes a player move and sends that message to the correct flow control" do
+      allow(mock_io).to receive(:player_input) { 3 }
+      allow(board).to receive(:fill_cell)
+      game.human_turn
+
+      expect(board).to have_received(:fill_cell)
+    end
+  end
+
+  context "ai turn" do
+    it "makes an ai move sends that message to the correct flow control" do
+      allow(mock_io).to receive(:find_move) { 2 }
+      allow(board).to receive(:fill_cell)
+      game.ai_turn
+
+      expect(board).to have_received(:fill_cell)
+      expect(mock_io.printed_strings[0]).to match /watson's turn/i
     end
   end
 
@@ -62,7 +107,7 @@ describe Game do
 
   context "game winner determination:" do
     it "has no winner at the beginning of the game" do
-      game.is_winner.should == nil
+      game.winner?.should == nil
     end
 
     it "ai wins the game with a diagonal" do
@@ -70,21 +115,21 @@ describe Game do
       board.fill_cell(5, ai.token)
       board.fill_cell(9, ai.token)
 
-      game.is_winner.should == ai.token
+      game.winner?.should == ai.token
     end
     it "ai wins the game with a row" do
       board.fill_cell(1, ai.token)
       board.fill_cell(2, ai.token)
       board.fill_cell(3, ai.token)
 
-      game.is_winner.should == ai.token
+      game.winner?.should == ai.token
     end
     it "ai wins the game with a column" do
       board.fill_cell(1, ai.token)
       board.fill_cell(4, ai.token)
       board.fill_cell(7, ai.token)
 
-      game.is_winner.should == ai.token
+      game.winner?.should == ai.token
     end
 
     it "player wins the game with a diagonal" do
@@ -92,21 +137,21 @@ describe Game do
       board.fill_cell(5, player.token)
       board.fill_cell(9, player.token)
 
-      game.is_winner.should == player.token
+      game.winner?.should == player.token
     end
     it "player wins the game with a row" do
       board.fill_cell(1, player.token)
       board.fill_cell(2, player.token)
       board.fill_cell(3, player.token)
 
-      game.is_winner.should == player.token
+      game.winner?.should == player.token
     end
     it "player wins the game with a column" do
       board.fill_cell(1, player.token)
       board.fill_cell(4, player.token)
       board.fill_cell(7, player.token)
 
-      game.is_winner.should == player.token
+      game.winner?.should == player.token
     end
 
     it "is a tie game" do
