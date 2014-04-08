@@ -1,5 +1,3 @@
-require 'pry'
-
 class Game
   PLAY_AGAIN = "Would you like to play again (y/n)?: "
 
@@ -37,12 +35,10 @@ class Game
   def game_loop
     until game_over do
       human_turn
-      @io.display_board
       winner?
       break if game_over
 
       ai_turn
-      @io.display_board
       winner?
     end
   end
@@ -56,10 +52,17 @@ class Game
 
   def human_turn
     move = @io.player_input USER_TURN
-    if valid_move_check?(move)
-      @board.fill_cell(move, @player.token)
-    else
+    if !valid_input?(move)
+      @io.output_message INVALID_INPUT
+      @io.display_board
       human_turn
+    elsif !valid_cell?(move)
+      @io.output_message INVALID_CELL
+      @io.display_board
+      human_turn
+    else
+      @board.fill_cell(move, @player.token)
+      @io.display_board
     end
   end
 
@@ -67,6 +70,7 @@ class Game
     move = @ai.find_move
     @io.output_message AI_TURN + "#{move}"
     @board.fill_cell(move, @ai.token)
+    @io.display_board
   end
 
   def calculate_sum(cell)
@@ -97,19 +101,14 @@ class Game
     @winner == nil && @board.cells.select { |cell| cell == nil }.empty?
   end
 
-  def valid_move_check?(move)
-    if !valid_input?(move)
-      @io.output_message INVALID_INPUT
-      @io.display_board
-      false
-    elsif !valid_cell?(move)
-      @io.output_message INVALID_CELL
-      @io.display_board
-      false
-    else
-      true
-    end
+ def winner_display
+    @io.output_message WATSON_WON if @winner == @ai.token
+    @io.output_message YOU_WON if @winner == @player.token
+    @io.output_message TIE if is_tie?
   end
+
+
+ private
 
   def valid_input?(move)
     [1,2,3,4,5,6,7,8,9].include?(move)
@@ -121,12 +120,6 @@ class Game
 
   def game_over
     @winner != nil || is_tie?
-  end
-
-  def winner_display
-    @io.output_message WATSON_WON if @winner == @ai.token
-    @io.output_message YOU_WON if @winner == @player.token
-    @io.output_message TIE if is_tie?
   end
 
 end
