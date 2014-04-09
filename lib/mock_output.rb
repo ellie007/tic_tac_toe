@@ -1,4 +1,3 @@
-# rename to MockCommandLine
 class MockCommandLine
 
   def initialize(cells, ai, player)
@@ -15,7 +14,6 @@ class MockCommandLine
   def output_message(message)
     @printed_strings << message
   end
-
 
   def display_board
     output_message display_board_message

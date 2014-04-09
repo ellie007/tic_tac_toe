@@ -7,25 +7,20 @@ require 'mock_output'
 describe Game do
 
   let(:board) { Board.new }
-  let(:ai)    { Ai.new(board.cells) }
+  let(:ai) { Ai.new(board.cells) }
   let(:player) { Player.new }
   let(:mock_io) { MockCommandLine.new(board.cells, ai, player) }
-  let(:game)  { Game.new(board, ai, player, mock_io) }
+  let(:game) { Game.new(board, ai, player, mock_io) }
 
   context 'run' do
     it 'prints the welcome message and displays the board', t:true do
       game.stub(:game_loop)
       game.run
 
-      expect(mock_io.printed_strings[0]).to match /welcome/i
+      expect(mock_io.printed_strings[0]).to match /welcome to tic tac toe/i
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
     end
-
-    xit "plays the game" do
-      game.run
-      expect(mock_io.first).to eq("Welcome to Tic Tac Toe")
-    end
-    it 'displays that watson is the winner of the game if watson wins' do # ??
+    it 'displays that watson is the winner of the game if watson wins' do
       game.stub(:game_loop)
       game.winner = ai.token
       game.run
@@ -39,7 +34,7 @@ describe Game do
 
       expect(mock_io.printed_strings[2]).to match /you won/i
     end
-    it 'displayer that it was a tie game' do
+    it 'displays that it was a tie game' do
       game.stub(:game_loop)
 
       board.fill_cell(1, player.token)
@@ -66,6 +61,18 @@ describe Game do
 
       expect(board).to have_received(:fill_cell)
     end
+    it "sends the invalid input message" do
+      game.invalid_input_response
+
+      expect(mock_io.printed_strings[0]).to match /That is invalid input./
+      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
+    end
+    it "sends the invalid cell message" do
+      game.invalid_cell_response
+
+      expect(mock_io.printed_strings[0]).to match /That spot is already taken./
+      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
+    end
   end
 
   context "ai turn" do
@@ -76,6 +83,7 @@ describe Game do
 
       expect(board).to have_received(:fill_cell)
       expect(mock_io.printed_strings[0]).to match /watson's turn/i
+      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
     end
   end
 

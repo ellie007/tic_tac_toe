@@ -1,4 +1,5 @@
 class Game
+
   PLAY_AGAIN = "Would you like to play again (y/n)?: "
 
   WELCOME = "Welcome to Tic Tac Toe"
@@ -53,12 +54,10 @@ class Game
   def human_turn
     move = @io.player_input USER_TURN
     if !valid_input?(move)
-      @io.output_message INVALID_INPUT
-      @io.display_board
+      invalid_input_response
       human_turn
     elsif !valid_cell?(move)
-      @io.output_message INVALID_CELL
-      @io.display_board
+      invalid_cell_response
       human_turn
     else
       @board.fill_cell(move, @player.token)
@@ -84,7 +83,6 @@ class Game
     @winner
   end
 
-  # needs a better name
   def winner?
     WIN_POSSIBILITIES.each do |set|
       @sum = 0
@@ -96,7 +94,6 @@ class Game
     set_winner
   end
 
-  # rename to tie?
   def is_tie?
     @winner == nil && @board.cells.select { |cell| cell == nil }.empty?
   end
@@ -108,7 +105,7 @@ class Game
   end
 
 
- private
+ #private
 
   def valid_input?(move)
     [1,2,3,4,5,6,7,8,9].include?(move)
@@ -116,6 +113,16 @@ class Game
 
   def valid_cell?(move)
     @board.cells[move - 1] == nil
+  end
+
+  def invalid_input_response
+    @io.output_message INVALID_INPUT
+    @io.display_board
+  end
+
+  def invalid_cell_response
+    @io.output_message INVALID_CELL
+    @io.display_board
   end
 
   def game_over
