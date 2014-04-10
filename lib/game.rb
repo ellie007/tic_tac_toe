@@ -81,7 +81,7 @@ class Game
   end
 
   def winner?
-    row_winner || column_winner if @winner.nil?
+    row_winner || column_winner ||principal_diagonal_winner || counter_diagonal_winner if @winner.nil?
   end
 
   def row_winner
@@ -111,12 +111,41 @@ class Game
     set_winner
   end
 
-  # def diagonal_winner
-  #   @board.cells.each do |cell, index|
-  #     if index %
-  #   end
-  #   @board.cells
-  # end
+  def principal_diagonal_winner
+    diagonal = []
+    i = 0
+    @board.cells.each_with_index do |cell, index|
+      if index % @size == 0
+        diagonal << index + i
+        i += 1
+      end
+    end
+
+    @sum = 0
+    diagonal.each do |cell|
+      @sum += 1 if @board.cells[cell] == @ai.token
+      @sum -= 1 if @board.cells[cell] == @player.token
+    end
+    set_winner
+  end
+
+  def counter_diagonal_winner
+    diagonal = []
+    i = @size - 1
+    @board.cells.each_with_index do |cell, index|
+      if index % @size == 0
+        diagonal << index + i
+        i -= 1
+      end
+    end
+
+    @sum = 0
+    diagonal.each do |cell|
+      @sum += 1 if @board.cells[cell] == @ai.token
+      @sum -= 1 if @board.cells[cell] == @player.token
+    end
+    set_winner
+  end
 
   def is_tie?
     @winner == nil && @board.cells.select { |cell| cell == nil }.empty?
@@ -129,7 +158,7 @@ class Game
   end
 
 
- private
+ #private
 
   def valid_input?(move)
     (0..size**2).include?(move)
