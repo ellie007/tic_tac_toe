@@ -1,9 +1,10 @@
 class CommandLine
 
-  def initialize(cells, ai, player)
+  def initialize(cells, ai, player, size)
     @cells = cells
     @ai = ai
     @player = player
+    @size = size
   end
 
   def output_message(message)
@@ -23,7 +24,7 @@ class CommandLine
     @cells.each_with_index do |element, index|
       display_board_row(element, index)
       line_counter += 1
-      print "\n" if line_counter % 3 == 0
+      print "\n" if line_counter % @size == 0
     end
   end
 

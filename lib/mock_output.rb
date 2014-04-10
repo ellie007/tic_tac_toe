@@ -1,9 +1,10 @@
 class MockCommandLine
 
-  def initialize(cells, ai, player)
+  def initialize(cells, ai, player, size)
     @cells = cells
     @ai = ai
     @player = player
+    @size = size
     @printed_strings = []
   end
 

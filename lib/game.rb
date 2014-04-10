@@ -11,18 +11,15 @@ class Game
   WATSON_WON = "Watson Won!"
   YOU_WON = "You Won!"
 
-  attr_accessor :board, :winner, :sum
+  attr_accessor :board, :winner, :sum, :size
 
-  WIN_POSSIBILITIES =
-    [[0,1,2], [3,4,5], [6,7,8],
-     [0,3,6], [1,4,7], [2,5,8],
-     [0,4,8], [2,4,6]]
 
-  def initialize(board, ai, player, io)
+  def initialize(board, ai, player, io, size)
     @board = board
     @ai = ai
     @player = player
     @io = io
+    @size = size
   end
 
   def run
@@ -78,27 +75,54 @@ class Game
   end
 
   def set_winner
-    @winner = @ai.token if @sum == 3
-    @winner = @player.token if @sum == -3
+    @winner = @ai.token if @sum == @size
+    @winner = @player.token if @sum == -@size
     @winner
   end
 
   def winner?
-    WIN_POSSIBILITIES.each do |set|
+    row_winner || column_winner if @winner.nil?
+  end
+
+  def row_winner
+    row_win_possibilities = []
+    @board.cells.each_slice(size) { |row| row_win_possibilities << row }
+    row_win_possibilities.each do |row|
       @sum = 0
-      set.each do |cell|
-        calculate_sum(@board.cells[cell])
+      row.each do |cell|
+        calculate_sum(cell)
       end
-      break if @sum == 3 || @sum == -3
+      break if @sum == @size || @sum == -@size
     end
     set_winner
   end
+
+  def column_winner
+    column_win_possibilities = []
+    @board.cells.each_slice(size) { |row| column_win_possibilities << row }
+    transposed_win_possibilties = column_win_possibilities.transpose
+    transposed_win_possibilties.each do |row|
+      @sum = 0
+      row.each do |cell|
+        calculate_sum(cell)
+      end
+      break if @sum == @size || @sum == -@size
+    end
+    set_winner
+  end
+
+  # def diagonal_winner
+  #   @board.cells.each do |cell, index|
+  #     if index %
+  #   end
+  #   @board.cells
+  # end
 
   def is_tie?
     @winner == nil && @board.cells.select { |cell| cell == nil }.empty?
   end
 
- def winner_display
+  def winner_display
     @io.output_message WATSON_WON if @winner == @ai.token
     @io.output_message YOU_WON if @winner == @player.token
     @io.output_message TIE if is_tie?
@@ -108,7 +132,7 @@ class Game
  #private
 
   def valid_input?(move)
-    [1,2,3,4,5,6,7,8,9].include?(move)
+    (0..size**2).include?(move)
   end
 
   def valid_cell?(move)

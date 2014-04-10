@@ -1,9 +1,10 @@
 class Board
 
-  attr_accessor :cells
+  attr_accessor :cells, :size
 
-  def initialize
-    @cells = Array.new(9, nil)
+  def initialize(size)
+    @size = size
+    @cells = Array.new(size**2, nil)
   end
 
   def fill_cell(value, token)
