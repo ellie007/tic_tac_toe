@@ -4,7 +4,7 @@ describe Board do
 
   let(:ai) { Ai.new({}) }
   let(:player) { Player.new }
-  let(:board) { Board.new }
+  let(:board) { Board.new(3) }
 
   it "places a move for the player on the board" do
     board.fill_cell(4, player.token).should == [nil,nil,nil," X ",nil,nil,nil,nil,nil]

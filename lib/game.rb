@@ -129,7 +129,7 @@ class Game
   end
 
 
- #private
+ private
 
   def valid_input?(move)
     (0..size**2).include?(move)
