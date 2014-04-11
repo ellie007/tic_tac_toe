@@ -33,12 +33,6 @@ class CommandLine
     move = gets.chomp.to_i
   end
 
-  # def play_again(message)
-  #   print "\n" + message
-  #   response = gets.chomp.downcase
-  #   if response
-  # end
-
 end
 
 

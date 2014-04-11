@@ -29,7 +29,8 @@ describe Game do
       expect(mock_io.printed_strings[2]).to match /watson won/i
     end
     it 'displays that player is the winner of the game if player wins' do
-      game.stub(:game_loop)
+      #game.stub(:game_loop)
+      allow(mock_io).to receive(:game_loop)
       game.winner = player.token
       game.run
 

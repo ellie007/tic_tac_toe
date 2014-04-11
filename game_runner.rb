@@ -4,16 +4,31 @@ require './lib/player'
 require './lib/game'
 require './lib/command_line'
 
-print "What board size would you like?\nPlease enter the base dimension.  (3 for 3 by 3; 4 for 4 by 4): "
+play_again = true
 
-size = gets.chomp.to_i
+while (play_again) do
 
-board = Board.new(size)
-ai = Ai.new(board.cells)
-player = Player.new
-cl = CommandLine.new(board.cells, ai, player, board.size)
-game = Game.new(board, ai, player, cl, board.size)
+  print "What board size would you like?\nPlease enter the base dimension.  (3 for 3 by 3; 4 for 4 by 4): "
 
+  size = gets.chomp.to_i
 
-game.run
+  board = Board.new(size)
+  ai = Ai.new(board.cells)
+  player = Player.new
+  cl = CommandLine.new(board.cells, ai, player, board.size)
+  game = Game.new(board, ai, player, cl, board.size)
+
+  game.run
+
+  print "Would you like to play again (y/n)?: "
+  input = gets.chomp
+
+  if input == 'y'
+    play_again = true
+  else
+    play_again = false
+  end
+
+end
+
 

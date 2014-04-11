@@ -1,7 +1,5 @@
 class Game
 
-  PLAY_AGAIN = "Would you like to play again (y/n)?: "
-
   WELCOME = "Welcome to Tic Tac Toe"
   USER_TURN  = "Your Turn: "
   AI_TURN = "Watson's Turn: "
@@ -12,7 +10,6 @@ class Game
   YOU_WON = "You Won!"
 
   attr_accessor :board, :winner, :sum, :size
-
 
   def initialize(board, ai, player, io, size)
     @board = board
@@ -27,7 +24,6 @@ class Game
     @io.display_board
     game_loop
     winner_display
-    #play_again
   end
 
   def game_loop
@@ -40,13 +36,6 @@ class Game
       winner?
     end
   end
-
-  # def play_again
-  #   response = @io.play_again PLAY_AGAIN
-  #   if response == "y"
-  #     new_game = 'ruby ./game_runner.rb'
-  #   end
-  # end
 
   def human_turn
     move = @io.player_input USER_TURN
@@ -81,7 +70,7 @@ class Game
   end
 
   def winner?
-    row_winner || column_winner ||principal_diagonal_winner || counter_diagonal_winner if @winner.nil?
+    row_winner || column_winner || principal_diagonal_winner || counter_diagonal_winner if @winner.nil?
   end
 
   def row_winner
