@@ -19,20 +19,38 @@ class Game
     @size = size
   end
 
-  def run
+  def run1
     @io.output_message WELCOME
     @io.display_board
-    game_loop
+    game_loop1
     winner_display
   end
 
-  def game_loop
+  def run2
+    @io.output_message WELCOME
+    @io.display_board
+    game_loop2
+    winner_display
+  end
+
+  def game_loop1
     until game_over do
       human_turn
       winner?
       break if game_over
 
       ai_turn
+      winner?
+    end
+  end
+
+  def game_loop2
+    until game_over do
+      ai_turn
+      winner?
+      break if game_over
+
+      human_turn
       winner?
     end
   end
