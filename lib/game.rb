@@ -1,5 +1,8 @@
 class Game
 
+  PLAY_AGAIN = "Would you like to play again (y/n)?: "
+  PLAY_AGAIN_REPROMPT = "Please enter only Y or N."
+
   WELCOME = "Welcome to Tic Tac Toe"
   USER_TURN  = "Your Turn: "
   AI_TURN = "Watson's Turn: "
@@ -9,14 +12,16 @@ class Game
   WATSON_WON = "Watson Won!"
   YOU_WON = "You Won!"
 
-  attr_accessor :board, :winner, :sum, :size
+  attr_accessor :board, :winner, :sum, :size, :play_again
 
-  def initialize(board, ai, player, io, size)
+  def initialize(board, ai, player, io, size, menu)
     @board = board
     @ai = ai
     @player = player
     @io = io
     @size = size
+    @play_again = true
+    @menu = menu
   end
 
   def run1
@@ -26,11 +31,29 @@ class Game
     winner_display
   end
 
-  def run2
-    @io.output_message WELCOME
+  def run
     @io.display_board
     game_loop2
     winner_display
+    play_again?
+  end
+
+  def play_again?
+    @io.same_line PLAY_AGAIN
+    play_again_input = gets.chomp.downcase
+
+    until play_again_input == "y" || play_again_input == "n" do
+      puts PLAY_AGAIN_REPROMPT
+      play_again_input = gets.chomp.downcase
+    end
+
+    if play_again_input == "y"
+      @play_again = true
+    elsif play_again_input == "n"
+      @play_again = false
+    end
+
+    return @play_again
   end
 
   def game_loop1

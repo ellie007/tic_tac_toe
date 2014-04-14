@@ -15,24 +15,24 @@ describe Game do
 
   context 'run' do
     it 'prints the welcome message and displays the board' do #, t:true do
-      game.stub(:game_loop)
-      game.run
+      allow(mock_io).to receive(:game_loop)
+      game.winner = ai.token
+      game.run1
 
       expect(mock_io.printed_strings[0]).to match /welcome to tic tac toe/i
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
     end
     it 'displays that watson is the winner of the game if watson wins' do
-      game.stub(:game_loop)
+      allow(mock_io).to receive(:game_loop)
       game.winner = ai.token
-      game.run
+      game.run1
 
       expect(mock_io.printed_strings[2]).to match /watson won/i
     end
     it 'displays that player is the winner of the game if player wins' do
-      #game.stub(:game_loop)
       allow(mock_io).to receive(:game_loop)
       game.winner = player.token
-      game.run
+      game.run1
 
       expect(mock_io.printed_strings[2]).to match /you won/i
     end
@@ -49,7 +49,7 @@ describe Game do
       board.fill_cell(8, ai.token)
       board.fill_cell(9, player.token)
 
-      game.run
+      game.run1
 
       expect(mock_io.printed_strings[2]).to match /tie game/
     end

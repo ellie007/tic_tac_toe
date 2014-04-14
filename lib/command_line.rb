@@ -33,6 +33,10 @@ class CommandLine
     move = gets.chomp.to_i
   end
 
+  def same_line(message)
+    print "\n" + message
+  end
+
 end
 
 
