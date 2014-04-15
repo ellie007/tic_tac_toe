@@ -1,10 +1,7 @@
 class Ai
 
-  attr_accessor :token
-
   def initialize(cells)
     @cells = cells
-    @token = " O "
   end
 
   def find_move

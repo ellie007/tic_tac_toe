@@ -1,10 +1,11 @@
 class CommandLine
 
-  def initialize(cells, ai, player, size)
+  def initialize(cells, ai, size, player_1, player_2)
     @cells = cells
     @ai = ai
-    @player = player
     @size = size
+    @player_1 = player_1
+    @player_2 = player_2
   end
 
   def output_message(message)
@@ -33,8 +34,13 @@ class CommandLine
     move = gets.chomp.to_i
   end
 
-  def same_line(message)
+  def play_again_output(message)
     print "\n" + message
+    play_again_input = gets.chomp.downcase
+  end
+
+  def clear_screen
+    system('clear')
   end
 
 end

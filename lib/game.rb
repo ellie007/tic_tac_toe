@@ -9,38 +9,35 @@ class Game
   INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to 9."
   INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
   TIE = "It is a tie game."
-  WATSON_WON = "Watson Won!"
-  YOU_WON = "You Won!"
+  # WATSON_WON = "Watson Won!"
+  # YOU_WON = "You Won!"
+  PLAYER_1_WON = "PLAYER ONE WON: " #+ @player_1.token
+  PLAYER_2_WON = "PLAYER TWO WON: " #+ @player_2.token
 
   attr_accessor :board, :winner, :sum, :size, :play_again
 
-  def initialize(board, ai, player, io, size, menu)
+  def initialize(board, ai, io, menu, player_1, player_2)
     @board = board
     @ai = ai
-    @player = player
+    @player_1 = player_1
+    @player_2 = player_2
     @io = io
-    @size = size
-    @play_again = true
     @menu = menu
-  end
 
-  def run1
-    @io.output_message WELCOME
-    @io.display_board
-    game_loop1
-    winner_display
+    @size = board.size
+    @play_again = true
   end
 
   def run
     @io.display_board
-    game_loop2
+    set_players
+    game_loop
     winner_display
     play_again?
   end
 
   def play_again?
-    @io.same_line PLAY_AGAIN
-    play_again_input = gets.chomp.downcase
+    play_again_input = @io.play_again_output PLAY_AGAIN
 
     until play_again_input == "y" || play_again_input == "n" do
       puts PLAY_AGAIN_REPROMPT
@@ -49,6 +46,7 @@ class Game
 
     if play_again_input == "y"
       @play_again = true
+      @io.clear_screen
     elsif play_again_input == "n"
       @play_again = false
     end
@@ -56,24 +54,45 @@ class Game
     return @play_again
   end
 
-  def game_loop1
-    until game_over do
-      human_turn
-      winner?
-      break if game_over
-
-      ai_turn
-      winner?
+  def set_current_player
+    case @menu.turn_response
+    when 1
+    @current_player = @player_1
+    when 2
+    @current_player = @player_2
     end
   end
 
-  def game_loop2
-    until game_over do
+  # def set_players
+  #   case @menu.turn_response
+  #   when 1
+  #     @player_1.type = "human"
+  #     @player_2.type = "ai"
+  #     @player_1.token = " X "
+  #     @player_2.token = " O "
+  #   when 2
+  #     @player_1.type = "ai"
+  #     @player_2.type = "human"
+  #     @player_1.token = " O "
+  #     @player_2.token = " X "
+  #   end
+  # end
+
+  def player_turn
+    if @current_player.type == "ai"
       ai_turn
+    elsif @current_player.type == "human"
+      human_turn
+    end
+  end
+
+  def game_loop
+    until game_over do
+      @player_1.make_move
       winner?
       break if game_over
 
-      human_turn
+      @player_2.make_move
       winner?
     end
   end
@@ -87,26 +106,27 @@ class Game
       invalid_cell_response
       human_turn
     else
-      @board.fill_cell(move, @player.token)
+      @board.fill_cell(move, " X ")
       @io.display_board
     end
   end
 
+#FIX THE TOKEN VALUES AS DYNAMIC
   def ai_turn
     move = @ai.find_move
     @io.output_message AI_TURN + "#{move}"
-    @board.fill_cell(move, @ai.token)
+    @board.fill_cell(move, " O ")
     @io.display_board
   end
 
   def calculate_sum(cell)
-     @sum += 1 if cell == @ai.token
-     @sum -= 1 if cell == @player.token
+     @sum += 1 if cell == @player_1.token
+     @sum -= 1 if cell == @player_2.token
   end
 
   def set_winner
-    @winner = @ai.token if @sum == @size
-    @winner = @player.token if @sum == -@size
+    @winner = @player_1.token if @sum == @size
+    @winner = @player_2.token if @sum == -@size
     @winner
   end
 
@@ -153,8 +173,8 @@ class Game
 
     @sum = 0
     diagonal.each do |cell|
-      @sum += 1 if @board.cells[cell] == @ai.token
-      @sum -= 1 if @board.cells[cell] == @player.token
+      @sum += 1 if @board.cells[cell] == @player_1.token
+      @sum -= 1 if @board.cells[cell] == @player_2.token
     end
     set_winner
   end
@@ -171,8 +191,8 @@ class Game
 
     @sum = 0
     diagonal.each do |cell|
-      @sum += 1 if @board.cells[cell] == @ai.token
-      @sum -= 1 if @board.cells[cell] == @player.token
+      @sum += 1 if @board.cells[cell] == @player_1.token
+      @sum -= 1 if @board.cells[cell] == @player_2.token
     end
     set_winner
   end
@@ -182,8 +202,8 @@ class Game
   end
 
   def winner_display
-    @io.output_message WATSON_WON if @winner == @ai.token
-    @io.output_message YOU_WON if @winner == @player.token
+    @io.output_message PLAYER_1_WON + @player_1.token if @winner == @player_1.token
+    @io.output_message PLAYER_2_WON + @player_2.token if @winner == @player_2.token
     @io.output_message TIE if is_tie?
   end
 
