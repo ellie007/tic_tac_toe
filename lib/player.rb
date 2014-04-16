@@ -8,9 +8,9 @@ class Player
     @name
   end
 
-  def opposite_value
-    value == 'X' ? 'O' : 'X'
-  end
+  # def opposite_value
+  #   value == 'X' ? 'O' : 'X'
+  # end
 
 end
 

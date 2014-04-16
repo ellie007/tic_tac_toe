@@ -11,8 +11,8 @@ class Game
   TIE = "It is a tie game."
   # WATSON_WON = "Watson Won!"
   # YOU_WON = "You Won!"
-  PLAYER_1_WON = "PLAYER ONE WON: " #+ @player_1.token
-  PLAYER_2_WON = "PLAYER TWO WON: " #+ @player_2.token
+  PLAYER_1_WON = "PLAYER ONE WON: " #+ @player_1.name
+  PLAYER_2_WON = "PLAYER TWO WON: " #+ @player_2.name
 
   attr_accessor :board, :winner, :sum, :size, :play_again
 
@@ -51,34 +51,54 @@ class Game
       @play_again = false
     end
 
-    return @play_again
+    @play_again
   end
 
   def set_current_player
+    if @menu.turn_response == nil
+      @current_player = @player_1
+    end
+
     case @menu.turn_response
     when 1
     @current_player = @player_1
     when 2
     @current_player = @player_2
     end
+    @current_player
   end
 
-  # def set_players
-  #   case @menu.turn_response
-  #   when 1
-  #     @player_1.type = "human"
-  #     @player_2.type = "ai"
-  #     @player_1.token = " X "
-  #     @player_2.token = " O "
-  #   when 2
-  #     @player_1.type = "ai"
-  #     @player_2.type = "human"
-  #     @player_1.token = " O "
-  #     @player_2.token = " X "
-  #   end
-  # end
+  def set_players
+    case @menu.game_type_response
+    when 1
+      @player_1.type = "human"
+      @player_1.name = @menu.player_one_name
+      @player_1.token = @menu.player_one_token
 
-  def player_turn
+      @player_2.type = "human"
+      @player_2.name = @menu.player_two_name
+      @player_2.token = @menu.player_two_token
+    when 2
+      case @menu.turn_response
+      when 1
+        @player_1.type = "human"
+        @player_2.type = "ai"
+      when 2
+        @player_1.type = "ai"
+        @player_2.type = "human"
+      end
+    when 3
+      @player_1.type = "ai"
+      @player_2.type = "ai"
+    end
+    @player_1.name = @menu.player_one_name
+    @player_1.token = @menu.player_one_token
+    @player_2.name = @menu.player_two_name
+    @player_2.token = @menu.player_two_token
+    set_current_player
+  end
+
+  def make_move
     if @current_player.type == "ai"
       ai_turn
     elsif @current_player.type == "human"
@@ -88,12 +108,17 @@ class Game
 
   def game_loop
     until game_over do
-      @player_1.make_move
+      make_move
       winner?
-      break if game_over
+      toogle_current_player
+    end
+  end
 
-      @player_2.make_move
-      winner?
+  def toogle_current_player
+    if @current_player == @player_1
+      @current_player = @player_2
+    elsif @current_player == @player_2
+      @current_player = @player_1
     end
   end
 
@@ -106,16 +131,15 @@ class Game
       invalid_cell_response
       human_turn
     else
-      @board.fill_cell(move, " X ")
+      @board.fill_cell(move, " " + @current_player.token + " ")
       @io.display_board
     end
   end
 
-#FIX THE TOKEN VALUES AS DYNAMIC
   def ai_turn
     move = @ai.find_move
     @io.output_message AI_TURN + "#{move}"
-    @board.fill_cell(move, " O ")
+    @board.fill_cell(move, " " + @current_player.token + " ")
     @io.display_board
   end
 

@@ -13,15 +13,15 @@ class Menu
   PLAYER_TWO_NAME = "Please enter Player Two's Name : "
 
   PLAYER_ONE_TOKEN = "\nWhat token value would Player One like?: "
-  PLAYER_TWO_TOKEN = "\nWhat token value would Player Two like?: "
+  PLAYER_TWO_TOKEN = "What token value would Player Two like?: "
 
   TURN_RESPONSE = "Would you like to go first or second? (Enter 1 or 2): "
 
-  attr_accessor :size, :game_type, :player_one_name, :player_two_name, :player_one_token, :player_two_token, :turn_response
+  attr_accessor :size, :game_type_response, :player_one_name, :player_two_name, :player_one_token, :player_two_token, :turn_response
 
   def initialize
     @size
-    @game_type
+    @game_type_response
     @player_one_name
     @player_two_name
     @player_one_token
@@ -43,26 +43,22 @@ class Menu
 
   def game_type
     print "\n" + GAME_TYPE_OPTION
-    @game_type = gets.chomp.to_i
+    @game_type_response = gets.chomp.to_i
   end
 
   def player_detail
-    case @game_type
+    case @game_type_response
     when 1
       print GAME_TYPE_1
-      players_names
-      players_token_values
     when 2
       print GAME_TYPE_2 + "\n"
       print TURN_RESPONSE
       @turn_response = gets.chomp.to_i
-      players_names
-      players_token_values
     when 3
       print GAME_TYPE_3
-      players_names
-      players_token_values
     end
+    players_names
+    players_token_values
   end
 
   def players_names
