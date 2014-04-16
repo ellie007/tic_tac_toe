@@ -3,16 +3,16 @@ class Game
   PLAY_AGAIN = "Would you like to play again (y/n)?: "
   PLAY_AGAIN_REPROMPT = "Please enter only Y or N."
 
-  WELCOME = "Welcome to Tic Tac Toe"
-  USER_TURN  = "Your Turn: "
-  AI_TURN = "Watson's Turn: "
+  #WELCOME = "Welcome to Tic Tac Toe"
+  # USER_TURN  = "Your Turn: "
+  # AI_TURN = "Watson's Turn: "
+  CURRENT_PLAYER_TURN = "'s Turn: "
   INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to 9."
   INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
   TIE = "It is a tie game."
   # WATSON_WON = "Watson Won!"
   # YOU_WON = "You Won!"
-  PLAYER_1_WON = "PLAYER ONE WON: " #+ @player_1.name
-  PLAYER_2_WON = "PLAYER TWO WON: " #+ @player_2.name
+  CURRENT_PLAYER_WON = "WON!"
 
   attr_accessor :board, :winner, :sum, :size, :play_again
 
@@ -72,30 +72,23 @@ class Game
     case @menu.game_type_response
     when 1
       @player_1.type = "human"
-      @player_1.name = @menu.player_one_name
-      @player_1.token = @menu.player_one_token
-
       @player_2.type = "human"
-      @player_2.name = @menu.player_two_name
-      @player_2.token = @menu.player_two_token
     when 2
-      case @menu.turn_response
-      when 1
-        @player_1.type = "human"
-        @player_2.type = "ai"
-      when 2
-        @player_1.type = "ai"
-        @player_2.type = "human"
-      end
+      @player_1.type = "human"
+      @player_2.type = "ai"
     when 3
       @player_1.type = "ai"
       @player_2.type = "ai"
     end
+    token_and_name
+    set_current_player
+  end
+
+  def token_and_name
     @player_1.name = @menu.player_one_name
     @player_1.token = @menu.player_one_token
     @player_2.name = @menu.player_two_name
     @player_2.token = @menu.player_two_token
-    set_current_player
   end
 
   def make_move
@@ -110,6 +103,9 @@ class Game
     until game_over do
       make_move
       winner?
+      # puts "current player token: " + @current_player.token
+      # puts "player one token: " + @player_1.token
+      # puts "player two token: " + @player_2.token
       toogle_current_player
     end
   end
@@ -123,7 +119,7 @@ class Game
   end
 
   def human_turn
-    move = @io.player_input USER_TURN
+    move = @io.player_input @current_player.name + CURRENT_PLAYER_TURN
     if !valid_input?(move)
       invalid_input_response
       human_turn
@@ -138,7 +134,7 @@ class Game
 
   def ai_turn
     move = @ai.find_move
-    @io.output_message AI_TURN + "#{move}"
+    @io.output_message @current_player.name + CURRENT_PLAYER_TURN + "#{move}"
     @board.fill_cell(move, " " + @current_player.token + " ")
     @io.display_board
   end
