@@ -14,7 +14,7 @@ class CommandLine
 
   def display_board_row(element, index)
     if element != nil
-      print element
+      print " #{element} "
     else
       print " #{index + 1} "
     end
@@ -44,5 +44,4 @@ class CommandLine
   end
 
 end
-
 

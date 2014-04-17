@@ -3,16 +3,13 @@ class Game
   PLAY_AGAIN = "Would you like to play again (y/n)?: "
   PLAY_AGAIN_REPROMPT = "Please enter only Y or N."
 
-  #WELCOME = "Welcome to Tic Tac Toe"
-  # USER_TURN  = "Your Turn: "
-  # AI_TURN = "Watson's Turn: "
   CURRENT_PLAYER_TURN = "'s Turn: "
+
   INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to 9."
   INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
+
+  CURRENT_PLAYER_WON = " Won!"
   TIE = "It is a tie game."
-  # WATSON_WON = "Watson Won!"
-  # YOU_WON = "You Won!"
-  CURRENT_PLAYER_WON = "WON!"
 
   attr_accessor :board, :winner, :sum, :size, :play_again
 
@@ -102,15 +99,12 @@ class Game
   def game_loop
     until game_over do
       make_move
-      winner?
-      # puts "current player token: " + @current_player.token
-      # puts "player one token: " + @player_1.token
-      # puts "player two token: " + @player_2.token
-      toogle_current_player
+      break if winner?
+      toggle_current_player
     end
   end
 
-  def toogle_current_player
+  def toggle_current_player
     if @current_player == @player_1
       @current_player = @player_2
     elsif @current_player == @player_2
@@ -127,7 +121,7 @@ class Game
       invalid_cell_response
       human_turn
     else
-      @board.fill_cell(move, " " + @current_player.token + " ")
+      @board.fill_cell(move, @current_player.token)
       @io.display_board
     end
   end
@@ -135,18 +129,16 @@ class Game
   def ai_turn
     move = @ai.find_move
     @io.output_message @current_player.name + CURRENT_PLAYER_TURN + "#{move}"
-    @board.fill_cell(move, " " + @current_player.token + " ")
+    @board.fill_cell(move, @current_player.token)
     @io.display_board
   end
 
   def calculate_sum(cell)
-     @sum += 1 if cell == @player_1.token
-     @sum -= 1 if cell == @player_2.token
+     @sum += 1 if cell == @current_player.token
   end
 
   def set_winner
-    @winner = @player_1.token if @sum == @size
-    @winner = @player_2.token if @sum == -@size
+    @winner = @current_player.token if @sum == @size
     @winner
   end
 
@@ -193,8 +185,7 @@ class Game
 
     @sum = 0
     diagonal.each do |cell|
-      @sum += 1 if @board.cells[cell] == @player_1.token
-      @sum -= 1 if @board.cells[cell] == @player_2.token
+      @sum += 1 if @board.cells[cell] == @current_player.token
     end
     set_winner
   end
@@ -211,8 +202,7 @@ class Game
 
     @sum = 0
     diagonal.each do |cell|
-      @sum += 1 if @board.cells[cell] == @player_1.token
-      @sum -= 1 if @board.cells[cell] == @player_2.token
+      @sum += 1 if @board.cells[cell] == @current_player.token
     end
     set_winner
   end
@@ -222,8 +212,7 @@ class Game
   end
 
   def winner_display
-    @io.output_message PLAYER_1_WON + @player_1.token if @winner == @player_1.token
-    @io.output_message PLAYER_2_WON + @player_2.token if @winner == @player_2.token
+    @io.output_message @current_player.name + CURRENT_PLAYER_WON
     @io.output_message TIE if is_tie?
   end
 

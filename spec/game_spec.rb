@@ -10,7 +10,7 @@ describe Game do
   let(:ai) { Ai.new(board.cells) }
   let(:player) { Player.new }
   let(:mock_io) { MockCommandLine.new(board.cells, ai, player, 3) }
-  let(:game) { Game.new(board, ai, player, mock_io, 3) }
+  let(:game) { Game.new(board, ai, mock_io, mock_menu, player, Player.new) }
 
 
   context 'run' do
@@ -32,7 +32,7 @@ describe Game do
     it 'displays that player is the winner of the game if player wins' do
       allow(mock_io).to receive(:game_loop)
       game.winner = player.token
-      game.run1
+      game.run
 
       expect(mock_io.printed_strings[2]).to match /you won/i
     end
