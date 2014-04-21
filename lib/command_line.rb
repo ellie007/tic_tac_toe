@@ -14,19 +14,39 @@ class CommandLine
 
   def display_board_row(element, index)
     if element != nil
-      print " #{element} "
+      if (index + 1) % @size == 0
+        print " #{element} "
+      else
+        print " #{element} |"
+      end
     else
+      if (index + 1) % @size == 0
+        print "   "
+      else
+        print "   |"
+      end
+    end
+  end
+
+  def legend
+    print "\n"
+    puts "Legend:"
+    @cells.each_with_index do |element, index|
       print " #{index + 1} "
+      print "\n" if (index + 1) % @size == 0
     end
   end
 
   def display_board
-    line_counter = 0
+    print "\n"
+    puts "Current state of game:"
     @cells.each_with_index do |element, index|
       display_board_row(element, index)
-      line_counter += 1
-      print "\n" if line_counter % @size == 0
+      print "\n" if (index + 1) % @size == 0
+      print "---+" * (@size-1) + "---" if (index + 1) % @size == 0 && (index + 1) < @size**2
+      print "\n" if (index + 1) % @size == 0 && (index + 1) < @size**2
     end
+    legend
   end
 
   def player_input(message)

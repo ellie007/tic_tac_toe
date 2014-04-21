@@ -26,8 +26,8 @@ class Game
   end
 
   def run
-    @io.display_board
     set_players
+    @io.display_board
     game_loop
     winner_display
     play_again?
@@ -99,7 +99,9 @@ class Game
   def game_loop
     until game_over do
       make_move
+      @io.clear_screen
       break if winner?
+      @io.display_board
       toggle_current_player
     end
   end
@@ -212,6 +214,7 @@ class Game
   end
 
   def winner_display
+    @io.display_board
     @io.output_message @current_player.name + CURRENT_PLAYER_WON
     @io.output_message TIE if is_tie?
   end
