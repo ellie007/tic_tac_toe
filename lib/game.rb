@@ -104,12 +104,7 @@ class Game
   end
 
   def toggle_current_player
-    #@current_player == @player_1 ? @current_player = @player_2 : @current_player = @player_1
-    if @current_player == @player_1
-      @current_player = @player_2
-    elsif @current_player == @player_2
-      @current_player = @player_1
-    end
+    @current_player == @player_1 ? @current_player = @player_2 : @current_player = @player_1
   end
 
   def human_turn
@@ -221,7 +216,7 @@ class Game
  #private
 
   def valid_input?(move)
-    (0..size**2).include?(move)
+    (0..size**2).include?(move) && move == " "
   end
 
   def valid_cell?(move)
