@@ -13,11 +13,11 @@ while game.play_again do
   menu.get_options
 
   board = Board.new(menu.size)
-  game_state = GameState.new(board.cells)
+  #game_state = GameState.new(board.cells)
   ai = Ai.new(board.cells)
   player_1 = Player.new
   player_2 = Player.new
-  cl = CommandLine.new(board.cells, ai, board.size, player_1, player_2)
+  cl = CommandLine.new(board, ai)
   game = Game.new(board, ai, cl, menu, player_1, player_2)
 
   game.run

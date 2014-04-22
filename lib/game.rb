@@ -216,7 +216,7 @@ class Game
  #private
 
   def valid_input?(move)
-    (0..size**2).include?(move) && move == " "
+    (0..size**2).include?(move) && move != " "
   end
 
   def valid_cell?(move)

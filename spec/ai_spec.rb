@@ -7,7 +7,7 @@ describe Ai do
   let(:ai) { Ai.new(board.cells) }
 
   it "finds a random move" do
-    (board.size**2).include?(ai.find_move).should == true
+    (1..board.size**2).include?(ai.find_move).should == true
   end
 
 end

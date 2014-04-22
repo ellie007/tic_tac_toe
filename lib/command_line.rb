@@ -1,11 +1,9 @@
 class CommandLine
 
-  def initialize(cells, ai, size, player_1, player_2)
-    @cells = cells
+  def initialize(board, ai)
+    @cells = board.cells
     @ai = ai
-    @size = size
-    @player_1 = player_1
-    @player_2 = player_2
+    @size = board.size
   end
 
   def output_message(message)
