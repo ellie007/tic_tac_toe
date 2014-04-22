@@ -39,7 +39,7 @@ class CommandLine
 
   def display_board
     print "\n"
-    puts "Current state of game:"
+    puts "Current State of Game:"
     @cells.each_with_index do |element, index|
       display_board_row(element, index)
       print "\n" if (index + 1) % @size == 0

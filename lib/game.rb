@@ -37,7 +37,7 @@ class Game
     play_again_input = @io.play_again_output PLAY_AGAIN
 
     until play_again_input == "y" || play_again_input == "n" do
-      puts PLAY_AGAIN_REPROMPT
+      @io.output_message PLAY_AGAIN_REPROMPT
       play_again_input = gets.chomp.downcase
     end
 
@@ -52,17 +52,14 @@ class Game
   end
 
   def set_current_player
-    if @menu.turn_response == nil
-      @current_player = @player_1
-    end
-
     case @menu.turn_response
+    when nil
+    @current_player = @player_1
     when 1
     @current_player = @player_1
     when 2
     @current_player = @player_2
     end
-    @current_player
   end
 
   def set_players
@@ -100,13 +97,14 @@ class Game
     until game_over do
       make_move
       @io.clear_screen
-      break if winner?
+      break if winner? || is_tie?
       @io.display_board
       toggle_current_player
     end
   end
 
   def toggle_current_player
+    #@current_player == @player_1 ? @current_player = @player_2 : @current_player = @player_1
     if @current_player == @player_1
       @current_player = @player_2
     elsif @current_player == @player_2
@@ -215,7 +213,7 @@ class Game
 
   def winner_display
     @io.display_board
-    @io.output_message @current_player.name + CURRENT_PLAYER_WON
+    @io.output_message @current_player.name + CURRENT_PLAYER_WON unless is_tie?
     @io.output_message TIE if is_tie?
   end
 

@@ -50,8 +50,10 @@ class Menu
   end
 
   def game_type
-    print "\n" + GAME_TYPE_OPTION
-    @game_type_response = gets.chomp.to_i
+    until @game_type_response == 1 || @game_type_response == 2 || @game_type_response == 3 do
+      print "\n" + GAME_TYPE_OPTION
+      @game_type_response = gets.chomp.to_i
+    end
   end
 
   def player_detail
@@ -62,8 +64,12 @@ class Menu
       players_token_values PLAYER_ONE_TOKEN, PLAYER_TWO_TOKEN
     when 2
       print GAME_TYPE_2 + "\n"
-      print TURN_RESPONSE
-      @turn_response = gets.chomp.to_i
+
+      until @turn_response == 1 || @turn_response == 2 do
+        print TURN_RESPONSE
+        @turn_response = gets.chomp.to_i
+      end
+
       if @turn_response == 1
         players_names PLAYER_NAME, COMPUTER_NAME
         players_token_values PLAYER_TOKEN, COMPUTER_TOKEN
@@ -80,16 +86,16 @@ class Menu
 
   def players_names message1, message2
     print "\n" + message1
-    @player_one_name = gets.chomp
+    @player_one_name = gets.capitalize.chomp
     print message2
-    @player_two_name = gets.chomp
+    @player_two_name = gets.capitalize.chomp
   end
 
   def players_names2 message1, message2
     print "\n" + message1
-    @player_two_name = gets.chomp
+    @player_two_name = gets.capitalize.chomp
     print message2
-    @player_one_name = gets.chomp
+    @player_one_name = gets.capitalize.chomp
   end
 
   def players_token_values message1, message2
@@ -105,6 +111,5 @@ class Menu
     print message2
     @player_one_token = gets.chomp
   end
-
 
 end

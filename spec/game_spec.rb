@@ -10,7 +10,7 @@ describe Game do
   let(:ai) { Ai.new(board.cells) }
   let(:player) { Player.new }
   let(:mock_io) { MockCommandLine.new(board.cells, ai, player, 3) }
-  let(:game) { Game.new(board, ai, mock_io, mock_menu, player, Player.new) }
+  let(:game) { Game.new(board, ai, mock_io, mock_io, player, Player.new) }
 
 
   context 'run' do

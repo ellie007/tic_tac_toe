@@ -4,6 +4,7 @@ require './lib/player'
 require './lib/game'
 require './lib/command_line'
 require './lib/menu'
+require './lib/game_state'
 
 game = Game.new({},{},{},{},{},{})
 
@@ -12,9 +13,10 @@ while game.play_again do
   menu.get_options
 
   board = Board.new(menu.size)
+  game_state = GameState.new(board.cells)
   ai = Ai.new(board.cells)
-  player_1 = Player.new#(menu.type)
-  player_2 = Player.new#(menu.type)
+  player_1 = Player.new
+  player_2 = Player.new
   cl = CommandLine.new(board.cells, ai, board.size, player_1, player_2)
   game = Game.new(board, ai, cl, menu, player_1, player_2)
 
