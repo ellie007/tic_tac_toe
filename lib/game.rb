@@ -212,7 +212,6 @@ class Game
     @io.output_message TIE if is_tie?
   end
 
-
  #private
 
   def valid_input?(move)

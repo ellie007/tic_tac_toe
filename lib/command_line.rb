@@ -1,8 +1,7 @@
 class CommandLine
 
-  def initialize(board, ai)
+  def initialize(board)
     @cells = board.cells
-    @ai = ai
     @size = board.size
   end
 
