@@ -3,7 +3,7 @@ require './lib/ai'
 
 describe Ai do
 
-  let(:board) { Board.new(3) }
+  let(:board) { Board.new(3, 9) }
   let(:ai) { Ai.new(board.cells) }
 
   it "finds a random move" do

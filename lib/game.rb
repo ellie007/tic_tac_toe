@@ -5,7 +5,7 @@ class Game
 
   CURRENT_PLAYER_TURN = "'s Turn: "
 
-  INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to 9."
+  INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to "
   INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
 
   CURRENT_PLAYER_WON = " Won!"
@@ -109,6 +109,7 @@ class Game
 
   def human_turn
     move = @io.player_input @current_player.name + CURRENT_PLAYER_TURN
+print move
     if !valid_input?(move)
       invalid_input_response
       human_turn
@@ -138,32 +139,47 @@ class Game
   end
 
   def winner?
-    row_winner || column_winner || principal_diagonal_winner || counter_diagonal_winner if @winner.nil?
+    if @winner.nil? && @board.dimension_size == 2
+      board = @board
+      row_winner(board) || column_winner(board) || principal_diagonal_winner || counter_diagonal_winner
+    elsif @winner.nil? && @board.dimension_size == 3
+      three_d_row_winner
+    end
   end
 
-  def row_winner
+  def three_d_row_winner
+    boards = []
+    @board.cells.each_slice(size**2) { |board| boards << board }
+    row_winner(boards)
+  end
+
+  def three_d_column_winner
+    boards = []
+  end
+
+  def row_winner(board)
     row_win_possibilities = []
-    @board.cells.each_slice(size) { |row| row_win_possibilities << row }
+    board.cells.each_slice(size) { |row| row_win_possibilities << row }
     row_win_possibilities.each do |row|
       @sum = 0
       row.each do |cell|
         calculate_sum(cell)
       end
-      break if @sum == @size || @sum == -@size
+      break if @sum == @size
     end
     set_winner
   end
 
-  def column_winner
+  def column_winner(board)
     column_win_possibilities = []
-    @board.cells.each_slice(size) { |row| column_win_possibilities << row }
+    board.cells.each_slice(size) { |row| column_win_possibilities << row }
     transposed_win_possibilties = column_win_possibilities.transpose
     transposed_win_possibilties.each do |row|
       @sum = 0
       row.each do |cell|
         calculate_sum(cell)
       end
-      break if @sum == @size || @sum == -@size
+      break if @sum == @size
     end
     set_winner
   end
@@ -215,7 +231,7 @@ class Game
  #private
 
   def valid_input?(move)
-    (0..size**2).include?(move) && move != " "
+    (0..board.dimension_size).include?(move) && move != " "
   end
 
   def valid_cell?(move)
@@ -223,7 +239,7 @@ class Game
   end
 
   def invalid_input_response
-    @io.output_message INVALID_INPUT
+    @io.output_message INVALID_INPUT + "#{board.dimension_size + 1}"
     @io.display_board
   end
 

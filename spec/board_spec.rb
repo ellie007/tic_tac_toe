@@ -7,7 +7,7 @@ describe Board do
   let(:menu) { Menu.new }
   let(:player_1) { Player.new }
   let(:player_2) { Player.new}
-  let(:board) { Board.new(3) }
+  let(:board) { Board.new(3, 9) }
   let(:game) { Game.new(board,{},{},menu,player_1,player_2) }
 
 

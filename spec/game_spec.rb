@@ -8,7 +8,7 @@ require 'menu'
 describe Game do
 
   let(:menu) { Menu.new }
-  let(:board) { Board.new(3) }
+  let(:board) { Board.new(3, 9) }
   let(:ai) { Ai.new(board.cells) }
   let(:player_1) { Player.new }
   let(:player_2) { Player.new }
@@ -65,9 +65,11 @@ describe Game do
     it "keeps prompting human for input until valid input" do
       player_1.name = "Eleanor"
       player_1.token = "X"
+      board.dimension_size = 9
       @current_player = game.set_current_player
       allow(mock_io).to receive(:player_input).and_return(123, 'a', 5)
-      game.human_turn
+      game.human_turn3
+
 
       expect(mock_io.printed_strings[0]).to match /That is invalid input./
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
@@ -138,6 +140,7 @@ describe Game do
     end
 
     it "player wins the game with a principal diagonal" do
+      board.dimension_size = 2
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(1, @current_player.token)
@@ -148,6 +151,7 @@ describe Game do
     end
 
     it "player wins the game with a row" do
+      board.dimension_size = 2
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(1, @current_player.token)
@@ -158,6 +162,7 @@ describe Game do
     end
 
     it "player wins the game with a column" do
+      board.dimension_size = 2
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(1, @current_player.token)
@@ -168,6 +173,7 @@ describe Game do
     end
 
     it "player wins the game with a counter diagonal" do
+      board.dimension_size = 2
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(3, @current_player.token)
@@ -178,15 +184,18 @@ describe Game do
     end
 
     it "is a tie game" do
-      board.fill_cell(1, player.token)
-      board.fill_cell(2, player.token)
-      board.fill_cell(3, ai.token)
-      board.fill_cell(4, ai.token)
-      board.fill_cell(5, ai.token)
-      board.fill_cell(6, player.token)
-      board.fill_cell(7, player.token)
-      board.fill_cell(8, ai.token)
-      board.fill_cell(9, player.token)
+      player_1.token = "X"
+      player_2.token = "O"
+
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(2, player_1.token)
+      board.fill_cell(3, player_2.token)
+      board.fill_cell(4, player_2.token)
+      board.fill_cell(5, player_2.token)
+      board.fill_cell(6, player_1.token)
+      board.fill_cell(7, player_1.token)
+      board.fill_cell(8, player_2.token)
+      board.fill_cell(9, player_1.token)
 
       game.is_tie?.should == true
     end
@@ -198,7 +207,9 @@ describe Game do
     end
 
     it "should not allow the player to place in a taken cell" do
-      board.fill_cell(5, player.token)
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(5, @current_player.token)
       game.valid_cell?(5).should == false
     end
 
@@ -209,21 +220,26 @@ describe Game do
 
   context "determines whether the game is over or not" do
     it "game over is true with tie game" do
-      board.fill_cell(1, player.token)
-      board.fill_cell(2, player.token)
-      board.fill_cell(3, ai.token)
-      board.fill_cell(4, ai.token)
-      board.fill_cell(5, ai.token)
-      board.fill_cell(6, player.token)
-      board.fill_cell(7, player.token)
-      board.fill_cell(8, ai.token)
-      board.fill_cell(9, player.token)
+      player_1.token = "X"
+      player_2.token = "O"
+
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(2, player_1.token)
+      board.fill_cell(3, player_2.token)
+      board.fill_cell(4, player_2.token)
+      board.fill_cell(5, player_2.token)
+      board.fill_cell(6, player_1.token)
+      board.fill_cell(7, player_1.token)
+      board.fill_cell(8, player_2.token)
+      board.fill_cell(9, player_1.token)
 
       game.game_over.should == true
     end
 
     it "game over is true with a winner" do
-      game.winner = player.token
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      game.winner = @current_player.token
       game.game_over == true
     end
 
@@ -233,8 +249,10 @@ describe Game do
     end
 
     it "game is not over mid game" do
-      board.fill_cell(1, player.token)
-      board.fill_cell(5, ai.token)
+      player_1.token = "X"
+      player_2.token = "O"
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(5, player_2.token)
       game.game_over == false
     end
   end

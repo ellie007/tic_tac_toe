@@ -26,11 +26,12 @@ class Menu
 
   TURN_RESPONSE = "Would you like to go first or second? (Enter 1 or 2): "
 
-  attr_accessor :size, :dimension_type, :game_type_response, :player_one_name, :player_two_name, :player_one_token, :player_two_token, :turn_response
+  attr_accessor :size, :dimension_type, :dimension_size, :game_type_response, :player_one_name, :player_two_name, :player_one_token, :player_two_token, :turn_response
 
   def initialize
     @size
     @dimension_type
+    @dimension_size
     @game_type_response
     @player_one_name
     @player_two_name
@@ -41,20 +42,21 @@ class Menu
 
   def get_options
     puts WELCOME + "\n"
-    board_size
     dimension_type
+    board_size
     game_type
     player_detail
-  end
-
-  def board_size
-    print BOARD_SIZE
-    @size = gets.chomp.to_i
   end
 
   def dimension_type
     print DIMENSION_TYPE
     @dimension_type = gets.chomp.to_i
+  end
+
+  def board_size
+    print BOARD_SIZE
+    @size = gets.chomp.to_i
+    @dimension_size = @size ** @dimension_type
   end
 
   def game_type
