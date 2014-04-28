@@ -97,7 +97,7 @@ describe Game do
 
   context "game winner determination:" do
     it "has no winner at the beginning of the game" do
-      game.winner?.should == nil
+      game.winner.should == nil
     end
 
     it "player wins the game with a principal diagonal" do
