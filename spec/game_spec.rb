@@ -27,6 +27,30 @@ describe Game do
     end
   end
 
+  context 'should make the correct type of move based on player type: ' do
+    it "ai type" do
+      player_1.name = 'Eleanor'
+      player_1.type = 'ai'
+      player_1.token = "O"
+      @current_player = game.set_current_player
+      allow(ai).to receive(:find_move).and_return(4)
+      game.make_move
+
+      expect(board.cells[3]).to eq(@current_player.token)
+    end
+
+    it "human type" do
+      player_1.name = 'Eleanor'
+      player_1.type = 'human'
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      allow(mock_io).to receive(:player_input).and_return(3)
+      game.make_move
+
+      expect(board.cells[2]).to eq(@current_player.token)
+    end
+  end
+
   it "should toggle the current player" do
     @current_player = game.set_current_player
     game.toggle_current_player.should == player_2
@@ -49,6 +73,7 @@ describe Game do
 
       expect(board.cells[4]).to eq(@current_player.token)
     end
+
 
     it "keeps prompting human for input until valid cell" do
       player_1.name = "Eleanor"
@@ -214,7 +239,7 @@ describe Game do
       expect(mock_io.printed_strings[1]).to match /eleanor won!/i
     end
 
-     it 'displays it was a tie game' do
+    it 'displays it was a tie game' do
         player_1.token = "X"
         player_2.token = "O"
 
@@ -231,7 +256,7 @@ describe Game do
         game.winner_display
 
         expect(mock_io.printed_strings[1]).to match /tie game/
-      end
+    end
   end
 
   context "player input validation" do
