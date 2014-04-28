@@ -204,7 +204,10 @@ describe Game do
     end
 
     it "should not allow the player to place in a taken cell" do
-      board.fill_cell(5, player.token)
+      player_1.token = "X"
+      @current_player = game.set_current_player
+
+      board.fill_cell(5, @current_player.token)
       game.valid_cell?(5).should == false
     end
 
