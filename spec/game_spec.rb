@@ -107,6 +107,16 @@ describe Game do
       board.fill_cell(5, @current_player.token)
       board.fill_cell(9, @current_player.token)
 
+      game.principal_diagonal_winner.should == @current_player.token
+    end
+
+    it "player wins the game with a principal diagonal" do
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(1, @current_player.token)
+      board.fill_cell(5, @current_player.token)
+      board.fill_cell(9, @current_player.token)
+
       game.winner?.should == @current_player.token
     end
 
