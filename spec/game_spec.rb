@@ -27,8 +27,35 @@ describe Game do
     end
   end
 
-  context 'settings' do
+  context 'play again: ' do
+    it "set to true" do
+      allow(mock_io).to receive(:play_again).and_return('y')
+      game.play_again?
+      game.play_again.should == true
+    end
 
+    it "set to false" do
+      allow(mock_io).to receive(:play_again).and_return('n')
+      game.play_again?
+      game.play_again.should == false
+    end
+  end
+
+  context 'settings' do
+    it "should set current player : nil" do
+      menu.turn_response = nil
+      game.set_current_player.should == player_1
+    end
+
+    it "should set current player : 1" do
+      menu.turn_response = 1
+      game.set_current_player.should == player_1
+    end
+
+    it "should set current player : 2" do
+      menu.turn_response = 2
+      game.set_current_player.should == player_2
+    end
 
     it "should set player types : 1" do
       menu.game_type_response = 1
@@ -92,6 +119,7 @@ describe Game do
 
   it "should toggle the current player" do
     @current_player = game.set_current_player
+    @current_player.should == player_1
     game.toggle_current_player.should == player_2
     game.toggle_current_player.should == player_1
   end

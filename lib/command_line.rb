@@ -51,7 +51,7 @@ class CommandLine
     move = gets.chomp.to_i
   end
 
-  def play_again_output(message)
+  def play_again(message)
     print "\n" + message
     play_again_input = gets.chomp.downcase
   end
