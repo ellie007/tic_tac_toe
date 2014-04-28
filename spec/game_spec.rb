@@ -235,7 +235,7 @@ describe Game do
     end
 
     it "when there is a winner" do
-      game.winner = player.token
+      game.winner = player_1.token = "X"
       game.game_over == true
     end
 
