@@ -127,6 +127,16 @@ describe Game do
       board.fill_cell(2, @current_player.token)
       board.fill_cell(3, @current_player.token)
 
+      game.row_winner.should == @current_player.token
+    end
+
+    it "player wins the game with a row" do
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(1, @current_player.token)
+      board.fill_cell(2, @current_player.token)
+      board.fill_cell(3, @current_player.token)
+
       game.winner?.should == @current_player.token
     end
 
@@ -137,7 +147,27 @@ describe Game do
       board.fill_cell(4, @current_player.token)
       board.fill_cell(7, @current_player.token)
 
+      game.column_winner.should == @current_player.token
+    end
+
+    it "player wins the game with a column" do
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(1, @current_player.token)
+      board.fill_cell(4, @current_player.token)
+      board.fill_cell(7, @current_player.token)
+
       game.winner?.should == @current_player.token
+    end
+
+    it "player wins the game with a counter diagonal" do
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(3, @current_player.token)
+      board.fill_cell(5, @current_player.token)
+      board.fill_cell(7, @current_player.token)
+
+      game.counter_diagonal_winner.should == @current_player.token
     end
 
     it "player wins the game with a counter diagonal" do
