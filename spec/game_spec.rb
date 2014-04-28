@@ -27,6 +27,45 @@ describe Game do
     end
   end
 
+  context 'settings' do
+
+
+    it "should set player types : 1" do
+      menu.game_type_response = 1
+      game.set_players
+      player_1.type.should == 'human'
+      player_2.type.should == 'human'
+    end
+
+    it "should set player types : 2" do
+      menu.game_type_response = 2
+      game.set_players
+      player_1.type.should == 'human'
+      player_2.type.should == 'ai'
+    end
+
+    it "should set player types : 3" do
+      menu.game_type_response = 3
+      game.set_players
+      player_1.type.should == 'ai'
+      player_2.type.should == 'ai'
+    end
+
+    it "should set tokens and names" do
+      menu.player_one_name = 'Eleanor'
+      menu.player_one_token = 'X'
+      menu.player_two_name = 'Vivian'
+      menu.player_two_token = 'O'
+
+      game.token_and_name
+
+      player_1.name.should == 'Eleanor'
+      player_1.token.should == 'X'
+      player_2.name.should == 'Vivian'
+      player_2.token.should == 'O'
+    end
+  end
+
   context 'should make the correct type of move based on player type: ' do
     it "ai type" do
       player_1.name = 'Eleanor'
@@ -73,7 +112,6 @@ describe Game do
 
       expect(board.cells[4]).to eq(@current_player.token)
     end
-
 
     it "keeps prompting human for input until valid cell" do
       player_1.name = "Eleanor"
