@@ -27,6 +27,12 @@ describe Game do
     end
   end
 
+  it "should toggle the current player" do
+    @current_player = game.set_current_player
+    game.toggle_current_player.should == player_2
+    game.toggle_current_player.should == player_1
+  end
+
   context "human turn" do
     it "keeps prompting human for input until valid input" do
       player_1.name = "Eleanor"
