@@ -12,8 +12,7 @@ while game.play_again do
   menu = Menu.new
   menu.get_options
 
-  board = Board.new(menu.size, menu.dimension_size)
-  #game_state = GameState.new(board.cells)
+  board = Board.new(menu.size, menu.dimension_type, menu.dimension_size)
   ai = Ai.new(board.cells)
   player_1 = Player.new
   player_2 = Player.new

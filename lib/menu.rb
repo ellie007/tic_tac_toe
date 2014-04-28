@@ -28,27 +28,15 @@ class Menu
 
   attr_accessor :size, :dimension_type, :dimension_size, :game_type_response, :player_one_name, :player_two_name, :player_one_token, :player_two_token, :turn_response
 
-  def initialize
-    @size
-    @dimension_type
-    @dimension_size
-    @game_type_response
-    @player_one_name
-    @player_two_name
-    @player_one_token
-    @player_two_token
-    @turn_response
-  end
-
   def get_options
     puts WELCOME + "\n"
-    dimension_type
+    get_dimension_type
     board_size
     game_type
     player_detail
   end
 
-  def dimension_type
+  def get_dimension_type
     print DIMENSION_TYPE
     @dimension_type = gets.chomp.to_i
   end

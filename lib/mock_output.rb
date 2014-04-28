@@ -26,4 +26,8 @@ class MockCommandLine
     @printed_strings << message
   end
 
+  def clear_screen
+
+  end
+
 end
