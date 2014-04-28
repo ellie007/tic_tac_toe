@@ -8,7 +8,7 @@ require 'menu'
 describe Game do
 
   let(:menu) { Menu.new }
-  let(:board) { Board.new(3) }
+  let(:board) { Board.new(3, 2) }
   let(:ai) { Ai.new(board.cells) }
   let(:player_1) { Player.new }
   let(:player_2) { Player.new }
@@ -204,10 +204,11 @@ describe Game do
       board.fill_cell(5, @current_player.token)
       board.fill_cell(9, @current_player.token)
 
-      game.principal_diagonal_winner.should == @current_player.token
+      game.principal_diagonal_winner(board.cells).should == @current_player.token
     end
 
     it "player wins the game with a principal diagonal" do
+      menu.dimension_response = 2
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(1, @current_player.token)
@@ -224,10 +225,11 @@ describe Game do
       board.fill_cell(2, @current_player.token)
       board.fill_cell(3, @current_player.token)
 
-      game.row_winner.should == @current_player.token
+      game.row_winner(board.cells).should == @current_player.token
     end
 
     it "player wins the game with a row" do
+      menu.dimension_response = 2
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(1, @current_player.token)
@@ -244,10 +246,11 @@ describe Game do
       board.fill_cell(4, @current_player.token)
       board.fill_cell(7, @current_player.token)
 
-      game.column_winner.should == @current_player.token
+      game.column_winner(board.cells).should == @current_player.token
     end
 
     it "player wins the game with a column" do
+      menu.dimension_response = 2
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(1, @current_player.token)
@@ -264,10 +267,11 @@ describe Game do
       board.fill_cell(5, @current_player.token)
       board.fill_cell(7, @current_player.token)
 
-      game.counter_diagonal_winner.should == @current_player.token
+      game.counter_diagonal_winner(board.cells).should == @current_player.token
     end
 
     it "player wins the game with a counter diagonal" do
+      menu.dimension_response = 2
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(3, @current_player.token)
@@ -387,5 +391,39 @@ describe Game do
 
 end
 
+describe Game do
+
+  let(:menu) { Menu.new }
+  let(:board) { Board.new(3, 3) }
+  let(:ai) { Ai.new(board.cells) }
+  let(:player_1) { Player.new }
+  let(:player_2) { Player.new }
+  let(:mock_io) { MockCommandLine.new(board) }
+  let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2) }
+
+  it "vertical straight on - should find a row winner" do
+    menu.dimension_response = 3
+    player_1.token = "X"
+    @current_player = game.set_current_player
+    board.fill_cell(13, @current_player.token)
+    board.fill_cell(14, @current_player.token)
+    board.fill_cell(15, @current_player.token)
+
+    game.winner?.should == @current_player.token
+  end
+
+  it "vertical side - should find a row winner" do
+    menu.dimension_response = 3
+    player_1.token = "X"
+    @current_player = game.set_current_player
+    board.fill_cell(7, @current_player.token)
+    board.fill_cell(16, @current_player.token)
+    board.fill_cell(25, @current_player.token)
+
+    game.winner?.should == @current_player.token
+  end
+
+
+end
 
 

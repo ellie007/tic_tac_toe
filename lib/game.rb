@@ -135,40 +135,49 @@ class Game
   end
 
   def winner?
-    row_winner || column_winner || principal_diagonal_winner || counter_diagonal_winner if @winner.nil?
+    if @winner.nil? && @menu.dimension_response == 2
+      board = @board.cells
+      row_winner(board) ||
+      column_winner(board) ||
+      principal_diagonal_winner(board) ||
+      counter_diagonal_winner(board)
+    elsif @winner.nil? && @menu.dimension_response == 3
+      board = @board.cells
+      row_winner(board)
+    end
   end
 
-  def row_winner
+  def row_winner(board)
     row_win_possibilities = []
-    @board.cells.each_slice(size) { |row| row_win_possibilities << row }
+    board.each_slice(size) { |row| row_win_possibilities << row }
     row_win_possibilities.each do |row|
       @sum = 0
       row.each do |cell|
         calculate_sum(cell)
       end
-      break if @sum == @size || @sum == -@size
+      break if @sum == @size
     end
     set_winner
   end
 
-  def column_winner
+  def column_winner(board)
     column_win_possibilities = []
-    @board.cells.each_slice(size) { |row| column_win_possibilities << row }
+    board.each_slice(size) { |row| column_win_possibilities << row }
     transposed_win_possibilties = column_win_possibilities.transpose
     transposed_win_possibilties.each do |row|
       @sum = 0
       row.each do |cell|
         calculate_sum(cell)
       end
-      break if @sum == @size || @sum == -@size
+      break if @sum == @size
     end
     set_winner
   end
 
-  def principal_diagonal_winner
+  def principal_diagonal_winner(board)
     diagonal = []
     i = 0
-    @board.cells.each_with_index do |cell, index|
+    board.each_with_index do |cell, index|
       if index % @size == 0
         diagonal << index + i
         i += 1
@@ -177,15 +186,15 @@ class Game
 
     @sum = 0
     diagonal.each do |cell|
-      @sum += 1 if @board.cells[cell] == @current_player.token
+      @sum += 1 if board[cell] == @current_player.token
     end
     set_winner
   end
 
-  def counter_diagonal_winner
+  def counter_diagonal_winner(board)
     diagonal = []
     i = @size - 1
-    @board.cells.each_with_index do |cell, index|
+    board.each_with_index do |cell, index|
       if index % @size == 0
         diagonal << index + i
         i -= 1
@@ -194,7 +203,7 @@ class Game
 
     @sum = 0
     diagonal.each do |cell|
-      @sum += 1 if @board.cells[cell] == @current_player.token
+      @sum += 1 if board[cell] == @current_player.token
     end
     set_winner
   end

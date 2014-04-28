@@ -1,11 +1,12 @@
 class Board
 
   attr_reader :cells
-  attr_accessor :size
+  attr_accessor :size, :dimension_response
 
-  def initialize(size)
+  def initialize(size, dimension)
     @size = size
-    @cells = Array.new(size**2, nil)
+    @dimension_response = size ** dimension
+    @cells = Array.new(size**dimension, nil)
   end
 
   def fill_cell(value, token)
