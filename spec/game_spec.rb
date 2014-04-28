@@ -216,32 +216,35 @@ describe Game do
     end
   end
 
-  context "determines whether the game is over or not" do
-    it "game over is true with tie game" do
-      board.fill_cell(1, player.token)
-      board.fill_cell(2, player.token)
-      board.fill_cell(3, ai.token)
-      board.fill_cell(4, ai.token)
-      board.fill_cell(5, ai.token)
-      board.fill_cell(6, player.token)
-      board.fill_cell(7, player.token)
-      board.fill_cell(8, ai.token)
-      board.fill_cell(9, player.token)
+  context "determines when game is over: " do
+    it "when tie game" do
+      player_1.token = "X"
+      player_2.token = "O"
+
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(2, player_1.token)
+      board.fill_cell(3, player_2.token)
+      board.fill_cell(4, player_2.token)
+      board.fill_cell(5, player_2.token)
+      board.fill_cell(6, player_1.token)
+      board.fill_cell(7, player_1.token)
+      board.fill_cell(8, player_1.token)
+      board.fill_cell(9, player_2.token)
 
       game.game_over.should == true
     end
 
-    it "game over is true with a winner" do
+    it "when there is a winner" do
       game.winner = player.token
       game.game_over == true
     end
 
-    it "game is not over with no winner" do
+    it "is not over with no winner" do
       game.winner = nil
       game.game_over == false
     end
 
-    it "game is not over mid game" do
+    it "not over mid game" do
       board.fill_cell(1, player.token)
       board.fill_cell(5, ai.token)
       game.game_over == false
