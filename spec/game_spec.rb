@@ -25,40 +25,6 @@ describe Game do
 
       expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
     end
-
-    xit 'displays that watson is the winner of the game if watson wins' do
-      allow(mock_io).to receive(:game_loop)
-      game.winner = ai.token
-      game.run1
-
-      expect(mock_io.printed_strings[2]).to match /watson won/i
-    end
-
-    xit 'displays that player is the winner of the game if player wins' do
-      allow(mock_io).to receive(:game_loop)
-      game.winner = player.token
-      game.run
-
-      expect(mock_io.printed_strings[2]).to match /you won/i
-    end
-
-    xit 'displays that it was a tie game' do
-      game.stub(:game_loop)
-
-      board.fill_cell(1, player.token)
-      board.fill_cell(2, player.token)
-      board.fill_cell(3, ai.token)
-      board.fill_cell(4, ai.token)
-      board.fill_cell(5, ai.token)
-      board.fill_cell(6, player.token)
-      board.fill_cell(7, player.token)
-      board.fill_cell(8, ai.token)
-      board.fill_cell(9, player.token)
-
-      game.run1
-
-      expect(mock_io.printed_strings[2]).to match /tie game/
-    end
   end
 
   context "human turn" do
@@ -130,10 +96,7 @@ describe Game do
   end
 
   context "game winner determination:" do
-
-
-   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    xit "has no winner at the beginning of the game" do
+    it "has no winner at the beginning of the game" do
       game.winner?.should == nil
     end
 
@@ -246,7 +209,7 @@ describe Game do
       game.winner_display
 
       expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
-       expect(mock_io.printed_strings[1]).to match /eleanor won!/i
+      expect(mock_io.printed_strings[1]).to match /eleanor won!/i
     end
 
      it 'displays it was a tie game' do
