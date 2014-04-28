@@ -198,9 +198,43 @@ describe Game do
     end
   end
 
+  context 'winner_display' do
+    it "displays the winner of the game when there is a winner" do
+      player_1.name = "Eleanor"
+      game.set_current_player
+      game.winner_display
+
+      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
+      expect(mock_io.printed_strings[1]).to match /eleanor won!/i
+    end
+
+     it 'displays it was a tie game' do
+        player_1.token = "X"
+        player_2.token = "O"
+
+        board.fill_cell(1, player_1.token)
+        board.fill_cell(2, player_1.token)
+        board.fill_cell(3, player_2.token)
+        board.fill_cell(4, player_2.token)
+        board.fill_cell(5, player_2.token)
+        board.fill_cell(6, player_1.token)
+        board.fill_cell(7, player_1.token)
+        board.fill_cell(8, player_2.token)
+        board.fill_cell(9, player_1.token)
+
+        game.winner_display
+
+        expect(mock_io.printed_strings[1]).to match /tie game/
+      end
+  end
+
   context "player input validation" do
     it "should return a false value for an invalid input type" do
-      game.valid_input?('123').should == false
+      game.valid_input?(123).should == false
+    end
+
+    it "should return a true value for a valid input type" do
+      game.valid_input?(1).should == true
     end
 
     it "should not allow the player to place in a taken cell" do
@@ -247,41 +281,12 @@ describe Game do
     it "not over mid game" do
       player_1.token = "X"
       player_2.token = "O"
+
       board.fill_cell(1, player_1.token)
       board.fill_cell(5, player_2.token)
       game.game_over == false
     end
   end
-
-  context 'winner_display' do
-    it "displays the winner of the game when there is a winner" do
-      player_1.name = "Eleanor"
-      game.set_current_player
-      game.winner_display
-
-      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
-      expect(mock_io.printed_strings[1]).to match /eleanor won!/i
-    end
-
-     it 'displays it was a tie game' do
-        player_1.token = "X"
-        player_2.token = "O"
-
-        board.fill_cell(1, player_1.token)
-        board.fill_cell(2, player_1.token)
-        board.fill_cell(3, player_2.token)
-        board.fill_cell(4, player_2.token)
-        board.fill_cell(5, player_2.token)
-        board.fill_cell(6, player_1.token)
-        board.fill_cell(7, player_1.token)
-        board.fill_cell(8, player_2.token)
-        board.fill_cell(9, player_1.token)
-
-        game.winner_display
-
-        expect(mock_io.printed_strings[1]).to match /tie game/
-      end
-    end
 
 end
 
