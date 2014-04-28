@@ -245,8 +245,10 @@ describe Game do
     end
 
     it "not over mid game" do
-      board.fill_cell(1, player.token)
-      board.fill_cell(5, ai.token)
+      player_1.token = "X"
+      player_2.token = "O"
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(5, player_2.token)
       game.game_over == false
     end
   end
