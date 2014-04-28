@@ -95,7 +95,7 @@ describe Game do
     end
   end
 
-  context "game winner determination:" do
+  context "winner determination:" do
     it "has no winner at the beginning of the game" do
       game.winner.should == nil
     end
@@ -141,15 +141,18 @@ describe Game do
     end
 
     it "is a tie game" do
-      board.fill_cell(1, player.token)
-      board.fill_cell(2, player.token)
-      board.fill_cell(3, ai.token)
-      board.fill_cell(4, ai.token)
-      board.fill_cell(5, ai.token)
-      board.fill_cell(6, player.token)
-      board.fill_cell(7, player.token)
-      board.fill_cell(8, ai.token)
-      board.fill_cell(9, player.token)
+      player_1.token = "X"
+      player_2.token = "O"
+
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(2, player_1.token)
+      board.fill_cell(3, player_2.token)
+      board.fill_cell(4, player_2.token)
+      board.fill_cell(5, player_2.token)
+      board.fill_cell(6, player_1.token)
+      board.fill_cell(7, player_1.token)
+      board.fill_cell(8, player_2.token)
+      board.fill_cell(9, player_1.token)
 
       game.is_tie?.should == true
     end
