@@ -401,7 +401,7 @@ describe Game do
   let(:mock_io) { MockCommandLine.new(board) }
   let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2) }
 
-  it "vertical straight on - should find a row winner" do
+  it "vertical straight - should find a row winner" do
     menu.dimension_response = 3
     player_1.token = "X"
     @current_player = game.set_current_player
@@ -422,7 +422,6 @@ describe Game do
 
     game.winner?.should == @current_player.token
   end
-
 
 end
 

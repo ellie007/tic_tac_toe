@@ -144,6 +144,7 @@ class Game
     elsif @winner.nil? && @menu.dimension_response == 3
       board = @board.cells
       row_winner(board)
+      vertical_side_row(board)
     end
   end
 
@@ -206,6 +207,26 @@ class Game
       @sum += 1 if board[cell] == @current_player.token
     end
     set_winner
+  end
+
+  def vertical_side_row(board)
+    vertical_side_board = []
+    board.each_slice(size**2) { |board| vertical_side_board << board }
+
+    greater_board = []
+    i = 0
+    j = 0
+    size.times do
+      vertical_side_board.each do |board|
+        size.times do
+          greater_board << board[i]
+        end
+        i += size
+      end
+      j += 1
+      i = j
+    end
+    row_winner(greater_board)
   end
 
   def is_tie?
