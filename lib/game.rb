@@ -214,16 +214,14 @@ class Game
     j = 1
     greater_array = []
       (size**2).times do
-        sub_array = []
         size.times do
-          sub_array << board[i]
+          greater_array << board[i]
           i += (size**2)
         end
         i = j
         j += 1
-        greater_array << sub_array
       end
-    row_winner(greater_array.flatten)
+    row_winner(greater_array)
   end
 
   def is_tie?
