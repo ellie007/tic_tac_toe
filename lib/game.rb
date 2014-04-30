@@ -143,7 +143,7 @@ class Game
       counter_diagonal_winner(board)
     elsif @winner.nil? && @menu.dimension_response == 3
       board = @board.cells
-      row_winner(board)
+      row_winner(board) ||
       vertical_side_row(board)
     end
   end
@@ -210,23 +210,20 @@ class Game
   end
 
   def vertical_side_row(board)
-    vertical_side_board = []
-    board.each_slice(size**2) { |board| vertical_side_board << board }
-
-    greater_board = []
     i = 0
-    j = 0
-    size.times do
-      vertical_side_board.each do |board|
+    j = 1
+    greater_array = []
+      (size**2).times do
+        sub_array = []
         size.times do
-          greater_board << board[i]
+          sub_array << board[i]
+          i += (size**2)
         end
-        i += size
+        i = j
+        j += 1
+        greater_array << sub_array
       end
-      j += 1
-      i = j
-    end
-    row_winner(greater_board)
+    row_winner(greater_array.flatten)
   end
 
   def is_tie?

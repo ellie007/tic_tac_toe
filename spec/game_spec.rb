@@ -412,6 +412,17 @@ describe Game do
     game.winner?.should == @current_player.token
   end
 
+  xit "column straight - should find a column winner" do
+    menu.dimension_response = 3
+    player_1.token = "X"
+    @current_player = game.set_current_player
+    board.fill_cell(11, @current_player.token)
+    board.fill_cell(14, @current_player.token)
+    board.fill_cell(17, @current_player.token)
+
+    game.winner?.should == @current_player.token
+  end
+
   it "vertical side - should find a row winner" do
     menu.dimension_response = 3
     player_1.token = "X"
