@@ -44,7 +44,8 @@ describe Game do
   context 'settings' do
     it "should set current player : nil" do
       menu.turn_response = nil
-      game.set_current_player.should == player_1
+      game.set_current_player
+      game.current_player.should == player_1
     end
 
     it "should set current player : 1" do

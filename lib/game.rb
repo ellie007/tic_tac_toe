@@ -10,6 +10,7 @@ class Game
   CURRENT_PLAYER_WON = " Won!"
   TIE = "It is a tie game."
 
+  attr_reader :current_player
   attr_accessor :board, :winner, :sum, :size, :play_again
 
   def initialize(board, ai, io, menu, player_1, player_2)
