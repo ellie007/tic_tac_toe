@@ -94,7 +94,7 @@ class Game
     until game_over do
       make_move
       @io.clear_screen
-      break if winner? || is_tie?
+      break if is_winner || is_tie?
       @io.display_board
       toggle_current_player
     end
@@ -134,7 +134,7 @@ class Game
     @winner
   end
 
-  def winner?
+  def is_winner
     if @winner.nil? && @menu.dimension_response == 2
       board = @board.cells
       row_winner(board) ||

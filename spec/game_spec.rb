@@ -215,7 +215,7 @@ describe Game do
       board.fill_cell(5, @current_player.token)
       board.fill_cell(9, @current_player.token)
 
-      game.winner?.should == @current_player.token
+      game.is_winner.should == @current_player.token
     end
 
     it "player wins the game with a row" do
@@ -236,7 +236,7 @@ describe Game do
       board.fill_cell(2, @current_player.token)
       board.fill_cell(3, @current_player.token)
 
-      game.winner?.should == @current_player.token
+      game.is_winner.should == @current_player.token
     end
 
     it "player wins the game with a column" do
@@ -257,7 +257,7 @@ describe Game do
       board.fill_cell(4, @current_player.token)
       board.fill_cell(7, @current_player.token)
 
-      game.winner?.should == @current_player.token
+      game.is_winner.should == @current_player.token
     end
 
     it "player wins the game with a counter diagonal" do
@@ -278,7 +278,7 @@ describe Game do
       board.fill_cell(5, @current_player.token)
       board.fill_cell(7, @current_player.token)
 
-      game.winner?.should == @current_player.token
+      game.is_winner.should == @current_player.token
     end
 
     it "is a tie game" do
@@ -409,7 +409,7 @@ describe Game do
     board.fill_cell(14, @current_player.token)
     board.fill_cell(15, @current_player.token)
 
-    game.winner?.should == @current_player.token
+    game.is_winner.should == @current_player.token
   end
 
   xit "column straight - should find a column winner" do
@@ -420,7 +420,7 @@ describe Game do
     board.fill_cell(14, @current_player.token)
     board.fill_cell(17, @current_player.token)
 
-    game.winner?.should == @current_player.token
+    game.is_winner.should == @current_player.token
   end
 
   it "vertical side - should find a row winner" do
@@ -431,7 +431,7 @@ describe Game do
     board.fill_cell(16, @current_player.token)
     board.fill_cell(25, @current_player.token)
 
-    game.winner?.should == @current_player.token
+    game.is_winner.should == @current_player.token
   end
 
 end
