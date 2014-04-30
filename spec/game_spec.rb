@@ -29,7 +29,7 @@ describe Game do
 
   context 'play again: ' do
     it "set to true" do
-      allow(mock_io).to receive(:play_again).and_return('y')
+      allow(mock_io).to receive(:play_again).and_return('a', 1, 'y')
       game.play_again?
       game.play_again.should == true
     end
