@@ -138,10 +138,10 @@ class Game
     if @winner.nil? && @menu.dimension_response == 2
       board = @board.cells
       row_winner(board) ||
-      column_winner(board) ||
-      principal_diagonal_winner(board) ||
-      counter_diagonal_winner(board)
-    elsif @winner.nil? && @menu.dimension_response == 3
+        column_winner(board) ||
+        principal_diagonal_winner(board) ||
+        counter_diagonal_winner(board)
+    elsif @winner_displaynner.nil? && @menu.dimension_response == 3
       board = @board.cells
       row_winner(board) ||
       vertical_side_row(board)
