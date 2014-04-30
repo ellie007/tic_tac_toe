@@ -198,45 +198,16 @@ describe Game do
       game.winner.should == nil
     end
 
-    it "player wins the game with a principal diagonal" do
-      player_1.token = "X"
-      @current_player = game.set_current_player
-      board.fill_cell(1, @current_player.token)
-      board.fill_cell(5, @current_player.token)
-      board.fill_cell(9, @current_player.token)
-
-      game.principal_diagonal_winner(board.cells).should == @current_player.token
-    end
-
-    it "player wins the game with a principal diagonal" do
-      menu.dimension_response = 2
-      player_1.token = "X"
-      @current_player = game.set_current_player
-      board.fill_cell(1, @current_player.token)
-      board.fill_cell(5, @current_player.token)
-      board.fill_cell(9, @current_player.token)
-
-      game.is_winner.should == @current_player.token
-    end
-
     it "player wins the game with a row" do
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(1, @current_player.token)
       board.fill_cell(2, @current_player.token)
       board.fill_cell(3, @current_player.token)
-
       game.row_winner(board.cells).should == @current_player.token
-    end
 
-    it "player wins the game with a row" do
       menu.dimension_response = 2
-      player_1.token = "X"
-      @current_player = game.set_current_player
-      board.fill_cell(1, @current_player.token)
-      board.fill_cell(2, @current_player.token)
-      board.fill_cell(3, @current_player.token)
-
+      game.winner = nil
       game.is_winner.should == @current_player.token
     end
 
@@ -246,18 +217,23 @@ describe Game do
       board.fill_cell(1, @current_player.token)
       board.fill_cell(4, @current_player.token)
       board.fill_cell(7, @current_player.token)
-
       game.column_winner(board.cells).should == @current_player.token
+
+      menu.dimension_response = 2
+      game.winner = nil
+      game.is_winner.should == @current_player.token
     end
 
-    it "player wins the game with a column" do
-      menu.dimension_response = 2
+    it "player wins the game with a principal diagonal" do
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(1, @current_player.token)
-      board.fill_cell(4, @current_player.token)
-      board.fill_cell(7, @current_player.token)
+      board.fill_cell(5, @current_player.token)
+      board.fill_cell(9, @current_player.token)
+      game.principal_diagonal_winner(board.cells).should == @current_player.token
 
+      menu.dimension_response = 2
+      game.winner = nil
       game.is_winner.should == @current_player.token
     end
 
@@ -267,18 +243,10 @@ describe Game do
       board.fill_cell(3, @current_player.token)
       board.fill_cell(5, @current_player.token)
       board.fill_cell(7, @current_player.token)
-
       game.counter_diagonal_winner(board.cells).should == @current_player.token
-    end
 
-    it "player wins the game with a counter diagonal" do
       menu.dimension_response = 2
-      player_1.token = "X"
-      @current_player = game.set_current_player
-      board.fill_cell(3, @current_player.token)
-      board.fill_cell(5, @current_player.token)
-      board.fill_cell(7, @current_player.token)
-
+      game.winner = nil
       game.is_winner.should == @current_player.token
     end
 
@@ -386,7 +354,7 @@ describe Game do
 
       board.fill_cell(1, player_1.token)
       board.fill_cell(5, player_2.token)
-      game.game_over == false
+      game.game_over.should == false
     end
   end
 

@@ -145,7 +145,7 @@ class Game
     elsif @winner_displaynner.nil? && @menu.dimension_response == 3
       board = @board.cells
       row_winner(board) ||
-      vertical_side_row(board)
+        vertical_side_row(board)
     end
   end
 
