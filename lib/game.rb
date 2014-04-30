@@ -235,8 +235,6 @@ class Game
     @io.output_message TIE if is_tie?
   end
 
-# private
-
   def valid_input?(move)
     (0..size**2).include?(move) && move != " "
   end
