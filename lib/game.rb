@@ -145,6 +145,7 @@ class Game
     elsif @winner_displaynner.nil? && @menu.dimension_response == 3
       board = @board.cells
       row_winner(board) ||
+        vertical_column_row(board) ||
         vertical_side_row(board)
     end
   end
@@ -213,16 +214,44 @@ class Game
   def vertical_side_row(board)
     i = 0
     j = 1
-    greater_array = []
-      (size**2).times do
-        size.times do
-          greater_array << board[i]
-          i += (size**2)
-        end
-        i = j
-        j += 1
+    three_d_board = []
+
+    (size**2).times do
+      size.times do
+        three_d_board << board[i]
+        i += (size**2)
       end
-    row_winner(greater_array)
+      i = j
+      j += 1
+    end
+
+    row_winner(three_d_board)
+  end
+
+  def vertical_column_row(board)
+    i = 0
+    j = 1
+    board_1 = []
+    size.times do
+      size.times do
+        board_1 << i
+        i += size
+      end
+      i = j
+      j += 1
+    end
+
+    duplicate_board = []
+    size.times do |i|
+      duplicate_board << board_1.map{|x| x + (i * (size**2))}
+    end
+
+    three_d_board = []
+    duplicate_board.flatten.each do |value|
+      three_d_board << board[value]
+    end
+
+    row_winner(three_d_board)
   end
 
   def is_tie?

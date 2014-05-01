@@ -5,7 +5,7 @@ require 'player'
 require 'mock_output'
 require 'menu'
 
-describe Game do
+describe Game, '2D'  do
 
   let(:menu) { Menu.new }
   let(:board) { Board.new(3, 2) }
@@ -28,16 +28,20 @@ describe Game do
   end
 
   context 'play again: ' do
-    it "set to true" do
-      allow(mock_io).to receive(:play_again).and_return('a', 1, 'y')
+     it "accepts y or n to play again response"  do
+      allow(mock_io).to receive(:play_again).and_return('y')
       game.play_again?
       game.play_again.should == true
-    end
 
-    it "set to false" do
       allow(mock_io).to receive(:play_again).and_return('n')
       game.play_again?
       game.play_again.should == false
+    end
+
+    it "continues to repromt until y or n"  do
+      allow(mock_io).to receive(:play_again).and_return(1, 2, 3, 'y')
+      game.play_again?
+      game.play_again.should == true
     end
   end
 
@@ -254,15 +258,7 @@ describe Game do
       player_1.token = "X"
       player_2.token = "O"
 
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(2, player_1.token)
-      board.fill_cell(3, player_2.token)
-      board.fill_cell(4, player_2.token)
-      board.fill_cell(5, player_2.token)
-      board.fill_cell(6, player_1.token)
-      board.fill_cell(7, player_1.token)
-      board.fill_cell(8, player_2.token)
-      board.fill_cell(9, player_1.token)
+      tie_board
 
       game.is_tie?.should == true
     end
@@ -282,15 +278,7 @@ describe Game do
         player_1.token = "X"
         player_2.token = "O"
 
-        board.fill_cell(1, player_1.token)
-        board.fill_cell(2, player_1.token)
-        board.fill_cell(3, player_2.token)
-        board.fill_cell(4, player_2.token)
-        board.fill_cell(5, player_2.token)
-        board.fill_cell(6, player_1.token)
-        board.fill_cell(7, player_1.token)
-        board.fill_cell(8, player_2.token)
-        board.fill_cell(9, player_1.token)
+        tie_board
 
         game.winner_display
 
@@ -325,15 +313,7 @@ describe Game do
       player_1.token = "X"
       player_2.token = "O"
 
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(2, player_1.token)
-      board.fill_cell(3, player_2.token)
-      board.fill_cell(4, player_2.token)
-      board.fill_cell(5, player_2.token)
-      board.fill_cell(6, player_1.token)
-      board.fill_cell(7, player_1.token)
-      board.fill_cell(8, player_1.token)
-      board.fill_cell(9, player_2.token)
+      tie_board
 
       game.game_over.should == true
     end
@@ -360,7 +340,7 @@ describe Game do
 
 end
 
-describe Game do
+describe Game, '3D' do
 
   let(:menu) { Menu.new }
   let(:board) { Board.new(3, 3) }
@@ -370,7 +350,7 @@ describe Game do
   let(:mock_io) { MockCommandLine.new(board) }
   let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2) }
 
-  it "vertical straight - should find a row winner" do
+  it "vertical straight row- should find a row winner" do
     menu.dimension_response = 3
     player_1.token = "X"
     @current_player = game.set_current_player
@@ -381,7 +361,7 @@ describe Game do
     game.is_winner.should == @current_player.token
   end
 
-  xit "column straight - should find a column winner" do
+  it "vertical straight column - should find a column winner" do
     menu.dimension_response = 3
     player_1.token = "X"
     @current_player = game.set_current_player
@@ -392,7 +372,7 @@ describe Game do
     game.is_winner.should == @current_player.token
   end
 
-  it "vertical side - should find a row winner" do
+  it "vertical side row - should find a row winner" do
     menu.dimension_response = 3
     player_1.token = "X"
     @current_player = game.set_current_player
@@ -405,4 +385,17 @@ describe Game do
 
 end
 
+private
+
+def tie_board
+  board.fill_cell(1, player_1.token)
+  board.fill_cell(2, player_1.token)
+  board.fill_cell(3, player_2.token)
+  board.fill_cell(4, player_2.token)
+  board.fill_cell(5, player_2.token)
+  board.fill_cell(6, player_1.token)
+  board.fill_cell(7, player_1.token)
+  board.fill_cell(8, player_1.token)
+  board.fill_cell(9, player_2.token)
+end
 
