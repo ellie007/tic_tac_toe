@@ -254,6 +254,10 @@ class Game
     board
   end
 
+  def y_axis_board
+
+  end
+
   def vertical_column_row(board)
     i = 0
     j = 1
