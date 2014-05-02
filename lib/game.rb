@@ -284,32 +284,6 @@ class Game
     board
   end
 
-  def vertical_column_row(board)
-    i = 0
-    j = 1
-    board_1 = []
-    size.times do
-      size.times do
-        board_1 << i
-        i += size
-      end
-      i = j
-      j += 1
-    end
-
-    duplicate_board = []
-    size.times do |i|
-      duplicate_board << board_1.map{|x| x + (i * (size**2))}
-    end
-
-    three_d_board = []
-    duplicate_board.flatten.each do |value|
-      three_d_board << board[value]
-    end
-
-    row_winner(three_d_board)
-  end
-
   def is_tie?
     @winner == nil && @board.cells.select { |cell| cell == nil }.empty?
   end
