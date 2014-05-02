@@ -404,13 +404,35 @@ describe Game, '3D' do
       game.is_winner(board.cells).should == @current_player.token
     end
 
-     it "check for a column winner" do
+    it "check for a column winner" do
       menu.dimension_response = 3
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(21, @current_player.token)
       board.fill_cell(24, @current_player.token)
       board.fill_cell(27, @current_player.token)
+
+      game.is_winner(board.cells).should == @current_player.token
+    end
+
+    it "for a principal diagonal winner" do
+      menu.dimension_response = 3
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(3, @current_player.token)
+      board.fill_cell(15, @current_player.token)
+      board.fill_cell(27, @current_player.token)
+
+      game.is_winner(board.cells).should == @current_player.token
+    end
+
+    it "for a counter diagonal winner" do
+      menu.dimension_response = 3
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(21, @current_player.token)
+      board.fill_cell(15, @current_player.token)
+      board.fill_cell(9, @current_player.token)
 
       game.is_winner(board.cells).should == @current_player.token
     end
