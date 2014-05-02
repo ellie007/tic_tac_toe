@@ -140,8 +140,8 @@ class Game
     if @menu.dimension_response == 2
       boards << @board.cells
     elsif @menu.dimension_response == 3
-      #z_axis_board.each { |sub_board| boards << sub_board }
-      #x_axis_board.each { |sub_board| boards << sub_board }
+      z_axis_board.each { |sub_board| boards << sub_board }
+      x_axis_board.each { |sub_board| boards << sub_board }
       y_axis_board.each { |sub_board| boards << sub_board }
     end
     boards

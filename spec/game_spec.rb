@@ -467,7 +467,7 @@ describe Game, '3D' do
       @current_player = game.set_current_player
       board.fill_cell(25, @current_player.token)
       board.fill_cell(17, @current_player.token)
-      board.fill_cell(8, @current_player.token)
+      board.fill_cell(9, @current_player.token)
 
       game.is_winner(board.cells).should == @current_player.token
     end
@@ -482,6 +482,30 @@ describe Game, '3D' do
 
       game.is_winner(board.cells).should == @current_player.token
     end
+  end
+
+end
+
+describe Game, '3D-4x4' do
+
+  let(:menu) { Menu.new }
+  let(:board) { Board.new(4, 3) }
+  let(:ai) { Ai.new(board.cells) }
+  let(:player_1) { Player.new }
+  let(:player_2) { Player.new }
+  let(:mock_io) { MockCommandLine.new(board) }
+  let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2) }
+
+  it "for a counter diagonal winner" do
+      menu.dimension_response = 3
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(53, @current_player.token)
+      board.fill_cell(38, @current_player.token)
+      board.fill_cell(23, @current_player.token)
+      board.fill_cell(8, @current_player.token)
+
+      game.is_winner(board.cells).should == @current_player.token
   end
 
 end
