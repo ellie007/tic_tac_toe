@@ -135,19 +135,26 @@ class Game
     @winner
   end
 
-  def is_winner
-    if @winner.nil? && @menu.dimension_response == 2
-      board = @board.cells
-      row_winner(board) ||
-        column_winner(board) ||
-        principal_diagonal_winner(board) ||
-        counter_diagonal_winner(board)
-    elsif @winner_displaynner.nil? && @menu.dimension_response == 3
-      board = @board.cells
-      row_winner(board) ||
-        vertical_column_row(board) ||
-        vertical_side_row(board)
+  def get_all_sub_boards
+    boards = []
+    if @menu.dimension_response == 2
+      boards << @board.cells
+    elsif @menu.dimension_response == 3
+      z_axis_board.each { |sub_board| boards << sub_board }
     end
+    boards
+  end
+
+  def is_winner(board)
+    get_all_sub_boards.each { |sub_board| per_board_direction_check(sub_board) }
+    set_winner
+  end
+
+  def per_board_direction_check(board)
+    row_winner(board) ||
+      column_winner(board) ||
+      principal_diagonal_winner(board) ||
+      counter_diagonal_winner(board)
   end
 
   def row_winner(board)
@@ -209,6 +216,12 @@ class Game
       @sum += 1 if board[cell] == @current_player.token
     end
     set_winner
+  end
+
+  def z_axis_board
+    x_board = []
+    @board.cells.each_slice(size**2) { |sub_board| x_board << sub_board }
+    x_board
   end
 
   def vertical_side_row(board)
