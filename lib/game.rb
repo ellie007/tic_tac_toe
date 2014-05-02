@@ -140,8 +140,9 @@ class Game
     if @menu.dimension_response == 2
       boards << @board.cells
     elsif @menu.dimension_response == 3
-      z_axis_board.each { |sub_board| boards << sub_board }
-      x_axis_board.each { |sub_board| boards << sub_board }
+      #z_axis_board.each { |sub_board| boards << sub_board }
+      #x_axis_board.each { |sub_board| boards << sub_board }
+      y_axis_board.each { |sub_board| boards << sub_board }
     end
     boards
   end
@@ -255,7 +256,32 @@ class Game
   end
 
   def y_axis_board
+    h = size - 1
+    i = (size**2) * h
 
+    index_builder = []
+    size.times do
+      size.times do
+        index_builder << i
+        i += 1
+      end
+      i -= (size**2 + size)
+    end
+
+    duplicate_board = []
+    size.times do |i|
+      duplicate_board << index_builder.map { |x| x + (i*size) }
+    end
+
+    three_d_board = []
+    duplicate_board.flatten.each do |value|
+      three_d_board << @board.cells[value]
+    end
+    print three_d_board
+
+    board = []
+    three_d_board.each_slice(size**2) { |sub_board| board << sub_board }
+    board
   end
 
   def vertical_column_row(board)
