@@ -141,6 +141,7 @@ class Game
       boards << @board.cells
     elsif @menu.dimension_response == 3
       z_axis_board.each { |sub_board| boards << sub_board }
+      y_axis_board.each { |sub_board| boards << sub_board }
     end
     boards
   end
@@ -224,21 +225,22 @@ class Game
     x_board
   end
 
-  def vertical_side_row(board)
+  def y_axis_board
     i = 0
     j = 1
-    three_d_board = []
+    index_builder = []
 
     (size**2).times do
       size.times do
-        three_d_board << board[i]
+        index_builder << @board.cells[i]
         i += (size**2)
       end
       i = j
       j += 1
     end
-
-    row_winner(three_d_board)
+    board = []
+    index_builder.each_slice(size**2) { |sub_board| board << sub_board }
+    board
   end
 
   def vertical_column_row(board)

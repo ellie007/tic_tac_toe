@@ -392,6 +392,19 @@ describe Game, '3D' do
     end
   end
 
+  context "x axis board winner check: " do
+    it "check for a row winner" do
+      menu.dimension_response = 3
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(2, @current_player.token)
+      board.fill_cell(11, @current_player.token)
+      board.fill_cell(20, @current_player.token)
+
+      game.is_winner(board.cells).should == @current_player.token
+    end
+  end
+
 end
 
 private
