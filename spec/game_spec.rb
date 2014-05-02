@@ -379,6 +379,17 @@ describe Game, '3D' do
 
       game.is_winner(board.cells).should == @current_player.token
     end
+
+    it "for a counter diagonal winner" do
+      menu.dimension_response = 3
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(12, @current_player.token)
+      board.fill_cell(14, @current_player.token)
+      board.fill_cell(16, @current_player.token)
+
+      game.is_winner(board.cells).should == @current_player.token
+    end
   end
 
 end
