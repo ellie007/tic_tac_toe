@@ -25,6 +25,8 @@ class Menu
   :player_1_token, :player_2_token, :player_3_token, :player_4_token,
   :player_1_type, :player_2_type, :player_3_type, :player_4_type
 
+  PLAYERS_ARRAY = []
+
   def get_options
     puts WELCOME + "\n"
     board_size
@@ -44,17 +46,28 @@ class Menu
 
   def player_detail
     player_1 PLAYER_ONE_NAME, PLAYER_ONE_TOKEN, PLAYER_ONE_TYPE
+    PLAYERS_ARRAY << player_1
     case @num_of_players
     when 2
       player_2 PLAYER_TWO_NAME, PLAYER_TWO_TOKEN, PLAYER_TWO_TYPE
+      PLAYERS_ARRAY << player_2
     when 3
       player_2 PLAYER_TWO_NAME, PLAYER_TWO_TOKEN, PLAYER_TWO_TYPE
       player_3 PLAYER_THREE_NAME, PLAYER_THREE_TOKEN, PLAYER_THREE_TYPE
+      PLAYERS_ARRAY << player_2
+      PLAYERS_ARRAY << player_3
     when 4
       player_2 PLAYER_TWO_NAME, PLAYER_TWO_TOKEN, PLAYER_TWO_TYPE
       player_3 PLAYER_THREE_NAME, PLAYER_THREE_TOKEN, PLAYER_THREE_TYPE
       player_4 PLAYER_FOUR_NAME, PLAYER_FOUR_TOKEN, PLAYER_FOUR_TYPE
+      PLAYERS_ARRAY << player_2
+      PLAYERS_ARRAY << player_3
+      PLAYERS_ARRAY << player_4
     end
+  end
+
+  def players_list
+    PLAYERS_ARRAY
   end
 
   def player_1 name, token, type

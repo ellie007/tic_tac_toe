@@ -41,7 +41,7 @@ describe Game do
 
   context 'toggle current player' do
     it 'current player should be next player' do
-      menu.num_of_players = 4
+      allow(menu).to receive(:players_list).and_return([player_1, player_2, player_3, player_4])
       game.current_player = player_4
       game.toggle_current_player
 

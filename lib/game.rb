@@ -89,30 +89,9 @@ class Game
   end
 
   def toggle_current_player
-    case @menu.num_of_players
-    when 1
-    @current_player = @player_1
-    when 2
-    @current_player == @player_1 ? @current_player = @player_2 : @current_player = @player_1
-    when 3
-      if @current_player == @player_1
-        @current_player = @player_2
-      elsif @current_player == @player_2
-        @current_player = @player_3
-      elsif @current_player == @player_3
-        @current_player = @player_1
-      end
-    when 4
-      if @current_player == @player_1
-        @current_player = @player_2
-      elsif @current_player == @player_2
-        @current_player = @player_3
-      elsif @current_player == @player_3
-        @current_player = @player_4
-      elsif @current_player == @player_4
-        @current_player = @player_1
-      end
-    end
+    current_player_index = @menu.players_list.index(@current_player)
+    next_player_index = (current_player_index + 1) % @menu.players_list.size
+    @current_player = @menu.players_list[next_player_index]
   end
 
   def human_turn
