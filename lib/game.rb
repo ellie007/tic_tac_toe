@@ -11,18 +11,21 @@ class Game
   CURRENT_PLAYER_WON = " Won!"
   TIE = "It is a tie game."
 
-  attr_accessor :board, :winner, :sum, :size, :play_again
+  attr_accessor :board, :winner, :sum, :size, :play_again, :current_player
 
-  def initialize(board, ai, io, menu, player_1, player_2)
+  def initialize(board, ai, io, menu, player_1, player_2, player_3, player_4)
     @board = board
     @ai = ai
     @player_1 = player_1
     @player_2 = player_2
+    @player_3 = player_3
+    @player_4 = player_4
     @io = io
     @menu = menu
 
     @size = board.size
     @play_again = true
+    @current_player = @player_1
   end
 
   def run
@@ -51,38 +54,22 @@ class Game
     @play_again
   end
 
-  def set_current_player
-    case @menu.turn_response
-    when nil
-    @current_player = @player_1
-    when 1
-    @current_player = @player_1
-    when 2
-    @current_player = @player_2
-    end
-  end
-
   def set_players
-    case @menu.game_type_response
-    when 1
-      @player_1.type = "human"
-      @player_2.type = "human"
-    when 2
-      @player_1.type = "human"
-      @player_2.type = "ai"
-    when 3
-      @player_1.type = "ai"
-      @player_2.type = "ai"
-    end
-    token_and_name
-    set_current_player
-  end
+    @player_1.name = @menu.player_1_name
+    @player_1.token = @menu.player_1_token
+    @player_1.type = @menu.player_1_type
 
-  def token_and_name
-    @player_1.name = @menu.player_one_name
-    @player_1.token = @menu.player_one_token
-    @player_2.name = @menu.player_two_name
-    @player_2.token = @menu.player_two_token
+    @player_2.name = @menu.player_2_name
+    @player_2.token = @menu.player_2_token
+    @player_2.type = @menu.player_2_type
+
+    @player_3.name = @menu.player_3_name
+    @player_3.token = @menu.player_3_token
+    @player_3.type = @menu.player_3_type
+
+    @player_4.name = @menu.player_4_name
+    @player_4.token = @menu.player_4_token
+    @player_4.type = @menu.player_4_type
   end
 
   def make_move
@@ -104,7 +91,30 @@ class Game
   end
 
   def toggle_current_player
+    case @menu.num_of_players
+    when 1
+    @current_player = @player_1
+    when 2
     @current_player == @player_1 ? @current_player = @player_2 : @current_player = @player_1
+    when 3
+      if @current_player == @player_1
+        @current_player = @player_2
+      elsif @current_player == @player_2
+        @current_player = @player_3
+      elsif @current_player == @player_3
+        @current_player = @player_1
+      end
+    when 4
+      if @current_player == @player_1
+        @current_player = @player_2
+      elsif @current_player == @player_2
+        @current_player = @player_3
+      elsif @current_player == @player_3
+        @current_player = @player_4
+      elsif @current_player == @player_4
+        @current_player = @player_1
+      end
+    end
   end
 
   def human_turn
@@ -138,130 +148,7 @@ class Game
   end
 
   def winner?
-    if @winner.nil? && @board.dimension_type ==  2
-      board = @board
-      row_winner || column_winner || principal_diagonal_winner || counter_diagonal_winner
-    elsif @winner.nil? && @board.dimension_type == 3
-      row_winner_vertical_face ||
-      column_winner_vertical_face ||
-      principal_diagonal_vertical_face ||
-      counter_diagonal_vertical_face
-    end
-  end
-
-  def vertical_column_transpose
-    board_1 = []
-    @board.cells.each_slice(size**2) { |board| board_1 << board }
-
-    boards = []
-    i = 0
-    size.times do
-      board = []
-      board_1.flatten(1).each_with_index do |cell, index|
-        if index % size == i
-          board << index
-        end
-      end
-      boards << board
-      i += 1
-    end
-
-    board_2 = []
-    boards.each do |board|
-      board.each_slice(size) { |board| board_2 << board }
-    end
-
-    @sum = 0
-    board_2.each do |row|
-      row.each do |index|
-
-        @sum += 1 if @board.cells[index] == @current_player.token
-      end
-    end
-    set_winner
-  end
-
-  def row_winner_vertical_face
-    board_1 = []
-    @board.cells.each_slice(size**2) { |board| board_1 << board }
-
-    board_2 = []
-    board_1.each do |board|
-      row_subset = []
-      board.each_slice(size) {|row| row_subset << row }
-      board_2 << row_subset
-    end
-
-    board_2.flatten(1).each do |row|
-      @sum = 0
-      row.each do |cell|
-        calculate_sum(cell)
-      end
-      break if @sum == 3
-    end
-    set_winner
-  end
-
-  def column_winner_vertical_face
-    board_1 = []
-    @board.cells.each_slice(size**2) { |board| board_1 << board }
-
-    board_2 = []
-    board_1.each do |board|
-      row_subset = []
-      board.each_slice(size) {|row| row_subset << row }
-      board_2 << row_subset
-    end
-
-    transposed_board = []
-    board_2.each do |board|
-      transposed_board << board.transpose
-    end
-
-    transposed_board.flatten(1).each do |row|
-      @sum = 0
-      row.each do |cell|
-        calculate_sum(cell)
-      end
-      break if @sum == 3
-    end
-    set_winner
-  end
-
-  def principal_diagonal_vertical_face
-    board_1 = []
-    @board.cells.each_slice(@size**2) { |board| board_1 << board }
-
-    board_1.each do |board|
-      @sum = 0
-      i = 0
-      board.each_with_index do |cell, index|
-        if index % @size == 0
-          @sum += 1 if board[index + i] == @current_player.token
-          i += 1
-        end
-      end
-      break if @sum == 3
-    end
-    set_winner
-  end
-
-  def counter_diagonal_vertical_face
-    board_1 = []
-    @board.cells.each_slice(@size**2) { |board| board_1 << board }
-
-    board_1.each do |board|
-      @sum = 0
-      i = @size - 1
-      board.each_with_index do |cell, index|
-        if index % @size == 0
-          @sum += 1 if board[index + i] == @current_player.token
-          i -= 1
-        end
-      end
-      break if @sum == 3
-    end
-    set_winner
+    row_winner || column_winner || principal_diagonal_winner ||counter_diagonal_winner
   end
 
   def row_winner
@@ -335,10 +222,8 @@ class Game
     @io.output_message TIE if is_tie?
   end
 
- #private
-
   def valid_input?(move)
-    (0..board.dimension_size).include?(move) && move != " "
+    (0..size**2).include?(move) && move != " "
   end
 
   def valid_cell?(move)
@@ -346,7 +231,7 @@ class Game
   end
 
   def invalid_input_response
-    @io.output_message INVALID_INPUT + "#{board.dimension_size + 1}"
+    @io.output_message INVALID_INPUT + "#{@size}"
     @io.display_board
   end
 
