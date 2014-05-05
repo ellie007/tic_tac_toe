@@ -30,4 +30,8 @@ class MockCommandLine
 
   end
 
+  def play_again_output(message)
+
+  end
+
 end

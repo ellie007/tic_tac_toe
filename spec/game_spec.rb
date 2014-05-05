@@ -29,6 +29,16 @@ describe Game do
     end
   end
 
+  context "play again" do
+    it "should ask player to play again with only y and n" do
+      allow(mock_io).to receive(:play_again_output).and_return('for sure', 'y', 1, 'n')
+      game.play_again?
+      game.play_again.should == true
+      game.play_again?
+      game.play_again.should == false
+    end
+  end
+
   context 'toggle current player' do
     it 'current player should be next player' do
       menu.num_of_players = 4
@@ -43,7 +53,6 @@ describe Game do
     it "keeps prompting human for input until valid input" do
       player_1.name = "Eleanor"
       player_1.token = "X"
-      #@current_player = game.set_current_player
       allow(mock_io).to receive(:player_input).and_return(123, 'a', 5)
       game.human_turn
 

@@ -1,7 +1,6 @@
 class Game
 
   PLAY_AGAIN = "Would you like to play again (y/n)?: "
-  PLAY_AGAIN_REPROMPT = "Please enter only Y or N."
 
   CURRENT_PLAYER_TURN = "'s Turn: "
 
@@ -40,8 +39,7 @@ class Game
     play_again_input = @io.play_again_output PLAY_AGAIN
 
     until play_again_input == "y" || play_again_input == "n" do
-      @io.output_message PLAY_AGAIN_REPROMPT
-      play_again_input = gets.chomp.downcase
+      play_again_input = @io.play_again_output PLAY_AGAIN
     end
 
     if play_again_input == "y"
