@@ -8,7 +8,7 @@ require 'menu'
 describe Game do
 
   let(:menu) { Menu.new }
-  let(:board) { Board.new(3, 2, 9) }
+  let(:board) { Board.new(3) }
   let(:ai) { Ai.new(board.cells) }
   let(:player_1) { Player.new }
   let(:player_2) { Player.new }
@@ -56,7 +56,7 @@ describe Game do
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
     end
 
-    it "restarts the game with same options if human player commands 'restart'" do
+    it "restarts the game with same options if player commands 'restart'" do
       player_1.name = "Eleanor"
       player_1.token = "X"
       @current_player = game.set_current_player
@@ -65,6 +65,18 @@ describe Game do
       game.human_turn
 
       expect(board.cells[0]).to eq(nil)
+      expect(board.cells[1]).to eq(@current_player.token)
+
+    end
+
+    it "restarts the game with new menu option if player commands 'menu'" do
+      player_1.name = "Eleanor"
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      allow(game).to receive(:menu_reset)
+
+      game.human_alternative_options("menu")
+      expect(game).to have_received(:menu_reset)
     end
   end
 
@@ -251,73 +263,5 @@ describe Game do
         expect(mock_io.printed_strings[1]).to match /tie game/
       end
     end
-
-end
-
-describe Game do
-
-  let(:menu) { Menu.new }
-  let(:board) { Board.new(3, 3, 27) }
-  let(:ai) { Ai.new(board.cells) }
-  let(:player_1) { Player.new }
-  let(:player_2) { Player.new }
-  let(:mock_io) { MockCommandLine.new(board) }
-  let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2) }
-
-  it "3d row winner-vertical straight on" do
-    player_1.token = "X"
-    @current_player = game.set_current_player
-
-    board.fill_cell(10, @current_player.token)
-    board.fill_cell(11, @current_player.token)
-    board.fill_cell(12, @current_player.token)
-
-    game.row_winner_vertical_face.should == @current_player.token
-  end
-
-  it "3d column winner-vertical straight on" do
-    player_1.token = "X"
-    @current_player = game.set_current_player
-
-    board.fill_cell(19, @current_player.token)
-    board.fill_cell(22, @current_player.token)
-    board.fill_cell(25, @current_player.token)
-
-    game.column_winner_vertical_face.should == @current_player.token
-  end
-
-  it "3d principal diagonal-vertical straight on" do
-    player_1.token = "X"
-    @current_player = game.set_current_player
-
-    board.fill_cell(19, @current_player.token)
-    board.fill_cell(23, @current_player.token)
-    board.fill_cell(27, @current_player.token)
-
-    game.principal_diagonal_vertical_face.should == @current_player.token
-  end
-
-  it "3d counter diagonal_vertical straight on" do
-    player_1.token = "X"
-    @current_player = game.set_current_player
-
-    board.fill_cell(12, @current_player.token)
-    board.fill_cell(14, @current_player.token)
-    board.fill_cell(16, @current_player.token)
-
-    game.counter_diagonal_vertical_face.should == @current_player.token
-  end
-
-  it "checks a column winner in the 3d vertical transpose" do
-    player_1.token = "X"
-    @current_player = game.set_current_player
-
-    board.fill_cell(1, @current_player.token)
-    board.fill_cell(11, @current_player.token)
-    board.fill_cell(19, @current_player.token)
-
-    game.vertical_column_transpose.should == @current_player.token
-  end
-
 
 end

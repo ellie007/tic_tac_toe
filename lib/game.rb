@@ -126,6 +126,9 @@ class Game
     if move.is_a?(String)
       if move.downcase == 'restart'
         clear_board
+      elsif move.downcase == 'menu'
+        @io.clear_screen
+        menu_reset
       end
     end
   end
@@ -135,6 +138,14 @@ class Game
       @board.fill_cell(move, nil)
     end
     @io.clear_screen
+  end
+
+  def menu_reset
+    @menu.get_options
+    @board = Board.new(@menu.size)
+    @ai = Ai.new(@board.cells)
+    @io = CommandLine.new(@board)
+    @size = @menu.size
   end
 
   def ai_turn
@@ -153,130 +164,7 @@ class Game
   end
 
   def winner?
-    if @winner.nil? && @board.dimension_type ==  2
-      board = @board
-      row_winner || column_winner || principal_diagonal_winner || counter_diagonal_winner
-    elsif @winner.nil? && @board.dimension_type == 3
-      row_winner_vertical_face ||
-      column_winner_vertical_face ||
-      principal_diagonal_vertical_face ||
-      counter_diagonal_vertical_face
-    end
-  end
-
-  def vertical_column_transpose
-    board_1 = []
-    @board.cells.each_slice(size**2) { |board| board_1 << board }
-
-    boards = []
-    i = 0
-    size.times do
-      board = []
-      board_1.flatten(1).each_with_index do |cell, index|
-        if index % size == i
-          board << index
-        end
-      end
-      boards << board
-      i += 1
-    end
-
-    board_2 = []
-    boards.each do |board|
-      board.each_slice(size) { |board| board_2 << board }
-    end
-
-    @sum = 0
-    board_2.each do |row|
-      row.each do |index|
-
-        @sum += 1 if @board.cells[index] == @current_player.token
-      end
-    end
-    set_winner
-  end
-
-  def row_winner_vertical_face
-    board_1 = []
-    @board.cells.each_slice(size**2) { |board| board_1 << board }
-
-    board_2 = []
-    board_1.each do |board|
-      row_subset = []
-      board.each_slice(size) {|row| row_subset << row }
-      board_2 << row_subset
-    end
-
-    board_2.flatten(1).each do |row|
-      @sum = 0
-      row.each do |cell|
-        calculate_sum(cell)
-      end
-      break if @sum == 3
-    end
-    set_winner
-  end
-
-  def column_winner_vertical_face
-    board_1 = []
-    @board.cells.each_slice(size**2) { |board| board_1 << board }
-
-    board_2 = []
-    board_1.each do |board|
-      row_subset = []
-      board.each_slice(size) {|row| row_subset << row }
-      board_2 << row_subset
-    end
-
-    transposed_board = []
-    board_2.each do |board|
-      transposed_board << board.transpose
-    end
-
-    transposed_board.flatten(1).each do |row|
-      @sum = 0
-      row.each do |cell|
-        calculate_sum(cell)
-      end
-      break if @sum == 3
-    end
-    set_winner
-  end
-
-  def principal_diagonal_vertical_face
-    board_1 = []
-    @board.cells.each_slice(@size**2) { |board| board_1 << board }
-
-    board_1.each do |board|
-      @sum = 0
-      i = 0
-      board.each_with_index do |cell, index|
-        if index % @size == 0
-          @sum += 1 if board[index + i] == @current_player.token
-          i += 1
-        end
-      end
-      break if @sum == 3
-    end
-    set_winner
-  end
-
-  def counter_diagonal_vertical_face
-    board_1 = []
-    @board.cells.each_slice(@size**2) { |board| board_1 << board }
-
-    board_1.each do |board|
-      @sum = 0
-      i = @size - 1
-      board.each_with_index do |cell, index|
-        if index % @size == 0
-          @sum += 1 if board[index + i] == @current_player.token
-          i -= 1
-        end
-      end
-      break if @sum == 3
-    end
-    set_winner
+    row_winner || column_winner || principal_diagonal_winner || counter_diagonal_winner if winner.nil?
   end
 
   def row_winner
@@ -294,7 +182,7 @@ class Game
 
   def column_winner
     column_win_possibilities = []
-    board.cells.each_slice(size) { |row| column_win_possibilities << row }
+    board.cells.each_slice(@size) { |row| column_win_possibilities << row }
     transposed_win_possibilties = column_win_possibilities.transpose
     transposed_win_possibilties.each do |row|
       @sum = 0

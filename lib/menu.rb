@@ -1,7 +1,6 @@
 class Menu
 
   WELCOME = "\nWelcome to Tic Tac Toe!"
-  DIMENSION_TYPE = "\nWould you like to play 2D or 3D? (enter 2 or 3): "
   BOARD_SIZE = "\nWhat board size would you like?\nPlease enter the base dimension.  (3 for 3 by 3; 4 for 4 by 4): "
 
   GAME_TYPE_OPTION = "1) Human vs. Human\n2) Human vs. Computer\n3) Computer vs. Computer\nPlease enter a type of game: "
@@ -26,28 +25,22 @@ class Menu
 
   TURN_RESPONSE = "Would you like to go first or second? (Enter 1 or 2): "
 
-  attr_accessor :size, :dimension_type, :dimension_size, :game_type_response, :player_one_name, :player_two_name, :player_one_token, :player_two_token, :turn_response
+  attr_accessor :size, :game_type_response, :player_one_name, :player_two_name, :player_one_token, :player_two_token, :turn_response
 
   def get_options
     puts WELCOME + "\n"
-    get_dimension_type
     board_size
     game_type
     player_detail
   end
 
-  def get_dimension_type
-    print DIMENSION_TYPE
-    @dimension_type = gets.chomp.to_i
-  end
-
   def board_size
     print BOARD_SIZE
     @size = gets.chomp.to_i
-    @dimension_size = @size ** @dimension_type
   end
 
   def game_type
+    @game_type_response = nil
     until @game_type_response == 1 || @game_type_response == 2 || @game_type_response == 3 do
       print "\n" + GAME_TYPE_OPTION
       @game_type_response = gets.chomp.to_i
@@ -62,6 +55,7 @@ class Menu
       players_token_values PLAYER_ONE_TOKEN, PLAYER_TWO_TOKEN
     when 2
       print GAME_TYPE_2 + "\n"
+      @turn_response = nil
 
       until @turn_response == 1 || @turn_response == 2 do
         print TURN_RESPONSE
