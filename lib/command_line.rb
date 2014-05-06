@@ -33,6 +33,10 @@ class CommandLine
       print " #{index + 1} "
       print "\n" if (index + 1) % @size == 0
     end
+    print "\n"
+    puts "Please enter a number to place a token there."
+    print "\n"
+    puts "Enter at anytime:\nMENU to restart with new options\nRESTART to begin again with same options\nQUIT to leave the game."
   end
 
   def display_board
