@@ -109,6 +109,8 @@ class Game
 
   def human_turn
     move = @io.player_input @current_player.name + CURRENT_PLAYER_TURN
+    run if human_alternative_options(move)
+    move = move.to_i
     if !valid_input?(move)
       invalid_input_response
       human_turn
@@ -117,15 +119,26 @@ class Game
       human_turn
     else
       @board.fill_cell(move, @current_player.token)
-      @io.display_board
     end
+  end
+
+  def human_alternative_options(move)
+    if move.is_a?(String) && move.downcase == 'restart'
+      restart_clear_board
+    end
+  end
+
+  def restart
+    (1..size**2).each do |move|
+      @board.fill_cell(move, nil)
+    end
+    @io.clear_screen
   end
 
   def ai_turn
     move = @ai.find_move
     @io.output_message @current_player.name + CURRENT_PLAYER_TURN + "#{move}"
     @board.fill_cell(move, @current_player.token)
-    @io.display_board
   end
 
   def calculate_sum(cell)
@@ -338,7 +351,7 @@ class Game
  #private
 
   def valid_input?(move)
-    (0..board.dimension_size).include?(move) && move != " "
+    (1..board.size**2).include?(move) && move != " "
   end
 
   def valid_cell?(move)
@@ -346,7 +359,7 @@ class Game
   end
 
   def invalid_input_response
-    @io.output_message INVALID_INPUT + "#{board.dimension_size + 1}"
+    @io.output_message INVALID_INPUT + "#{board.size**2}"
     @io.display_board
   end
 

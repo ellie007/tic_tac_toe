@@ -53,7 +53,7 @@ class CommandLine
 
   def player_input(message)
     print "\n" + message
-    move = gets.chomp.to_i
+    move = gets.chomp
   end
 
   def play_again_output(message)

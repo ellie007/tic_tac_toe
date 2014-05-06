@@ -39,7 +39,6 @@ describe Game do
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
       expect(mock_io.printed_strings[2]).to match /That is invalid input./
       expect(mock_io.printed_strings[3]).to eq(mock_io.display_board_message)
-      expect(mock_io.printed_strings[4]).to eq(mock_io.display_board_message)
 
       expect(board.cells[4]).to eq(@current_player.token)
     end
@@ -55,7 +54,6 @@ describe Game do
       expect(board.cells[1]).to eq(@current_player.token)
       expect(mock_io.printed_strings[0]).to match /That spot is already taken./
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
-      expect(mock_io.printed_strings[2]).to eq(mock_io.display_board_message)
     end
   end
 
@@ -69,7 +67,6 @@ describe Game do
       game.ai_turn
 
       expect(mock_io.printed_strings[0]).to match /Eleanor's turn: 5/i
-      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
     end
   end
 
