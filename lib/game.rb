@@ -123,12 +123,14 @@ class Game
   end
 
   def human_alternative_options(move)
-    if move.is_a?(String) && move.downcase == 'restart'
-      restart_clear_board
+    if move.is_a?(String)
+      if move.downcase == 'restart'
+        clear_board
+      end
     end
   end
 
-  def restart
+  def clear_board
     (1..size**2).each do |move|
       @board.fill_cell(move, nil)
     end

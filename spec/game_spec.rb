@@ -55,6 +55,17 @@ describe Game do
       expect(mock_io.printed_strings[0]).to match /That spot is already taken./
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
     end
+
+    it "restarts the game with same options if human player commands 'restart'" do
+      player_1.name = "Eleanor"
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(1, player_1.token)
+      allow(mock_io).to receive(:player_input).and_return('restart', 2)
+      game.human_turn
+
+      expect(board.cells[0]).to eq(nil)
+    end
   end
 
   context "ai turn" do
