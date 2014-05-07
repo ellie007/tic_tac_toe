@@ -223,7 +223,7 @@ class Game
   end
 
   def invalid_input_response
-    @io.output_message INVALID_INPUT + "#{board.size**2}"
+    @io.output_message INVALID_INPUT + "#{size**2}"
     @io.display_board
   end
 

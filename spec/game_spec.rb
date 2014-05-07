@@ -159,8 +159,11 @@ describe Game do
   end
 
   context "player input validation" do
-    it "should return a false value for an invalid input type" do
-      game.valid_input?('123').should == false
+    it "should correctly determine if invalid input type" do
+      game.valid_input?('apple').should == false
+      game.valid_input?(0).should == false
+      game.valid_input?(10).should == false
+      game.valid_input?(5).should == true
     end
 
     it "should not allow the player to place in a taken cell" do
