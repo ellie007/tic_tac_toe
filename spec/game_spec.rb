@@ -62,7 +62,7 @@ describe Game do
       @current_player = game.set_current_player
       board.fill_cell(1, player_1.token)
       game.stub(:run)
-      allow(mock_io).to receive(:player_input).and_return('restart', 2)
+      allow(mock_io).to receive(:player_input).and_return('Restart', 2)
       game.human_turn
 
       expect(board.cells[0]).to eq(nil)
