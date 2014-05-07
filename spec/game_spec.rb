@@ -61,12 +61,12 @@ describe Game do
       player_1.token = "X"
       @current_player = game.set_current_player
       board.fill_cell(1, player_1.token)
+      game.stub(:run)
       allow(mock_io).to receive(:player_input).and_return('restart', 2)
       game.human_turn
 
       expect(board.cells[0]).to eq(nil)
       expect(board.cells[1]).to eq(@current_player.token)
-
     end
 
     it "restarts the game with new menu option if player commands 'menu'" do

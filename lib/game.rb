@@ -135,13 +135,6 @@ class Game
     end
   end
 
-  def clear_board
-    (1..size**2).each do |move|
-      @board.fill_cell(move, nil)
-    end
-    @io.clear_screen
-  end
-
   def menu_reset
     @menu.get_options
     @board = Board.new(@menu.size)
@@ -240,8 +233,6 @@ class Game
     @io.output_message TIE if is_tie?
   end
 
- #private
-
   def valid_input?(move)
     (1..board.size**2).include?(move) && move != " "
   end
@@ -262,6 +253,16 @@ class Game
 
   def game_over
     @winner != nil || is_tie?
+  end
+
+
+  private
+
+  def clear_board
+    (1..size**2).each do |move|
+      @board.fill_cell(move, nil)
+    end
+    @io.clear_screen
   end
 
 end
