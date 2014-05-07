@@ -1,11 +1,11 @@
 class Player
 
-  attr_accessor :token, :type, :name
+  attr_accessor :name, :token, :type
 
   def initialize
+    @name
     @token
     @type
-    @name
   end
 
 end

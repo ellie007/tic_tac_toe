@@ -3,7 +3,6 @@ class CommandLine
   def initialize(board)
     @cells = board.cells
     @size = board.size
-    @dimension_size = board.dimension_size
   end
 
   def output_message(message)
@@ -45,8 +44,8 @@ class CommandLine
     @cells.each_with_index do |element, index|
       display_board_row(element, index)
       print "\n" if (index + 1) % @size == 0
-      print "---+" * (@size-1) + "---" if (index + 1) % @size == 0 && (index + 1) < @dimension_size
-      print "\n" if (index + 1) % @size == 0 && (index + 1) < @dimension_size
+      print "---+" * (@size-1) + "---" if (index + 1) % @size == 0 && (index + 1) < @size**2
+      print "\n" if (index + 1) % @size == 0 && (index + 1) < @size**2
     end
     legend
   end
