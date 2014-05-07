@@ -126,9 +126,11 @@ class Game
     if move.is_a?(String)
       if move.downcase == 'restart'
         clear_board
+        return true
       elsif move.downcase == 'menu'
         @io.clear_screen
         menu_reset
+        return true
       end
     end
   end
