@@ -10,12 +10,10 @@ describe Game do
   let(:menu) { Menu.new }
   let(:board) { Board.new(3) }
   let(:ai) { Ai.new(board.cells) }
-  let(:player_1) { Player.new }
-  let(:player_2) { Player.new }
-  let(:player_3) { Player.new }
-  let(:player_4) { Player.new }
+  let(:player_1) { Player.new({},{},{}) }
+  let(:player_2) { Player.new({},{},{}) }
   let(:mock_io) { MockCommandLine.new(board) }
-  let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2, player_3, player_4) }
+  let(:game) { Game.new(board, ai, mock_io, menu, [player_1, player_2]) }
 
   context 'run' do
     it 'prints the welcome message and displays the board' do #, t:true do

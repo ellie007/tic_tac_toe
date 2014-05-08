@@ -12,23 +12,19 @@ class Game
 
   attr_accessor :board, :winner, :sum, :size, :play_again, :current_player
 
-  def initialize(board, ai, io, menu, player_1, player_2, player_3, player_4)
+  def initialize(board, ai, io, menu, players)
     @board = board
     @ai = ai
-    @player_1 = player_1
-    @player_2 = player_2
-    @player_3 = player_3
-    @player_4 = player_4
     @io = io
     @menu = menu
+    @players = players
 
     @size = board.size
     @play_again = true
-    @current_player = @player_1
+    @current_player = @players[0]
   end
 
   def run
-    set_players
     @io.display_board
     game_loop
     winner_display
@@ -52,24 +48,6 @@ class Game
     @play_again
   end
 
-  def set_players
-    @player_1.name = @menu.player_1_name
-    @player_1.token = @menu.player_1_token
-    @player_1.type = @menu.player_1_type
-
-    @player_2.name = @menu.player_2_name
-    @player_2.token = @menu.player_2_token
-    @player_2.type = @menu.player_2_type
-
-    @player_3.name = @menu.player_3_name
-    @player_3.token = @menu.player_3_token
-    @player_3.type = @menu.player_3_type
-
-    @player_4.name = @menu.player_4_name
-    @player_4.token = @menu.player_4_token
-    @player_4.type = @menu.player_4_type
-  end
-
   def make_move
     if @current_player.type == "ai"
       ai_turn
@@ -89,9 +67,9 @@ class Game
   end
 
   def toggle_current_player
-    current_player_index = @menu.players_list.index(@current_player)
-    next_player_index = (current_player_index + 1) % @menu.players_list.size
-    @current_player = @menu.players_list[next_player_index]
+    current_player_index = @players.index(@current_player)
+    next_player_index = (current_player_index + 1) % @players.size
+    @current_player = @players[next_player_index]
   end
 
   def human_turn
