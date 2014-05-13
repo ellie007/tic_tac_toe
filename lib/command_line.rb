@@ -12,7 +12,6 @@ class CommandLine
       display_element(element, index)
       print_new_line if new_board_row?(index)
       row_separator if new_board_row?(index) && !end_of_board?(index)
-      print_new_line if new_board_row?(index) && !end_of_board?(index)
     end
     legend
   end
@@ -76,6 +75,7 @@ class CommandLine
 
   def row_separator
     print "---+" * (@size-1) + "---"
+    print_new_line
   end
 
   def new_board_row?(index)

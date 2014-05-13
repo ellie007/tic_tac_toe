@@ -1,7 +1,6 @@
 class Game
 
   PLAY_AGAIN = "Would you like to play again (y/n)?: "
-  PLAY_AGAIN_REPROMPT = "Please enter only Y or N."
 
   CURRENT_PLAYER_TURN = "'s Turn: "
 
@@ -20,13 +19,14 @@ class Game
     @player_2 = player_2
     @io = io
     @menu = menu
-
     @size = board.size
     @play_again = true
+    @current_player = @player_1
   end
 
   def run
     set_players
+    @io.clear_screen
     @io.display_board
     game_loop
     winner_display
@@ -34,33 +34,14 @@ class Game
   end
 
   def play_again?
-    play_again_input = @io.player_input PLAY_AGAIN
-    play_again_input = play_again_input.downcase
-
-    until play_again_input == "y" || play_again_input == "n" do
-      @io.output_message PLAY_AGAIN_REPROMPT
-      play_again_input = gets.chomp.downcase
-    end
-
-    if play_again_input == "y"
-      @play_again = true
-      @io.clear_screen
-    elsif play_again_input == "n"
-      @play_again = false
-    end
-
+    @play_again_input = nil
+    get_play_again_response
+    set_play_again_response
     @play_again
   end
 
   def set_current_player
-    case @menu.turn_response
-    when nil
-    @current_player = @player_1
-    when 1
-    @current_player = @player_1
-    when 2
-    @current_player = @player_2
-    end
+    @current_player = @player_2 if @menu.turn_response == 2
   end
 
   def set_players
@@ -109,8 +90,7 @@ class Game
   end
 
   def human_turn
-    move = @io.player_input @current_player.name + CURRENT_PLAYER_TURN
-    move = move.to_i
+    move = (@io.player_input @current_player.name + CURRENT_PLAYER_TURN).to_i
     if !valid_input?(move)
       invalid_input_response
       human_turn
@@ -144,23 +124,20 @@ class Game
   end
 
   def row_winner
-    row_win_possibilities = []
-    @board.cells.each_slice(size) { |row| row_win_possibilities << row }
-    row_win_possibilities.each do |row|
-      @sum = 0
-      row.each do |cell|
-        calculate_sum(cell)
-      end
-      break if @sum == @size
-    end
-    set_winner
+    split_board = []
+    @board.cells.each_slice(size) { |row| split_board << row }
+    row_column_win_checker(split_board)
   end
 
   def column_winner
     column_win_possibilities = []
-    board.cells.each_slice(size) { |row| column_win_possibilities << row }
-    transposed_win_possibilties = column_win_possibilities.transpose
-    transposed_win_possibilties.each do |row|
+    @board.cells.each_slice(size) { |row| column_win_possibilities << row }
+    split_board = column_win_possibilities.transpose
+    row_column_win_checker(split_board)
+  end
+
+  def row_column_win_checker(split_board)
+     split_board.each do |row|
       @sum = 0
       row.each do |cell|
         calculate_sum(cell)
@@ -171,34 +148,32 @@ class Game
   end
 
   def principal_diagonal_winner
-    diagonal = []
+    indicies= []
     i = 0
     @board.cells.each_with_index do |cell, index|
       if index % @size == 0
-        diagonal << index + i
+        indicies << index + i
         i += 1
       end
     end
-
-    @sum = 0
-    diagonal.each do |cell|
-      @sum += 1 if @board.cells[cell] == @current_player.token
-    end
-    set_winner
+    diagonal_win_checker(indicies)
   end
 
   def counter_diagonal_winner
-    diagonal = []
+    indicies = []
     i = @size - 1
     @board.cells.each_with_index do |cell, index|
       if index % @size == 0
-        diagonal << index + i
+        indicies << index + i
         i -= 1
       end
     end
+    diagonal_win_checker(indicies)
+  end
 
+  def diagonal_win_checker(indicies)
     @sum = 0
-    diagonal.each do |cell|
+    indicies.each do |cell|
       @sum += 1 if @board.cells[cell] == @current_player.token
     end
     set_winner
@@ -214,7 +189,24 @@ class Game
     @io.output_message TIE if is_tie?
   end
 
- #private
+  def game_over
+    @winner != nil || is_tie?
+  end
+
+  def get_play_again_response
+    until @play_again_input == "y" || @play_again_input == "n" do
+      @play_again_input = (@io.player_input PLAY_AGAIN).downcase
+    end
+  end
+
+  def set_play_again_response
+    if @play_again_input == "y"
+      @play_again = true
+      @io.clear_screen
+    elsif @play_again_input == "n"
+      @play_again = false
+    end
+  end
 
   def valid_input?(move)
     (1..size**2).include?(move) && move != " "
@@ -232,10 +224,6 @@ class Game
   def invalid_cell_response
     @io.output_message INVALID_CELL
     @io.display_board
-  end
-
-  def game_over
-    @winner != nil || is_tie?
   end
 
 end

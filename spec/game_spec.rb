@@ -31,7 +31,6 @@ describe Game do
     it "keeps prompting human for input until valid input" do
       player_1.name = "Eleanor"
       player_1.token = "X"
-      @current_player = game.set_current_player
       allow(mock_io).to receive(:player_input).and_return(123, 'a', 5)
       game.human_turn
 
@@ -41,18 +40,17 @@ describe Game do
       expect(mock_io.printed_strings[3]).to eq(mock_io.display_board_message)
       expect(mock_io.printed_strings[4]).to eq(mock_io.display_board_message)
 
-      expect(board.cells[4]).to eq(@current_player.token)
+      expect(board.cells[4]).to eq(player_1.token)
     end
 
     it "keeps prompting human for input until valid cell" do
       player_1.name = "Eleanor"
       player_1.token = "X"
-      @current_player = game.set_current_player
-      board.fill_cell(1, @current_player.token)
+      board.fill_cell(1, player_1.token)
       allow(mock_io).to receive(:player_input).and_return(1,2)
       game.human_turn
 
-      expect(board.cells[1]).to eq(@current_player.token)
+      expect(board.cells[1]).to eq(player_1.token)
       expect(mock_io.printed_strings[0]).to match /That spot is already taken./
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
       expect(mock_io.printed_strings[2]).to eq(mock_io.display_board_message)
@@ -76,9 +74,7 @@ describe Game do
   context "calculates sum" do
     it "adds one for a current player token" do
       player_1.token = "X"
-      @current_player = game.set_current_player
-
-      cell = @current_player.token
+      cell = player_1.token
       game.sum = 0
       game.calculate_sum(cell)
       game.sum.should == 1
@@ -88,10 +84,9 @@ describe Game do
   context "correctly sets the winner based on sum" do
     it "the winner is set with the player token" do
       player_1.token = "X"
-      @current_player = game.set_current_player
       game.sum = 3
 
-      game.set_winner.should == @current_player.token
+      game.set_winner.should == player_1.token
     end
   end
 
@@ -102,42 +97,38 @@ describe Game do
 
     it "player wins the game with a principal diagonal" do
       player_1.token = "X"
-      @current_player = game.set_current_player
-      board.fill_cell(1, @current_player.token)
-      board.fill_cell(5, @current_player.token)
-      board.fill_cell(9, @current_player.token)
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(5, player_1.token)
+      board.fill_cell(9, player_1.token)
 
-      game.winner?.should == @current_player.token
+      game.winner?.should == player_1.token
     end
 
     it "player wins the game with a row" do
       player_1.token = "X"
-      @current_player = game.set_current_player
-      board.fill_cell(1, @current_player.token)
-      board.fill_cell(2, @current_player.token)
-      board.fill_cell(3, @current_player.token)
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(2, player_1.token)
+      board.fill_cell(3, player_1.token)
 
-      game.winner?.should == @current_player.token
+      game.winner?.should == player_1.token
     end
 
     it "player wins the game with a column" do
       player_1.token = "X"
-      @current_player = game.set_current_player
-      board.fill_cell(1, @current_player.token)
-      board.fill_cell(4, @current_player.token)
-      board.fill_cell(7, @current_player.token)
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(4, player_1.token)
+      board.fill_cell(7, player_1.token)
 
-      game.winner?.should == @current_player.token
+      game.winner?.should == player_1.token
     end
 
     it "player wins the game with a counter diagonal" do
       player_1.token = "X"
-      @current_player = game.set_current_player
-      board.fill_cell(3, @current_player.token)
-      board.fill_cell(5, @current_player.token)
-      board.fill_cell(7, @current_player.token)
+      board.fill_cell(3, player_1.token)
+      board.fill_cell(5, player_1.token)
+      board.fill_cell(7, player_1.token)
 
-      game.winner?.should == @current_player.token
+      game.winner?.should == player_1.token
     end
 
     it "is a tie game" do
@@ -168,8 +159,7 @@ describe Game do
 
     it "should not allow the player to place in a taken cell" do
       player_1.token = "X"
-      @current_player = game.set_current_player
-      board.fill_cell(5, @current_player.token)
+      board.fill_cell(5, player_1.token)
       game.valid_cell?(5).should == false
     end
 
@@ -198,8 +188,7 @@ describe Game do
 
     it "game over is true with a winner" do
       player_1.token = "X"
-      @current_player = game.set_current_player
-      game.winner = @current_player.token
+      game.winner = player_1.token
       game.game_over == true
     end
 
