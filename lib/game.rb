@@ -34,7 +34,8 @@ class Game
   end
 
   def play_again?
-    play_again_input = @io.play_again_output PLAY_AGAIN
+    play_again_input = @io.player_input PLAY_AGAIN
+    play_again_input = play_again_input.downcase
 
     until play_again_input == "y" || play_again_input == "n" do
       @io.output_message PLAY_AGAIN_REPROMPT
@@ -109,6 +110,7 @@ class Game
 
   def human_turn
     move = @io.player_input @current_player.name + CURRENT_PLAYER_TURN
+    move = move.to_i
     if !valid_input?(move)
       invalid_input_response
       human_turn
