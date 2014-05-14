@@ -116,13 +116,6 @@ class Game
     @winner
   end
 
-  # def winner?
-  #   @game_rules.row_winner? ||
-  #     @game_rules.column_winner? ||
-  #     @game_rules.principal_diagonal_winner? ||
-  #     @game_rules.counter_diagonal_winner?
-  # end
-
   def winner_display
     @io.display_board
     set_winner
@@ -133,23 +126,8 @@ class Game
     end
   end
 
-  def get_play_again_response
-    until @play_again_input == "y" || @play_again_input == "n" do
-      @play_again_input = (@io.player_input PLAY_AGAIN).downcase
-    end
-  end
-
-  def set_play_again_response
-    if @play_again_input == "y"
-      @play_again = true
-      @io.clear_screen
-    elsif @play_again_input == "n"
-      @play_again = false
-    end
-  end
-
   def valid_input?(move)
-    (1..size**2).include?(move) && move != " "
+    (1..size**2).include?(move)
   end
 
   def valid_cell?(move)
@@ -164,6 +142,23 @@ class Game
   def invalid_cell_response
     @io.output_message INVALID_CELL
     @io.display_board
+  end
+
+  private
+
+  def get_play_again_response
+    until @play_again_input == "y" || @play_again_input == "n" do
+      @play_again_input = (@io.player_input PLAY_AGAIN).downcase
+    end
+  end
+
+  def set_play_again_response
+    if @play_again_input == "y"
+      @play_again = true
+      @io.clear_screen
+    elsif @play_again_input == "n"
+      @play_again = false
+    end
   end
 
 end

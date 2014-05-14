@@ -6,40 +6,19 @@ class GameRules
   end
 
   def row_winner?
-    split_board = []
-    @board.cells.each_slice(@size) { |row| split_board << row }
     row_column_win_checker(split_board)
   end
 
   def column_winner?
-    column_win_possibilities = []
-    @board.cells.each_slice(@size) { |row| column_win_possibilities << row }
-    split_board = column_win_possibilities.transpose
-    row_column_win_checker(split_board)
+    row_column_win_checker(split_board.transpose)
   end
 
   def principal_diagonal_winner?
-    indices = []
-    i = 0
-    @board.cells.each_with_index do |cell, index|
-      if index % @size == 0
-        indices << index + i
-        i += 1
-      end
-    end
-    diagonal_win_checker(indices)
+    diagonal_win_checker(create_diagonal(0, 1))
   end
 
   def counter_diagonal_winner?
-    indices = []
-    i = @size - 1
-    @board.cells.each_with_index do |cell, index|
-      if index % @size == 0
-        indices << index + i
-        i -= 1
-      end
-    end
-    diagonal_win_checker(indices)
+    diagonal_win_checker(create_diagonal(@size-1, -1))
   end
 
   def winner?
@@ -56,6 +35,12 @@ class GameRules
 
 private
 
+  def split_board
+    split_board = []
+    @board.cells.each_slice(@size) { |row| split_board << row }
+    split_board
+  end
+
   def row_column_win_checker(split_board)
     split_board.each do |row|
       return true if row.uniq.count == 1 && row.uniq[0] != nil
@@ -63,18 +48,21 @@ private
     return false
   end
 
-  def diagonal_win_checker(indices)
-    diagonal = []
-    indices.each do |cell|
-      diagonal << @board.cells[cell]
+  def create_diagonal(i_value, incrementor)
+    values = []
+    i = i_value
+    @board.cells.each_with_index do |cell, index|
+      if index % @size == 0
+        values << @board.cells[index + i]
+        i += incrementor
+      end
     end
-
-    if diagonal.uniq.count == 1 &&  diagonal.uniq[0] != nil
-      return true
-    else
-      return false
-    end
+    values
   end
 
+  def diagonal_win_checker(values)
+    return true if values.uniq.count == 1 &&  values.uniq[0] != nil
+    return false
+  end
 
 end
