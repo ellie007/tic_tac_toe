@@ -10,9 +10,9 @@ class Game
   CURRENT_PLAYER_WON = " Won!"
   TIE = "It is a tie game."
 
-  attr_accessor :board, :winner, :sum, :size, :play_again
+  attr_accessor :board, :winner, :sum, :size, :play_again, :current_player
 
-  def initialize(board, ai, io, menu, player_1, player_2)
+  def initialize(board, ai, io, menu, player_1, player_2, game_rules)
     @board = board
     @ai = ai
     @player_1 = player_1
@@ -22,6 +22,7 @@ class Game
     @size = board.size
     @play_again = true
     @current_player = @player_1
+    @game_rules = game_rules
   end
 
   def run
@@ -79,7 +80,7 @@ class Game
     until game_over do
       make_move
       @io.clear_screen
-      break if winner? || is_tie?
+      set_winner && break if winner? || is_tie?
       @io.display_board
       toggle_current_player
     end
@@ -110,83 +111,26 @@ class Game
     @io.display_board
   end
 
-  def calculate_sum(cell)
-     @sum += 1 if cell == @current_player.token
-  end
-
   def set_winner
-    @winner = @current_player.token if @sum == @size
+    @winner = @current_player.token if winner? == true
     @winner
   end
 
   def winner?
-    row_winner || column_winner || principal_diagonal_winner || counter_diagonal_winner if @winner.nil?
-  end
-
-  def row_winner
-    split_board = []
-    @board.cells.each_slice(size) { |row| split_board << row }
-    row_column_win_checker(split_board)
-  end
-
-  def column_winner
-    column_win_possibilities = []
-    @board.cells.each_slice(size) { |row| column_win_possibilities << row }
-    split_board = column_win_possibilities.transpose
-    row_column_win_checker(split_board)
-  end
-
-  def row_column_win_checker(split_board)
-     split_board.each do |row|
-      @sum = 0
-      row.each do |cell|
-        calculate_sum(cell)
-      end
-      break if @sum == @size
-    end
-    set_winner
-  end
-
-  def principal_diagonal_winner
-    indicies= []
-    i = 0
-    @board.cells.each_with_index do |cell, index|
-      if index % @size == 0
-        indicies << index + i
-        i += 1
-      end
-    end
-    diagonal_win_checker(indicies)
-  end
-
-  def counter_diagonal_winner
-    indicies = []
-    i = @size - 1
-    @board.cells.each_with_index do |cell, index|
-      if index % @size == 0
-        indicies << index + i
-        i -= 1
-      end
-    end
-    diagonal_win_checker(indicies)
-  end
-
-  def diagonal_win_checker(indicies)
-    @sum = 0
-    indicies.each do |cell|
-      @sum += 1 if @board.cells[cell] == @current_player.token
-    end
-    set_winner
-  end
-
-  def is_tie?
-    @winner == nil && @board.cells.select { |cell| cell == nil }.empty?
+    @game_rules.row_winner? ||
+      @game_rules.column_winner? ||
+      @game_rules.principal_diagonal_winner? ||
+      @game_rules.counter_diagonal_winner?
   end
 
   def winner_display
     @io.display_board
     @io.output_message @current_player.name + CURRENT_PLAYER_WON unless is_tie?
     @io.output_message TIE if is_tie?
+  end
+
+  def is_tie?
+    @winner == nil && @board.cells.select { |cell| cell == nil }.empty?
   end
 
   def game_over

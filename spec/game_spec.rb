@@ -4,6 +4,7 @@ require 'ai'
 require 'player'
 require 'mock_output'
 require 'menu'
+require 'game_rules'
 
 describe Game do
 
@@ -13,7 +14,8 @@ describe Game do
   let(:player_1) { Player.new }
   let(:player_2) { Player.new }
   let(:mock_io) { MockCommandLine.new(board) }
-  let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2) }
+  let(:game_rules) {GameRules.new(board) }
+  let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2, game_rules) }
 
   context 'run' do
     it 'prints the welcome message and displays the board' do #, t:true do
@@ -71,20 +73,12 @@ describe Game do
     end
   end
 
-  context "calculates sum" do
-    it "adds one for a current player token" do
+  context "set winner: " do
+    it "winner instance variable set with set_winner" do
       player_1.token = "X"
-      cell = player_1.token
-      game.sum = 0
-      game.calculate_sum(cell)
-      game.sum.should == 1
-    end
-  end
-
-  context "correctly sets the winner based on sum" do
-    it "the winner is set with the player token" do
-      player_1.token = "X"
-      game.sum = 3
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(5, player_1.token)
+      board.fill_cell(9, player_1.token)
 
       game.set_winner.should == player_1.token
     end
@@ -95,22 +89,13 @@ describe Game do
       game.winner.should == nil
     end
 
-    it "player wins the game with a principal diagonal" do
-      player_1.token = "X"
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(5, player_1.token)
-      board.fill_cell(9, player_1.token)
-
-      game.winner?.should == player_1.token
-    end
-
     it "player wins the game with a row" do
       player_1.token = "X"
       board.fill_cell(1, player_1.token)
       board.fill_cell(2, player_1.token)
       board.fill_cell(3, player_1.token)
 
-      game.winner?.should == player_1.token
+      game.winner?.should == true
     end
 
     it "player wins the game with a column" do
@@ -119,7 +104,16 @@ describe Game do
       board.fill_cell(4, player_1.token)
       board.fill_cell(7, player_1.token)
 
-      game.winner?.should == player_1.token
+      game.winner?.should == true
+    end
+
+    it "player wins the game with a principal diagonal" do
+      player_1.token = "X"
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(5, player_1.token)
+      board.fill_cell(9, player_1.token)
+
+      game.winner?.should == true
     end
 
     it "player wins the game with a counter diagonal" do
@@ -128,7 +122,7 @@ describe Game do
       board.fill_cell(5, player_1.token)
       board.fill_cell(7, player_1.token)
 
-      game.winner?.should == player_1.token
+      game.winner?.should == true
     end
 
     it "is a tie game" do
