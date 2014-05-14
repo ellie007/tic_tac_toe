@@ -77,10 +77,10 @@ class Game
   end
 
   def game_loop
-    until game_over do
+    until @game_rules.game_over(winner) do
       make_move
       @io.clear_screen
-      set_winner && break if winner? || is_tie?
+      set_winner && break if winner? || @game_rules.is_tie?
       @io.display_board
       toggle_current_player
     end
@@ -125,16 +125,11 @@ class Game
 
   def winner_display
     @io.display_board
-    @io.output_message @current_player.name + CURRENT_PLAYER_WON unless is_tie?
-    @io.output_message TIE if is_tie?
-  end
-
-  def is_tie?
-    @winner == nil && @board.cells.select { |cell| cell == nil }.empty?
-  end
-
-  def game_over
-    @winner != nil || is_tie?
+    if winner?
+      @io.output_message @current_player.name + CURRENT_PLAYER_WON
+    elsif @game_rules.is_tie?
+      @io.output_message TIE
+    end
   end
 
   def get_play_again_response

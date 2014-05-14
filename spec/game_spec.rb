@@ -14,7 +14,7 @@ describe Game do
   let(:player_1) { Player.new }
   let(:player_2) { Player.new }
   let(:mock_io) { MockCommandLine.new(board) }
-  let(:game_rules) {GameRules.new(board) }
+  let(:game_rules) { GameRules.new(board) }
   let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2, game_rules) }
 
   context 'run' do
@@ -124,23 +124,6 @@ describe Game do
 
       game.winner?.should == true
     end
-
-    it "is a tie game" do
-      player_1.token = "X"
-      player_2.token = "O"
-
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(2, player_1.token)
-      board.fill_cell(3, player_2.token)
-      board.fill_cell(4, player_2.token)
-      board.fill_cell(5, player_2.token)
-      board.fill_cell(6, player_1.token)
-      board.fill_cell(7, player_1.token)
-      board.fill_cell(8, player_2.token)
-      board.fill_cell(9, player_1.token)
-
-      game.is_tie?.should == true
-    end
   end
 
   context "player input validation" do
@@ -162,8 +145,20 @@ describe Game do
     end
   end
 
-  context "determines whether the game is over or not" do
-    it "game over is true with tie game" do
+  context 'winner_display: ' do
+    it "displays the winner of the game when there is a winner" do
+      player_1.name = "Eleanor"
+      player_1.token = 'X'
+      board.fill_cell(1, player_1.token)
+      board.fill_cell(2, player_1.token)
+      board.fill_cell(3, player_1.token)
+      game.winner_display
+
+      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
+      expect(mock_io.printed_strings[1]).to match /eleanor won!/i
+    end
+
+    it 'displays it was a tie game' do
       player_1.token = "X"
       player_2.token = "O"
 
@@ -177,57 +172,10 @@ describe Game do
       board.fill_cell(8, player_2.token)
       board.fill_cell(9, player_1.token)
 
-      game.game_over.should == true
-    end
-
-    it "game over is true with a winner" do
-      player_1.token = "X"
-      game.winner = player_1.token
-      game.game_over == true
-    end
-
-    it "game is not over with no winner" do
-      game.winner = nil
-      game.game_over == false
-    end
-
-    it "game is not over mid game" do
-      player_1.token = "X"
-      player_2.token = "O"
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(5, player_2.token)
-      game.game_over == false
-    end
-  end
-
-  context 'winner_display' do
-    it "displays the winner of the game when there is a winner" do
-      player_1.name = "Eleanor"
-      game.set_current_player
       game.winner_display
 
-      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
-       expect(mock_io.printed_strings[1]).to match /eleanor won!/i
+      expect(mock_io.printed_strings[1]).to match /tie game/
     end
-
-     it 'displays it was a tie game' do
-        player_1.token = "X"
-        player_2.token = "O"
-
-        board.fill_cell(1, player_1.token)
-        board.fill_cell(2, player_1.token)
-        board.fill_cell(3, player_2.token)
-        board.fill_cell(4, player_2.token)
-        board.fill_cell(5, player_2.token)
-        board.fill_cell(6, player_1.token)
-        board.fill_cell(7, player_1.token)
-        board.fill_cell(8, player_2.token)
-        board.fill_cell(9, player_1.token)
-
-        game.winner_display
-
-        expect(mock_io.printed_strings[1]).to match /tie game/
-      end
-    end
+  end
 
 end
