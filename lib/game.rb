@@ -77,10 +77,10 @@ class Game
   end
 
   def game_loop
-    until @game_rules.game_over(winner) do
+    until @game_rules.game_over do
       make_move
       @io.clear_screen
-      set_winner && break if winner? || @game_rules.is_tie?
+      break if @game_rules.winner? || @game_rules.is_tie?
       @io.display_board
       toggle_current_player
     end
@@ -112,20 +112,21 @@ class Game
   end
 
   def set_winner
-    @winner = @current_player.token if winner? == true
+    @winner = @current_player.token if @game_rules.winner? == true
     @winner
   end
 
-  def winner?
-    @game_rules.row_winner? ||
-      @game_rules.column_winner? ||
-      @game_rules.principal_diagonal_winner? ||
-      @game_rules.counter_diagonal_winner?
-  end
+  # def winner?
+  #   @game_rules.row_winner? ||
+  #     @game_rules.column_winner? ||
+  #     @game_rules.principal_diagonal_winner? ||
+  #     @game_rules.counter_diagonal_winner?
+  # end
 
   def winner_display
     @io.display_board
-    if winner?
+    set_winner
+    if @game_rules.winner?
       @io.output_message @current_player.name + CURRENT_PLAYER_WON
     elsif @game_rules.is_tie?
       @io.output_message TIE

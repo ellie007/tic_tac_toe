@@ -19,35 +19,39 @@ class GameRules
   end
 
   def principal_diagonal_winner?
-    indicies = []
+    indices = []
     i = 0
     @board.cells.each_with_index do |cell, index|
       if index % @size == 0
-        indicies << index + i
+        indices << index + i
         i += 1
       end
     end
-    diagonal_win_checker(indicies)
+    diagonal_win_checker(indices)
   end
 
   def counter_diagonal_winner?
-    indicies = []
+    indices = []
     i = @size - 1
     @board.cells.each_with_index do |cell, index|
       if index % @size == 0
-        indicies << index + i
+        indices << index + i
         i -= 1
       end
     end
-    diagonal_win_checker(indicies)
+    diagonal_win_checker(indices)
+  end
+
+  def winner?
+    row_winner? || column_winner? || principal_diagonal_winner? || counter_diagonal_winner?
   end
 
   def is_tie?
     @board.cells.select { |cell| cell == nil }.empty?
   end
 
-  def game_over(winner)
-    winner != nil || is_tie?
+  def game_over
+    winner? == true || is_tie?
   end
 
 private
@@ -59,9 +63,9 @@ private
     return false
   end
 
-  def diagonal_win_checker(indicies)
+  def diagonal_win_checker(indices)
     diagonal = []
-    indicies.each do |cell|
+    indices.each do |cell|
       diagonal << @board.cells[cell]
     end
 

@@ -16,6 +16,7 @@ while game.play_again do
   ai = Ai.new(board.cells)
   player_1 = Player.new
   player_2 = Player.new
+  # menu = Menu.new
   cl = CommandLine.new(board)
   game_rules = GameRules.new(board)
   game = Game.new(board, ai, cl, menu, player_1, player_2, game_rules)

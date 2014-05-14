@@ -84,48 +84,6 @@ describe Game do
     end
   end
 
-  context "game winner determination:" do
-    it "has no winner at the beginning of the game" do
-      game.winner.should == nil
-    end
-
-    it "player wins the game with a row" do
-      player_1.token = "X"
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(2, player_1.token)
-      board.fill_cell(3, player_1.token)
-
-      game.winner?.should == true
-    end
-
-    it "player wins the game with a column" do
-      player_1.token = "X"
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(4, player_1.token)
-      board.fill_cell(7, player_1.token)
-
-      game.winner?.should == true
-    end
-
-    it "player wins the game with a principal diagonal" do
-      player_1.token = "X"
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(5, player_1.token)
-      board.fill_cell(9, player_1.token)
-
-      game.winner?.should == true
-    end
-
-    it "player wins the game with a counter diagonal" do
-      player_1.token = "X"
-      board.fill_cell(3, player_1.token)
-      board.fill_cell(5, player_1.token)
-      board.fill_cell(7, player_1.token)
-
-      game.winner?.should == true
-    end
-  end
-
   context "player input validation" do
     it "should correctly determine if invalid input type" do
       game.valid_input?('apple').should == false
