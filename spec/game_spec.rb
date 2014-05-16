@@ -11,11 +11,12 @@ describe Game do
   let(:menu) { Menu.new }
   let(:board) { Board.new(3) }
   let(:ai) { Ai.new(board.cells) }
-  let(:player_1) { Player.new }
-  let(:player_2) { Player.new }
+  let(:player_1) { Player.new({},{},{}) }
+  let(:player_2) { Player.new({},{},{}) }
   let(:mock_io) { MockCommandLine.new(board) }
   let(:game_rules) { GameRules.new(board) }
-  let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2, game_rules) }
+  let(:game) { Game.new(board, ai, mock_io, menu, [player_1, player_2], game_rules) }
+
 
   context 'run' do
     it 'prints the welcome message and displays the board' do #, t:true do
@@ -26,6 +27,26 @@ describe Game do
       game.run
 
       expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
+    end
+  end
+
+  context "play again" do
+    it "should ask player to play again with only y and n" do
+      allow(mock_io).to receive(:play_again_output).and_return('for sure', 'y', 1, 'n')
+      game.play_again?
+      game.play_again.should == true
+      game.play_again?
+      game.play_again.should == false
+    end
+  end
+
+  context 'toggle current player' do
+    it 'current player should be next player' do
+      allow(menu).to receive(:players_list).and_return([player_1, player_2, player_3, player_4])
+      game.current_player = player_4
+      game.toggle_current_player
+
+      game.current_player.should == player_1
     end
   end
 
@@ -59,12 +80,12 @@ describe Game do
     it "restarts the game with same options if player commands 'restart'" do
       player_1.name = "Eleanor"
       player_1.token = "X"
-      @current_player = game.set_current_player
       board.fill_cell(1, player_1.token)
       game.stub(:run)
       allow(mock_io).to receive(:player_input).and_return('Restart', 2)
       game.human_turn
 
+      expect(game).to have_received(:player_input)
       expect(board.cells[0]).to eq(nil)
       expect(board.cells[1]).to eq(@current_player.token)
     end
@@ -72,10 +93,10 @@ describe Game do
     it "restarts the game with new menu option if player commands 'menu'" do
       player_1.name = "Eleanor"
       player_1.token = "X"
-      @current_player = game.set_current_player
+      game.stub(:run)
       allow(game).to receive(:menu_reset)
+      game.human_turn
 
-      game.human_alternative_options("menu")
       expect(game).to have_received(:menu_reset)
     end
   end
@@ -84,12 +105,12 @@ describe Game do
     it "ai gets random move, sends correct message, and fills the board" do
       player_1.name = "Eleanor"
       player_1.token = "X"
-      @current_player = game.set_current_player
       #ai.stub find_move: 5
       allow(ai).to receive(:find_move).and_return(5)
       game.ai_turn
 
       expect(mock_io.printed_strings[0]).to match /Eleanor's turn: 5/i
+      expect(board.cells[4]).to eq(player_1.token)
     end
   end
 
@@ -149,12 +170,11 @@ describe Game do
       board.fill_cell(7, player_1.token)
       board.fill_cell(8, player_2.token)
       board.fill_cell(9, player_1.token)
-
       game.winner_display
 
       expect(mock_io.printed_strings[1]).to match /tie game/
     end
   end
 
-
 end
+

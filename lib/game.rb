@@ -12,17 +12,19 @@ class Game
 
   attr_accessor :board, :winner, :sum, :size, :play_again, :current_player
 
-  def initialize(board, ai, io, menu, player_1, player_2, game_rules)
+
+  def initialize(board, ai, io, menu, players, game_rules)
     @board = board
     @ai = ai
-    @player_1 = player_1
-    @player_2 = player_2
     @io = io
     @menu = menu
-    @size = board.size
-    @play_again = true
-    @current_player = @player_1
+    @players = players
     @game_rules = game_rules
+
+    @size = board.size
+    @current_player = @players[0]
+    @play_again = true
+
   end
 
   def run
@@ -41,31 +43,21 @@ class Game
     @play_again
   end
 
-  def set_current_player
-    @current_player = @player_2 if @menu.turn_response == 2
-  end
+  def get_play_again_response
+    play_again_input = @io.play_again_output PLAY_AGAIN
 
-  def set_players
-    case @menu.game_type_response
-    when 1
-      @player_1.type = "human"
-      @player_2.type = "human"
-    when 2
-      @player_1.type = "human"
-      @player_2.type = "ai"
-    when 3
-      @player_1.type = "ai"
-      @player_2.type = "ai"
+    until play_again_input == "y" || play_again_input == "n" do
+      play_again_input = @io.play_again_output PLAY_AGAIN
     end
-    token_and_name
-    set_current_player
   end
 
-  def token_and_name
-    @player_1.name = @menu.player_one_name
-    @player_1.token = @menu.player_one_token
-    @player_2.name = @menu.player_two_name
-    @player_2.token = @menu.player_two_token
+  def set_play_again_response
+    if play_again_input == "y"
+      @play_again = true
+      @io.clear_screen
+    elsif play_again_input == "n"
+      @play_again = false
+    end
   end
 
   def make_move
@@ -87,7 +79,9 @@ class Game
   end
 
   def toggle_current_player
-    @current_player == @player_1 ? @current_player = @player_2 : @current_player = @player_1
+    current_player_index = @players.index(@current_player)
+    next_player_index = (current_player_index + 1) % @players.size
+    @current_player = @players[next_player_index]
   end
 
   def human_turn
@@ -147,14 +141,6 @@ class Game
     end
   end
 
-  def valid_input?(move)
-    (1..size**2).include?(move)
-  end
-
-  def valid_cell?(move)
-    @board.cells[move - 1] == nil
-  end
-
   def invalid_input_response
     @io.output_message INVALID_INPUT + "#{size**2}"
     @io.display_board
@@ -165,9 +151,12 @@ class Game
     @io.display_board
   end
 
+
   private
 
   def get_play_again_response
+    play_again_input = @io.play_again_output PLAY_AGAIN
+
     until @play_again_input == "y" || @play_again_input == "n" do
       @play_again_input = (@io.player_input PLAY_AGAIN).downcase
     end
@@ -182,14 +171,29 @@ class Game
     end
   end
 
-
-  private
-
   def clear_board
     (1..size**2).each do |move|
       @board.fill_cell(move, nil)
     end
     @io.clear_screen
+  end
+
+  def invalid_input_response
+    @io.output_message INVALID_INPUT + "#{@size}"
+    @io.display_board
+  end
+
+  def invalid_cell_response
+    @io.output_message INVALID_CELL
+    @io.display_board
+  end
+
+  def valid_input?(move)
+    (1..size**2).include?(move)
+  end
+
+  def valid_cell?(move)
+    @board.cells[move - 1] == nil
   end
 
 end

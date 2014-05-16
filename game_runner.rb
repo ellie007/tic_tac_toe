@@ -6,7 +6,7 @@ require './lib/command_line'
 require './lib/menu'
 require './lib/game_rules'
 
-game = Game.new({},{},{},{},{},{},{})
+game = Game.new({},{},{},{},{})
 
 while game.play_again do
   menu = Menu.new
@@ -14,12 +14,17 @@ while game.play_again do
 
   board = Board.new(menu.size)
   ai = Ai.new(board.cells)
-  player_1 = Player.new
-  player_2 = Player.new
-  # menu = Menu.new
+
+  players = []
+
+  menu.num_of_players.times do |i|
+    player = Player.new(menu.get_name(i+1), menu.get_token(i+1), menu.get_type(i+1))
+    players << player
+  end
+
   cl = CommandLine.new(board)
   game_rules = GameRules.new(board)
-  game = Game.new(board, ai, cl, menu, player_1, player_2, game_rules)
+  game = Game.new(board, ai, cl, menu, players)
 
   game.run
 end
