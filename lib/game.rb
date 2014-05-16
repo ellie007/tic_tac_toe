@@ -91,7 +91,9 @@ class Game
   end
 
   def human_turn
-    move = (@io.player_input @current_player.name + CURRENT_PLAYER_TURN).to_i
+    move = @io.player_input @current_player.name + CURRENT_PLAYER_TURN
+    run if human_alternative_options(move)
+    move = move.to_i
     if !valid_input?(move)
       invalid_input_response
       human_turn
@@ -100,15 +102,34 @@ class Game
       human_turn
     else
       @board.fill_cell(move, @current_player.token)
-      @io.display_board
     end
+  end
+
+  def human_alternative_options(move)
+    if move.is_a?(String)
+      if move.downcase == 'restart'
+        clear_board
+        return true
+      elsif move.downcase == 'menu'
+        @io.clear_screen
+        menu_reset
+        return true
+      end
+    end
+  end
+
+  def menu_reset
+    @menu.get_options
+    @board = Board.new(@menu.size)
+    @ai = Ai.new(@board.cells)
+    @io = CommandLine.new(@board)
+    @size = @menu.size
   end
 
   def ai_turn
     move = @ai.find_move
     @io.output_message @current_player.name + CURRENT_PLAYER_TURN + "#{move}"
     @board.fill_cell(move, @current_player.token)
-    @io.display_board
   end
 
   def set_winner
@@ -159,6 +180,16 @@ class Game
     elsif @play_again_input == "n"
       @play_again = false
     end
+  end
+
+
+  private
+
+  def clear_board
+    (1..size**2).each do |move|
+      @board.fill_cell(move, nil)
+    end
+    @io.clear_screen
   end
 
 end

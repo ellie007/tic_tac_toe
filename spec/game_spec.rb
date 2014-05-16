@@ -40,7 +40,6 @@ describe Game do
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
       expect(mock_io.printed_strings[2]).to match /That is invalid input./
       expect(mock_io.printed_strings[3]).to eq(mock_io.display_board_message)
-      expect(mock_io.printed_strings[4]).to eq(mock_io.display_board_message)
 
       expect(board.cells[4]).to eq(player_1.token)
     end
@@ -55,7 +54,29 @@ describe Game do
       expect(board.cells[1]).to eq(player_1.token)
       expect(mock_io.printed_strings[0]).to match /That spot is already taken./
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
-      expect(mock_io.printed_strings[2]).to eq(mock_io.display_board_message)
+    end
+
+    it "restarts the game with same options if player commands 'restart'" do
+      player_1.name = "Eleanor"
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      board.fill_cell(1, player_1.token)
+      game.stub(:run)
+      allow(mock_io).to receive(:player_input).and_return('Restart', 2)
+      game.human_turn
+
+      expect(board.cells[0]).to eq(nil)
+      expect(board.cells[1]).to eq(@current_player.token)
+    end
+
+    it "restarts the game with new menu option if player commands 'menu'" do
+      player_1.name = "Eleanor"
+      player_1.token = "X"
+      @current_player = game.set_current_player
+      allow(game).to receive(:menu_reset)
+
+      game.human_alternative_options("menu")
+      expect(game).to have_received(:menu_reset)
     end
   end
 
@@ -69,7 +90,6 @@ describe Game do
       game.ai_turn
 
       expect(mock_io.printed_strings[0]).to match /Eleanor's turn: 5/i
-      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
     end
   end
 
@@ -135,5 +155,6 @@ describe Game do
       expect(mock_io.printed_strings[1]).to match /tie game/
     end
   end
+
 
 end

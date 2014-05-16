@@ -40,6 +40,7 @@ class Menu
   end
 
   def game_type
+    @game_type_response = nil
     until @game_type_response == 1 || @game_type_response == 2 || @game_type_response == 3 do
       print "\n" + GAME_TYPE_OPTION
       @game_type_response = gets.chomp.to_i
@@ -54,6 +55,7 @@ class Menu
       players_token_values PLAYER_ONE_TOKEN, PLAYER_TWO_TOKEN
     when 2
       print GAME_TYPE_2 + "\n"
+      @turn_response = nil
 
       until @turn_response == 1 || @turn_response == 2 do
         print TURN_RESPONSE
