@@ -2,9 +2,9 @@ require 'game'
 require 'board'
 require 'ai'
 require 'player'
-require 'mock_output'
 require 'menu'
 require 'game_rules'
+require_relative 'mock_commandline'
 
 describe Game do
 
@@ -30,9 +30,9 @@ describe Game do
     end
   end
 
-  context "play again" do
-    it "should ask player to play again with only y and n" do
-      allow(mock_io).to receive(:play_again_output).and_return('for sure', 'y', 1, 'n')
+  context "play again: " do
+    it "ask player to play again with only y and n" do
+      allow(mock_io).to receive(:player_input).and_return('for sure', 'y', 1, 'n')
       game.play_again?
       game.play_again.should == true
       game.play_again?
@@ -42,8 +42,7 @@ describe Game do
 
   context 'toggle current player' do
     it 'current player should be next player' do
-      allow(menu).to receive(:players_list).and_return([player_1, player_2, player_3, player_4])
-      game.current_player = player_4
+      game.current_player = player_2
       game.toggle_current_player
 
       game.current_player.should == player_1
@@ -85,16 +84,18 @@ describe Game do
       allow(mock_io).to receive(:player_input).and_return('Restart', 2)
       game.human_turn
 
-      expect(game).to have_received(:player_input)
+      #expect(game).to have_received(:player_input)
       expect(board.cells[0]).to eq(nil)
-      expect(board.cells[1]).to eq(@current_player.token)
+      expect(board.cells[1]).to eq(player_1.token)
     end
 
     it "restarts the game with new menu option if player commands 'menu'" do
       player_1.name = "Eleanor"
       player_1.token = "X"
       game.stub(:run)
+      allow(mock_io).to receive(:player_input).and_return('Menu', 2)
       allow(game).to receive(:menu_reset)
+
       game.human_turn
 
       expect(game).to have_received(:menu_reset)
@@ -127,20 +128,32 @@ describe Game do
 
   context "player input validation" do
     it "should correctly determine if invalid input type" do
-      game.valid_input?('apple').should == false
-      game.valid_input?(0).should == false
-      game.valid_input?(10).should == false
-      game.valid_input?(5).should == true
+      player_1.name = "Eleanor"
+      player_1.token = "X"
+      allow(mock_io).to receive(:player_input).and_return('apple', 0, 5)
+      game.human_turn
+
+      expect(mock_io.printed_strings[0]).to match /That is invalid input.  Please choose open spaces 1 to 9/
+      expect(mock_io.printed_strings[2]).to match /That is invalid input.  Please choose open spaces 1 to 9/
     end
 
     it "should not allow the player to place in a taken cell" do
-      player_1.token = "X"
+      player_1.name = "Eleanor"
+      player_1.token = 'X'
       board.fill_cell(5, player_1.token)
-      game.valid_cell?(5).should == false
+      allow(mock_io).to receive(:player_input).and_return(5, 4)
+      game.human_turn
+
+      expect(mock_io.printed_strings[0]).to match /That spot is already taken.  Please choose an empty spot./
     end
 
     it "should allow the player to place in an empty cell" do
-      game.valid_cell?(5).should == true
+      player_1.name = "Eleanor"
+      player_1.token = 'X'
+      allow(mock_io).to receive(:player_input).and_return(5)
+      game.human_turn
+
+      expect(board.cells[4]).to eq(player_1.token)
     end
   end
 

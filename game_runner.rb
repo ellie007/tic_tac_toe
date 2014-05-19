@@ -29,4 +29,3 @@ while game.play_again do
   game.run
 end
 
-

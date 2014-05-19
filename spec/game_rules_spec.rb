@@ -5,8 +5,8 @@ require 'board'
 describe GameRules do
 
   let(:board) { Board.new(3) }
-  let(:player_1) { Player.new }
-  let(:player_2) { Player.new }
+  let(:player_1) { Player.new({},{},{}) }
+  let(:player_2) { Player.new({},{},{}) }
   let(:game_rules) { GameRules.new(board) }
 
   context 'is tie?:' do

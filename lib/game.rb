@@ -24,7 +24,6 @@ class Game
     @size = board.size
     @current_player = @players[0]
     @play_again = true
-
   end
 
   def run
@@ -41,23 +40,6 @@ class Game
     get_play_again_response
     set_play_again_response
     @play_again
-  end
-
-  def get_play_again_response
-    play_again_input = @io.play_again_output PLAY_AGAIN
-
-    until play_again_input == "y" || play_again_input == "n" do
-      play_again_input = @io.play_again_output PLAY_AGAIN
-    end
-  end
-
-  def set_play_again_response
-    if play_again_input == "y"
-      @play_again = true
-      @io.clear_screen
-    elsif play_again_input == "n"
-      @play_again = false
-    end
   end
 
   def make_move
@@ -141,21 +123,11 @@ class Game
     end
   end
 
-  def invalid_input_response
-    @io.output_message INVALID_INPUT + "#{size**2}"
-    @io.display_board
-  end
-
-  def invalid_cell_response
-    @io.output_message INVALID_CELL
-    @io.display_board
-  end
-
 
   private
 
   def get_play_again_response
-    play_again_input = @io.play_again_output PLAY_AGAIN
+    play_again_input = @io.player_input PLAY_AGAIN
 
     until @play_again_input == "y" || @play_again_input == "n" do
       @play_again_input = (@io.player_input PLAY_AGAIN).downcase
@@ -179,7 +151,7 @@ class Game
   end
 
   def invalid_input_response
-    @io.output_message INVALID_INPUT + "#{@size}"
+    @io.output_message INVALID_INPUT + "#{size**2}"
     @io.display_board
   end
 
