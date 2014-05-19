@@ -19,14 +19,13 @@ describe Game do
 
 
   context 'run' do
-    it 'prints the welcome message and displays the board' do #, t:true do
-      game.stub(:set_players)
+    it 'prints the welcome message and displays the board' do #, t:true do3
       game.stub(:game_loop)
       game.stub(:winner_display)
       game.stub(:play_again?)
       game.run
 
-      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
+      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)3
     end
   end
 

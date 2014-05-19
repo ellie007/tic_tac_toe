@@ -6,7 +6,7 @@ require './lib/command_line'
 require './lib/menu'
 require './lib/game_rules'
 
-game = Game.new({},{},{},{},{})
+game = Game.new({},{},{},{},{},{})
 
 while game.play_again do
   menu = Menu.new
@@ -24,7 +24,7 @@ while game.play_again do
 
   cl = CommandLine.new(board)
   game_rules = GameRules.new(board)
-  game = Game.new(board, ai, cl, menu, players)
+  game = Game.new(board, ai, cl, menu, players, game_rules)
 
   game.run
 end

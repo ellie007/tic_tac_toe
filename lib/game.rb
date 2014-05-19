@@ -27,7 +27,6 @@ class Game
   end
 
   def run
-    set_players
     @io.clear_screen
     @io.display_board
     game_loop

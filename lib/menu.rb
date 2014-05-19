@@ -18,8 +18,11 @@ class Menu
   end
 
   def number_of_players
-    print "\n" + NUM_OF_PLAYERS
-    @num_of_players = gets.chomp.to_i
+    self.num_of_players = 0
+    until self.num_of_players.between?(1, 4) do
+      print "\n" + NUM_OF_PLAYERS
+      self.num_of_players = gets.chomp.to_i
+    end
   end
 
   def get_name(num)
@@ -27,7 +30,7 @@ class Menu
     gets.capitalize.chomp
   end
 
-   def get_token(num)
+  def get_token(num)
     print "Enter token value for Player " + num.to_s + ": "
     gets.capitalize.chomp[0]
   end
