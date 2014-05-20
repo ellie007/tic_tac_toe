@@ -2,9 +2,9 @@ require 'game'
 require 'board'
 require 'ai'
 require 'player'
-require 'mock_output'
 require 'menu'
 require 'game_rules'
+require_relative 'mock_commandline'
 
 describe Game do
 
