@@ -15,16 +15,14 @@ while game.play_again do
   board = Board.new(menu.size)
   ai = Ai.new(board.cells)
 
-  players = []
-
   menu.num_of_players.times do |i|
     player = Player.new(menu.get_name(i+1), menu.get_token(i+1), menu.get_type(i+1))
-    players << player
+    menu.players << player
   end
 
   cl = CommandLine.new(board)
   game_rules = GameRules.new(board)
-  game = Game.new(board, ai, cl, menu, players, game_rules)
+  game = Game.new(board, ai, cl, menu, menu.players, game_rules)
 
   game.run
 end

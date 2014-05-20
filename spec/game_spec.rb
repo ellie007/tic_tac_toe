@@ -25,7 +25,7 @@ describe Game do
       game.stub(:play_again?)
       game.run
 
-      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)3
+      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
     end
   end
 
