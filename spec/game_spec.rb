@@ -17,18 +17,6 @@ describe Game do
   let(:game_rules) { GameRules.new(board) }
   let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2, game_rules) }
 
-  context 'run' do
-    it 'prints the welcome message and displays the board' do #, t:true do
-      game.stub(:set_players)
-      game.stub(:game_loop)
-      game.stub(:winner_display)
-      game.stub(:play_again?)
-      game.run
-
-      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
-    end
-  end
-
   context "human turn" do
     it "keeps prompting human for input until valid input" do
       player_1.name = "Eleanor"

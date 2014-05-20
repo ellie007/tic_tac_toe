@@ -20,22 +20,24 @@ class Game
     @io = io
     @menu = menu
     @size = board.size
+
     @play_again = true
     @current_player = @player_1
     @game_rules = game_rules
   end
 
   def run
-    set_players
-    @io.clear_screen
-    @io.display_board
-    game_loop
-    winner_display
-    play_again?
+    while @play_again == true do
+      set_players
+      @io.clear_screen
+      @io.display_board
+      game_loop
+      winner_display
+      play_again?
+    end
   end
 
   def play_again?
-    @play_again_input = nil
     get_play_again_response
     set_play_again_response
     @play_again
@@ -147,6 +149,7 @@ class Game
   private
 
   def get_play_again_response
+    @play_again_input = nil
     until @play_again_input == "y" || @play_again_input == "n" do
       @play_again_input = (@io.player_input PLAY_AGAIN).downcase
     end
@@ -156,9 +159,14 @@ class Game
     if @play_again_input == "y"
       @play_again = true
       @io.clear_screen
+      play_again_reset
     elsif @play_again_input == "n"
       @play_again = false
     end
+  end
+
+  def play_again_reset
+    @board.cells.each_with_index { |cell, index| @board.fill_cell(index + 1, nil) }
   end
 
 end
