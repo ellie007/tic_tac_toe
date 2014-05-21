@@ -1,4 +1,4 @@
-require_relative 'mock_commandline'
+require_relative 'mock_command_line'
 
 describe Menu do
 

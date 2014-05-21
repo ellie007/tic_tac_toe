@@ -4,7 +4,7 @@ require 'ai'
 require 'player'
 require 'menu'
 require 'game_rules'
-require_relative 'mock_commandline'
+require_relative 'mock_command_line'
 
 describe Game do
 

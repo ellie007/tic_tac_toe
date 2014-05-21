@@ -21,18 +21,18 @@ class Menu
 
   def player_name(i)
     player_name = "Enter NAME for Player "
-    name = (@io.player_input player_name + "#{i}: ").capitalize
+    (@io.player_input player_name + "#{i}: ").capitalize
   end
 
   def player_token(i)
     player_token = "Enter TOKEN for Player "
-    token = (@io.player_input player_token + "#{i}: ")[0].capitalize
+    (@io.player_input player_token + "#{i}: ")[0].capitalize
   end
 
   def player_type(i)
     player_type = "Enter TYPE for Player "
     human_or_ai = " (human or ai): "
-    type = @io.player_input player_type + "#{i}" + human_or_ai
+    @io.player_input player_type + "#{i}" + human_or_ai
   end
 
 end
