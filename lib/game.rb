@@ -61,7 +61,11 @@ class Game
   end
 
   def toggle_current_player
-    @current_player == @players[0] ? @current_player = @players[1] : @current_player = @players[0]
+    if game.current_player == @players[0]
+      @current_player = @players[1]
+    else
+      @current_player = @players[0]
+    end
   end
 
   def human_turn
