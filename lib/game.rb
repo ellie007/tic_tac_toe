@@ -61,7 +61,7 @@ class Game
   end
 
   def toggle_current_player
-    if game.current_player == @players[0]
+    if self.current_player == @players[0]
       @current_player = @players[1]
     else
       @current_player = @players[0]
