@@ -32,7 +32,10 @@ describe Game do
     end
 
     it "keeps prompting human for input until valid cell" do
-      board.fill_cell(1, player_1.token)
+      board.cells = [ "X", nil, nil,
+                      nil, nil, nil,
+                      nil, nil, nil ]
+
       allow(mock_io).to receive(:player_input).and_return(1,2)
       game.human_turn
 
@@ -58,9 +61,9 @@ describe Game do
 
   context "set winner: " do
     it "winner instance variable set with set_winner" do
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(5, player_1.token)
-      board.fill_cell(9, player_1.token)
+      board.cells = [ "E", nil, nil,
+                      nil, "E", nil,
+                      nil, nil, "E" ]
 
       game.set_winner.should == player_1.token
     end
@@ -75,7 +78,10 @@ describe Game do
     end
 
     it "should not allow the player to place in a taken cell" do
-      board.fill_cell(5, player_1.token)
+      board.cells = [ nil, nil, nil,
+                      nil, "E", nil,
+                      nil, nil, nil ]
+
       game.valid_cell?(5).should == false
     end
 
@@ -86,9 +92,10 @@ describe Game do
 
   context 'winner_display: ' do
     it "displays the winner of the game when there is a winner" do
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(2, player_1.token)
-      board.fill_cell(3, player_1.token)
+      board.cells = [ "E", "E", "E",
+                      nil, nil, nil,
+                      nil, nil, nil ]
+
       game.winner_display
 
       expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
@@ -96,15 +103,9 @@ describe Game do
     end
 
     it 'displays it was a tie game' do
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(2, player_1.token)
-      board.fill_cell(3, player_2.token)
-      board.fill_cell(4, player_2.token)
-      board.fill_cell(5, player_2.token)
-      board.fill_cell(6, player_1.token)
-      board.fill_cell(7, player_1.token)
-      board.fill_cell(8, player_2.token)
-      board.fill_cell(9, player_1.token)
+      board.cells = [ "E", "E", "V",
+                      "V", "V", "E",
+                      "E", "E", "V" ]
 
       game.winner_display
 

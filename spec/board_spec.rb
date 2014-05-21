@@ -12,7 +12,10 @@ describe Board do
 
 
   it "places a move for the player on the board" do
-    board.fill_cell(4, player_1.token)
+    board.cells = [ nil, nil, nil,
+                    "E", nil, nil,
+                    nil, nil, nil ]
+
     expect(board.cells[3]).to eq(player_1.token)
   end
 
