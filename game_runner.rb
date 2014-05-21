@@ -22,7 +22,7 @@ end
 
 game_rules = GameRules.new(board)
 game = Game.new(board, ai, cl, menu, players, game_rules)
-game.run3
+game.run
 
 
 
