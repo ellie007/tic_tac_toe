@@ -2,16 +2,8 @@ class Menu
 
   WELCOME = "\nWelcome to Tic Tac Toe!"
 
-  BOARD_SIZE = "\nWhat board size would you like?\nPlease enter the base dimension.  (3 for 3 by 3; 4 for 4 by 4): "
-
-  PLAYER_NAME = "Enter NAME for Player "
-  PLAYER_TOKEN = "Enter TOKEN for Player "
-  PLAYER_TYPE = "Enter TYPE for Player "
-  ENDING_COLON = ": "
-  HUMAN_OR_AI = " (human or ai)"
-
-
   attr_accessor :size
+
 
   def initialize(io)
     @io = io
@@ -23,19 +15,24 @@ class Menu
   end
 
   def board_size
-    @size = (@io.player_input BOARD_SIZE).to_i
+    board_size_message = "\nWhat board size would you like?\nPlease enter the base dimension. (3 for 3 by 3; 4 for 4 by 4): "
+    self.size = (@io.player_input board_size_message).to_i
   end
 
   def player_name(i)
-    name = (@io.player_input PLAYER_NAME + "#{i}" + ENDING_COLON).capitalize
+    player_name = "Enter NAME for Player "
+    name = (@io.player_input player_name + "#{i}: ").capitalize
   end
 
   def player_token(i)
-    token = (@io.player_input PLAYER_TOKEN + "#{i}" + ENDING_COLON)[0].capitalize
+    player_token = "Enter TOKEN for Player "
+    token = (@io.player_input player_token + "#{i}: ")[0].capitalize
   end
 
   def player_type(i)
-    type = @io.player_input PLAYER_TYPE + "#{i}" + HUMAN_OR_AI + ENDING_COLON
+    player_type = "Enter TYPE for Player "
+    human_or_ai = " (human or ai): "
+    type = @io.player_input player_type + "#{i}" + human_or_ai
   end
 
 end
