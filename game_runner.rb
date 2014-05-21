@@ -14,8 +14,7 @@ ai = Ai.new(board.cells)
 
 players = []
 
-2.times do |i|
-  i += 1
+(0..1).each do |i|
   player = Player.new(menu.player_name(i), menu.player_token(i), menu.player_type(i))
   players << player
 end
