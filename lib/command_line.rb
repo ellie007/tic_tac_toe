@@ -1,25 +1,22 @@
 class CommandLine
 
-  def initialize(board)
-    @cells = board.cells
-    @size = board.size
-  end
+  attr_accessor :size
 
-  def display_board
+  def display_board(cells)
     print_new_line
     puts "Current State of Game:"
-    @cells.each_with_index do |element, index|
+    cells.each_with_index do |element, index|
       display_element(element, index)
       print_new_line if new_board_row?(index)
       row_separator if new_board_row?(index) && !end_of_board?(index)
     end
-    legend
+    legend(cells)
   end
 
-  def legend
+  def legend(cells)
     print_new_line
     puts "Legend:"
-    @cells.each_with_index do |element, index|
+    cells.each_with_index do |element, index|
       print " #{index + 1} "
       print_new_line if new_board_row?(index)
     end

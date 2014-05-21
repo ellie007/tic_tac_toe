@@ -10,27 +10,26 @@ class Game
   CURRENT_PLAYER_WON = " Won!"
   TIE = "It is a tie game."
 
-  attr_accessor :board, :winner, :sum, :size, :play_again, :current_player
+  attr_accessor :board, :winner, :size, :play_again, :current_player
 
-  def initialize(board, ai, io, menu, player_1, player_2, game_rules)
+  def initialize(board, ai, io, menu, players, game_rules)
     @board = board
     @ai = ai
-    @player_1 = player_1
-    @player_2 = player_2
+    @players = players
     @io = io
     @menu = menu
-    @size = board.size
-
-    @play_again = true
-    @current_player = @player_1
     @game_rules = game_rules
+
+    @size = board.size
+    @play_again = true
+    @current_player = @players[0]
+    @io.size = @size
   end
 
   def run
     while @play_again == true do
-      set_players
       @io.clear_screen
-      @io.display_board
+      display_board
       game_loop
       winner_display
       play_again?
@@ -41,33 +40,6 @@ class Game
     get_play_again_response
     set_play_again_response
     @play_again
-  end
-
-  def set_current_player
-    @current_player = @player_2 if @menu.turn_response == 2
-  end
-
-  def set_players
-    case @menu.game_type_response
-    when 1
-      @player_1.type = "human"
-      @player_2.type = "human"
-    when 2
-      @player_1.type = "human"
-      @player_2.type = "ai"
-    when 3
-      @player_1.type = "ai"
-      @player_2.type = "ai"
-    end
-    token_and_name
-    set_current_player
-  end
-
-  def token_and_name
-    @player_1.name = @menu.player_one_name
-    @player_1.token = @menu.player_one_token
-    @player_2.name = @menu.player_two_name
-    @player_2.token = @menu.player_two_token
   end
 
   def make_move
@@ -83,13 +55,13 @@ class Game
       make_move
       @io.clear_screen
       break if @game_rules.winner? || @game_rules.is_tie?
-      @io.display_board
+      display_board
       toggle_current_player
     end
   end
 
   def toggle_current_player
-    @current_player == @player_1 ? @current_player = @player_2 : @current_player = @player_1
+    @current_player == @players[0] ? @current_player = @players[1] : @current_player = @players[0]
   end
 
   def human_turn
@@ -102,7 +74,7 @@ class Game
       human_turn
     else
       @board.fill_cell(move, @current_player.token)
-      @io.display_board
+      display_board
     end
   end
 
@@ -110,7 +82,7 @@ class Game
     move = @ai.find_move
     @io.output_message @current_player.name + CURRENT_PLAYER_TURN + "#{move}"
     @board.fill_cell(move, @current_player.token)
-    @io.display_board
+    display_board
   end
 
   def set_winner
@@ -119,7 +91,7 @@ class Game
   end
 
   def winner_display
-    @io.display_board
+    display_board
     set_winner
     if @game_rules.winner?
       @io.output_message @current_player.name + CURRENT_PLAYER_WON
@@ -138,12 +110,12 @@ class Game
 
   def invalid_input_response
     @io.output_message INVALID_INPUT + "#{size**2}"
-    @io.display_board
+    display_board
   end
 
   def invalid_cell_response
     @io.output_message INVALID_CELL
-    @io.display_board
+    display_board
   end
 
   private
@@ -167,6 +139,10 @@ class Game
 
   def play_again_reset
     @board.cells.each_with_index { |cell, index| @board.fill_cell(index + 1, nil) }
+  end
+
+  def display_board
+    @io.display_board(board.cells)
   end
 
 end

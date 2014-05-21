@@ -6,16 +6,23 @@ require './lib/command_line'
 require './lib/menu'
 require './lib/game_rules'
 
-menu = Menu.new
+cl = CommandLine.new
+menu = Menu.new(cl)
 menu.get_options
 board = Board.new(menu.size)
 ai = Ai.new(board.cells)
-player_1 = Player.new
-player_2 = Player.new
-cl = CommandLine.new(board)
+
+players = []
+
+2.times do |i|
+  i += 1
+  player = Player.new(menu.player_name(i), menu.player_token(i), menu.player_type(i))
+  players << player
+end
+
 game_rules = GameRules.new(board)
-game = Game.new(board, ai, cl, menu, player_1, player_2, game_rules)
-game.run
+game = Game.new(board, ai, cl, menu, players, game_rules)
+game.run3
 
 
 

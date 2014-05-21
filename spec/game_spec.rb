@@ -8,19 +8,17 @@ require_relative 'mock_commandline'
 
 describe Game do
 
-  let(:menu) { Menu.new }
+  let(:mock_io) { MockCommandLine.new }
+  let(:menu) { Menu.new(mock_io) }
   let(:board) { Board.new(3) }
   let(:ai) { Ai.new(board.cells) }
-  let(:player_1) { Player.new }
-  let(:player_2) { Player.new }
-  let(:mock_io) { MockCommandLine.new(board) }
+  let(:player_1) { Player.new("Eleanor", "E", "human") }
+  let(:player_2) { Player.new("Vivian", "V", "ai") }
   let(:game_rules) { GameRules.new(board) }
-  let(:game) { Game.new(board, ai, mock_io, menu, player_1, player_2, game_rules) }
+  let(:game) { Game.new(board, ai, mock_io, menu, [player_1, player_2], game_rules) }
 
   context "human turn" do
     it "keeps prompting human for input until valid input" do
-      player_1.name = "Eleanor"
-      player_1.token = "X"
       allow(mock_io).to receive(:player_input).and_return(123, 'a', 5)
       game.human_turn
 
@@ -34,8 +32,6 @@ describe Game do
     end
 
     it "keeps prompting human for input until valid cell" do
-      player_1.name = "Eleanor"
-      player_1.token = "X"
       board.fill_cell(1, player_1.token)
       allow(mock_io).to receive(:player_input).and_return(1,2)
       game.human_turn
@@ -49,21 +45,19 @@ describe Game do
 
   context "ai turn" do
     it "ai gets random move, sends correct message, and fills the board" do
-      player_1.name = "Eleanor"
-      player_1.token = "X"
-      @current_player = game.set_current_player
+      game.current_player = player_2
       #ai.stub find_move: 5
       allow(ai).to receive(:find_move).and_return(5)
       game.ai_turn
 
-      expect(mock_io.printed_strings[0]).to match /Eleanor's turn: 5/i
+      expect(mock_io.printed_strings[0]).to match /Vivian's turn: 5/i
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
+      expect(board.cells[4]).to eq(game.current_player.token)
     end
   end
 
   context "set winner: " do
     it "winner instance variable set with set_winner" do
-      player_1.token = "X"
       board.fill_cell(1, player_1.token)
       board.fill_cell(5, player_1.token)
       board.fill_cell(9, player_1.token)
@@ -81,7 +75,6 @@ describe Game do
     end
 
     it "should not allow the player to place in a taken cell" do
-      player_1.token = "X"
       board.fill_cell(5, player_1.token)
       game.valid_cell?(5).should == false
     end
@@ -93,8 +86,6 @@ describe Game do
 
   context 'winner_display: ' do
     it "displays the winner of the game when there is a winner" do
-      player_1.name = "Eleanor"
-      player_1.token = 'X'
       board.fill_cell(1, player_1.token)
       board.fill_cell(2, player_1.token)
       board.fill_cell(3, player_1.token)
@@ -105,9 +96,6 @@ describe Game do
     end
 
     it 'displays it was a tie game' do
-      player_1.token = "X"
-      player_2.token = "O"
-
       board.fill_cell(1, player_1.token)
       board.fill_cell(2, player_1.token)
       board.fill_cell(3, player_2.token)

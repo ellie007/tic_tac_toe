@@ -1,8 +1,8 @@
 class MockCommandLine
 
-  def initialize(board)
-    @cells = board.cells
-    @size = board.size
+  attr_accessor :size
+
+  def initialize
     @printed_strings = []
   end
 
@@ -14,7 +14,7 @@ class MockCommandLine
     @printed_strings << message
   end
 
-  def display_board
+  def display_board(cells)
     output_message display_board_message
   end
 
