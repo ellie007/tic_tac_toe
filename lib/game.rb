@@ -20,16 +20,16 @@ class Game
     @menu = menu
     @game_rules = game_rules
 
-    @size = board.size
+    @size = board.size.to_i
     @play_again = true
     @current_player = @players[0]
-    @io.size = @size
+    @io.size = @size.to_i
   end
 
   def run
     while @play_again == true do
       @io.clear_screen
-      display_board
+      @io.display_board(board.cells)
       game_loop
       winner_display
       play_again?
@@ -52,14 +52,6 @@ class Game
     end
   end
 
-  def make_move
-    if false # @current_player.type == "ai"
-      ai_turn
-    elsif @current_player.class == HumanPlayer
-      human_turn
-    end
-  end
-
   def toggle_current_player
     if self.current_player == @players[0]
       @current_player = @players[1]
@@ -68,18 +60,11 @@ class Game
     end
   end
 
-  def human_turn
+  def make_move
     move = @current_player.make_move.to_i
-    if !valid_input?(move)
-      invalid_input_response
-      human_turn
-    elsif !valid_cell?(move)
-      invalid_cell_response
-      human_turn
-    else
-      @board.fill_cell(move, @current_player.token)
-      display_board
-    end
+    valid_move_check(move)
+    @board.fill_cell(move, @current_player.token)
+    display_board
   end
 
   def ai_turn
@@ -104,16 +89,29 @@ class Game
     end
   end
 
+
+  private
+
+  def valid_move_check(move)
+    if !valid_input?(move)
+      invalid_input_response
+      make_move
+    elsif !valid_cell?(move)
+      invalid_cell_response
+      make_move
+    end
+  end
+
   def valid_input?(move)
     (1..size**2).include?(move)
   end
 
   def valid_cell?(move)
-    @board.cells[move - 1] == nil
+    @board.cells[move - 1].nil?
   end
 
   def invalid_input_response
-    @io.output_message INVALID_INPUT + "#{size**2}"
+    @io.output_message INVALID_INPUT + "#{size**2}."
     display_board
   end
 
@@ -121,8 +119,6 @@ class Game
     @io.output_message INVALID_CELL
     display_board
   end
-
-  private
 
   def get_play_again_response
     @play_again_input = nil

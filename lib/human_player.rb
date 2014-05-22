@@ -9,7 +9,7 @@ class HumanPlayer
   end
 
   def make_move
-    @io.prompt_for_input(self.name + "Turn: ")
+    move = @io.prompt_for_input(self.name + "'s Turn: ")
   end
 
 end

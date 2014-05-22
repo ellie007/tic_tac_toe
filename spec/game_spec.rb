@@ -17,10 +17,19 @@ describe Game do
   let(:game_rules) { GameRules.new(board) }
   let(:game) { Game.new(board, ai, mock_io, menu, [player_1, player_2], game_rules) }
 
-  context "human turn" do
+  context "make move: " do
+    it "makes a move for a human" do
+      allow(player_1).to receive(:make_move).and_return(1)
+      game.make_move
+
+      expect(board.cells).to eq([ "E", nil, nil,
+                                   nil, nil, nil,
+                                   nil, nil, nil ])
+    end
+
     it "keeps prompting human for input until valid input" do
-      allow(mock_io).to receive(:prompt_for_input).and_return(123, 'a', 5)
-      game.human_turn
+      allow(mock_io).to receive(:prompt_for_input).and_return(123, 'apple', 5)
+      game.make_move
 
       expect(mock_io.printed_strings[0]).to match /That is invalid input./
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
@@ -37,7 +46,7 @@ describe Game do
                       nil, nil, nil ]
 
       allow(mock_io).to receive(:prompt_for_input).and_return(1,2)
-      game.human_turn
+      game.make_move
 
       expect(board.cells[1]).to eq(player_1.token)
       expect(mock_io.printed_strings[0]).to match /That spot is already taken./
@@ -66,8 +75,6 @@ describe Game do
     expect(game.current_player).to eq(player_1)
   end
 
-
-
   context "set winner: " do
     it "winner instance variable set with set_winner" do
       board.cells = [ "E", nil, nil,
@@ -78,26 +85,26 @@ describe Game do
     end
   end
 
-  context "player input validation" do
-    it "should correctly determine if invalid input type" do
-      game.valid_input?('apple').should == false
-      game.valid_input?(0).should == false
-      game.valid_input?(10).should == false
-      game.valid_input?(5).should == true
-    end
+  # context "player input validation" do
+  #   it "should correctly determine if invalid input type" do
+  #     game.valid_input?('apple').should == false
+  #     game.valid_input?(0).should == false
+  #     game.valid_input?(10).should == false
+  #     game.valid_input?(5).should == true
+  #   end
 
-    it "should not allow the player to place in a taken cell" do
-      board.cells = [ nil, nil, nil,
-                      nil, "E", nil,
-                      nil, nil, nil ]
+  #   it "should not allow the player to place in a taken cell" do
+  #     board.cells = [ nil, nil, nil,
+  #                     nil, "E", nil,
+  #                     nil, nil, nil ]
 
-      game.valid_cell?(5).should == false
-    end
+  #     game.valid_cell?(5).should == false
+  #   end
 
-    it "should allow the player to place in an empty cell" do
-      game.valid_cell?(5).should == true
-    end
-  end
+  #   it "should allow the player to place in an empty cell" do
+  #     game.valid_cell?(5).should == true
+  #   end
+  # end
 
   context 'winner_display: ' do
     it "displays the winner of the game when there is a winner" do

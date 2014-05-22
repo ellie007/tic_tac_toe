@@ -16,13 +16,14 @@ ai = Ai.new(board.cells)
 
 players = []
 
-(0..1).each do |i|
+(1..2).each do |i|
   player = HumanPlayer.new(menu.get_player_name(i), menu.get_player_token(i), cl)
   players << player
 end
 
 game_rules = GameRules.new(board)
 game = Game.new(board, ai, cl, menu, players, game_rules)
+
 game.run
 
 
