@@ -53,9 +53,9 @@ class Game
   end
 
   def make_move
-    if @current_player.type == "ai"
+    if false # @current_player.type == "ai"
       ai_turn
-    elsif @current_player.type == "human"
+    elsif @current_player.class == HumanPlayer
       human_turn
     end
   end
@@ -69,7 +69,7 @@ class Game
   end
 
   def human_turn
-    move = (@io.prompt_for_input(@current_player.name + CURRENT_PLAYER_TURN)).to_i
+    move = @current_player.make_move.to_i
     if !valid_input?(move)
       invalid_input_response
       human_turn

@@ -1,6 +1,6 @@
 require './lib/board'
 require './lib/ai'
-require './lib/player'
+require './lib/human_player'
 require './lib/game'
 require './lib/command_line'
 require './lib/menu'
@@ -15,7 +15,7 @@ ai = Ai.new(board.cells)
 players = []
 
 (0..1).each do |i|
-  player = Player.new(menu.get_player_name(i), menu.get_player_token(i), menu.get_player_type(i))
+  player = HumanPlayer.new(menu.get_player_name(i), menu.get_player_token(i), cl)
   players << player
 end
 

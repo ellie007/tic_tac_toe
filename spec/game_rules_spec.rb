@@ -1,5 +1,5 @@
 require 'game_rules'
-require 'player'
+require 'human_player'
 require 'board'
 
 describe GameRules do

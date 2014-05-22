@@ -1,7 +1,7 @@
 require 'game'
 require 'board'
 require 'ai'
-require 'player'
+require 'human_player'
 require 'menu'
 require 'game_rules'
 require_relative 'mock_command_line'
@@ -12,8 +12,8 @@ describe Game do
   let(:menu) { Menu.new(mock_io) }
   let(:board) { Board.new(3) }
   let(:ai) { Ai.new(board.cells) }
-  let(:player_1) { Player.new("Eleanor", "E", "human") }
-  let(:player_2) { Player.new("Vivian", "V", "ai") }
+  let(:player_1) { HumanPlayer.new("Eleanor", "E", mock_io) }
+  let(:player_2) { HumanPlayer.new("Vivian", "V", mock_io) }
   let(:game_rules) { GameRules.new(board) }
   let(:game) { Game.new(board, ai, mock_io, menu, [player_1, player_2], game_rules) }
 
