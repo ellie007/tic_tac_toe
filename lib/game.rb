@@ -45,11 +45,10 @@ class Game
   def game_loop
     until @game_rules.game_over do
       make_move
-      @io.clear_screen
       break if @game_rules.winner? || @game_rules.is_tie?
-      display_board
       toggle_current_player
     end
+    @io.clear_screen
   end
 
   def toggle_current_player
@@ -64,13 +63,7 @@ class Game
     move = @current_player.make_move.to_i
     valid_move_check(move)
     @board.fill_cell(move, @current_player.token)
-    display_board
-  end
-
-  def ai_turn
-    move = @ai.find_move
-    @io.output_message @current_player.name + CURRENT_PLAYER_TURN + "#{move}"
-    @board.fill_cell(move, @current_player.token)
+    @io.clear_screen
     display_board
   end
 

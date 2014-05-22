@@ -22,8 +22,8 @@ class Menu
   end
 
   def get_player_type(i)
-    player_type_prompt = "Enter TYPE for Player #{i} (human or ai): "
-    @io.prompt_for_input(player_type_prompt)
+    player_type_prompt = "Enter TYPE for Player #{i} (1 for human : 2 for ai): "
+    (@io.prompt_for_input(player_type_prompt)).to_i
   end
 
 end

@@ -32,9 +32,9 @@ describe Menu do
   end
 
   it 'prompts for player type' do
-    allow(mock_io).to receive(:prompt_for_input).and_return('human')
+    allow(mock_io).to receive(:prompt_for_input).and_return('1')
 
-    expect(menu.get_player_type(0)).to eq('human')
+    expect(menu.get_player_type(0)).to eq(1)
   end
 
 end
