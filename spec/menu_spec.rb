@@ -6,13 +6,6 @@ describe Menu do
   let(:mock_io) { MockCommandLine.new }
   let(:menu) { Menu.new(mock_io) }
 
-  it 'gets options for the players' do
-    allow(mock_io).to receive(:prompt_for_input).and_return(3)
-    menu.get_options
-
-    expect(menu.board_size).to eq(3)
-  end
-
    it 'gets and sets board size for the players' do
     allow(mock_io).to receive(:prompt_for_input).and_return(3)
     menu.get_board_size
