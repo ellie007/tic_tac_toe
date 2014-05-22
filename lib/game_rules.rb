@@ -29,8 +29,8 @@ class GameRules
     @board.cells.select { |cell| cell.nil? }.empty?
   end
 
-  def game_over
-    winner? == true || is_tie?
+  def game_over?
+    winner? || is_tie?
   end
 
 private

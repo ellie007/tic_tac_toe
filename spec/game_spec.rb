@@ -80,8 +80,9 @@ describe Game do
       board.cells = [ "E", nil, nil,
                       nil, "E", nil,
                       nil, nil, "E" ]
+      game.winner_display
 
-      game.set_winner.should == player_1.token
+      game.winner.should == player_1.token
     end
   end
 

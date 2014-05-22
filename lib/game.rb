@@ -33,7 +33,7 @@ class Game
   end
 
   def game_loop
-    until @game_rules.game_over do
+    until @game_rules.game_over? do
       make_move
       break if @game_rules.winner? || @game_rules.is_tie?
       toggle_current_player
@@ -69,11 +69,6 @@ class Game
     end
   end
 
-  def set_winner
-    @winner = @current_player.token if @game_rules.winner?
-    self.winner
-  end
-
   private
 
   def valid_move_check(move)
@@ -104,6 +99,11 @@ class Game
     invalid_cell_memo = "That spot is already taken.  Please choose an empty spot."
     @io.output_message(invalid_cell_memo)
     display_board
+  end
+
+  def set_winner
+    @winner = @current_player.token if @game_rules.winner?
+    self.winner
   end
 
   def get_play_again_response

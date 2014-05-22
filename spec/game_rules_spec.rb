@@ -65,7 +65,7 @@ describe GameRules do
                       "V", "V", "E",
                       "E", "E", "V" ]
 
-      game_rules.game_over.should == true
+      game_rules.game_over?.should == true
     end
 
     it "game over is true with a winner" do
@@ -73,11 +73,11 @@ describe GameRules do
                         nil, nil, nil,
                         nil, nil, nil ]
 
-      game_rules.game_over.should == true
+      game_rules.game_over?.should == true
     end
 
     it "game is not over with no winner" do
-      game_rules.game_over.should == false
+      game_rules.game_over?.should == false
     end
 
     it "game is not over mid game" do
@@ -85,7 +85,7 @@ describe GameRules do
                       nil, "V", nil,
                       nil, nil, nil ]
 
-      game_rules.game_over.should == false
+      game_rules.game_over?.should == false
     end
   end
 
