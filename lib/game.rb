@@ -42,14 +42,6 @@ class Game
     @play_again
   end
 
-  def make_move
-    if @current_player.type == "ai"
-      ai_turn
-    elsif @current_player.type == "human"
-      human_turn
-    end
-  end
-
   def game_loop
     until @game_rules.game_over do
       make_move
@@ -57,6 +49,14 @@ class Game
       break if @game_rules.winner? || @game_rules.is_tie?
       display_board
       toggle_current_player
+    end
+  end
+
+  def make_move
+    if @current_player.type == "ai"
+      ai_turn
+    elsif @current_player.type == "human"
+      human_turn
     end
   end
 
@@ -69,7 +69,7 @@ class Game
   end
 
   def human_turn
-    move = (@io.player_input @current_player.name + CURRENT_PLAYER_TURN).to_i
+    move = (@io.prompt_for_input(@current_player.name + CURRENT_PLAYER_TURN)).to_i
     if !valid_input?(move)
       invalid_input_response
       human_turn
@@ -127,7 +127,7 @@ class Game
   def get_play_again_response
     @play_again_input = nil
     until @play_again_input == "y" || @play_again_input == "n" do
-      @play_again_input = (@io.player_input PLAY_AGAIN).downcase
+      @play_again_input = (@io.prompt_for_input PLAY_AGAIN).downcase
     end
   end
 

@@ -1,3 +1,4 @@
+require 'menu'
 require_relative 'mock_command_line'
 
 describe Menu do
@@ -6,35 +7,41 @@ describe Menu do
   let(:menu) { Menu.new(mock_io) }
 
   it 'gets options for the players' do
-    allow(mock_io).to receive(:player_input).and_return(3)
+    allow(mock_io).to receive(:prompt_for_input).and_return(3)
     menu.get_options
 
-    expect(menu.size).to eq(3)
+    expect(menu.board_size).to eq(3)
   end
 
-   it 'sets board size for the players' do
-    allow(mock_io).to receive(:player_input).and_return(3)
-    menu.board_size
+   it 'gets and sets board size for the players' do
+    allow(mock_io).to receive(:prompt_for_input).and_return(3)
+    menu.get_board_size
 
-    expect(menu.size).to eq(3)
+    expect(menu.board_size).to eq(3)
   end
 
-  it 'sets player name' do
-    allow(mock_io).to receive(:player_input).and_return('eleanor')
+  it 'prompts for player name and capitalizes' do
+    allow(mock_io).to receive(:prompt_for_input).and_return('eleanor')
 
-    expect(menu.player_name(0)).to eq('Eleanor')
+    expect(menu.get_player_name(0)).to eq('Eleanor')
   end
 
-  it 'sets player token' do
-    allow(mock_io).to receive(:player_input).and_return('asdf')
+  it 'prompts for player token' do
+    allow(mock_io).to receive(:prompt_for_input).and_return('A')
 
-    expect(menu.player_token(0)).to eq('A')
+    expect(menu.get_player_token(0)).to eq('A')
   end
 
-  it 'sets player type' do
-    allow(mock_io).to receive(:player_input).and_return('human')
+  it 'takes only the first letter of the player token and capitalizes' do
+    allow(mock_io).to receive(:prompt_for_input).and_return('asdf')
 
-    expect(menu.player_type(0)).to eq('human')
+    expect(menu.get_player_token(0)).to eq('A')
+  end
+
+  it 'prompts for player type' do
+    allow(mock_io).to receive(:prompt_for_input).and_return('human')
+
+    expect(menu.get_player_type(0)).to eq('human')
   end
 
 end

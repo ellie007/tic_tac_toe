@@ -23,7 +23,7 @@ class CommandLine
     legend_options
   end
 
-  def player_input(message)
+  def prompt_for_input(message)
     print_new_line
     print message
     input = gets.chomp

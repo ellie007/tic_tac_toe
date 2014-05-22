@@ -19,7 +19,7 @@ describe Game do
 
   context "human turn" do
     it "keeps prompting human for input until valid input" do
-      allow(mock_io).to receive(:player_input).and_return(123, 'a', 5)
+      allow(mock_io).to receive(:prompt_for_input).and_return(123, 'a', 5)
       game.human_turn
 
       expect(mock_io.printed_strings[0]).to match /That is invalid input./
@@ -36,7 +36,7 @@ describe Game do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      allow(mock_io).to receive(:player_input).and_return(1,2)
+      allow(mock_io).to receive(:prompt_for_input).and_return(1,2)
       game.human_turn
 
       expect(board.cells[1]).to eq(player_1.token)
@@ -58,6 +58,15 @@ describe Game do
       expect(board.cells[4]).to eq(game.current_player.token)
     end
   end
+
+  it 'toggles the current player' do
+    game.current_player = player_2
+    game.toggle_current_player
+
+    expect(game.current_player).to eq(player_1)
+  end
+
+
 
   context "set winner: " do
     it "winner instance variable set with set_winner" do

@@ -22,7 +22,7 @@ class MockCommandLine
     "DISPLAY BOARD"
   end
 
-  def player_input(message)
+  def prompt_for_input(message)
     @printed_strings << message
   end
 
