@@ -6,11 +6,6 @@ class Menu
     @io = io
   end
 
-  def get_options
-    @io.output_message("\nWelcome to Tic Tac Toe!")
-    get_board_size
-  end
-
   def get_board_size
     board_size_prompt = "\nWhat board size would you like?\nPlease enter the base dimension. (3 for 3 by 3; 4 for 4 by 4): "
     self.board_size = (@io.prompt_for_input board_size_prompt).to_i

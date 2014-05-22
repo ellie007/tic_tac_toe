@@ -6,9 +6,11 @@ require './lib/command_line'
 require './lib/menu'
 require './lib/game_rules'
 
+puts "\nWelcome to Tic Tac Toe!"
+
 cl = CommandLine.new
 menu = Menu.new(cl)
-menu.get_options
+menu.get_board_size
 board = Board.new(menu.board_size)
 ai = Ai.new(board.cells)
 
