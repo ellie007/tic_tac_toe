@@ -26,7 +26,7 @@ class GameRules
   end
 
   def is_tie?
-    @board.cells.select { |cell| cell == nil }.empty?
+    @board.cells.select { |cell| cell.nil? }.empty?
   end
 
   def game_over

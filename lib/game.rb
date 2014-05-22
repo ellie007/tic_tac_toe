@@ -1,15 +1,5 @@
 class Game
 
-  PLAY_AGAIN = "Would you like to play again (y/n)?: "
-
-  CURRENT_PLAYER_TURN = "'s Turn: "
-
-  INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to "
-  INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
-
-  CURRENT_PLAYER_WON = " Won!"
-  TIE = "It is a tie game."
-
   attr_accessor :board, :winner, :size, :play_again, :current_player
 
   def initialize(board, ai, io, menu, players, game_rules)
@@ -39,7 +29,7 @@ class Game
   def play_again?
     get_play_again_response
     set_play_again_response
-    @play_again
+    self.play_again
   end
 
   def game_loop
@@ -67,21 +57,22 @@ class Game
     display_board
   end
 
-  def set_winner
-    @winner = @current_player.token if @game_rules.winner? == true
-    @winner
-  end
-
   def winner_display
-    display_board
+    tie_memo = "It was a tie game."
+
     set_winner
+    display_board
     if @game_rules.winner?
-      @io.output_message @current_player.name + CURRENT_PLAYER_WON
+      @io.output_message(@current_player.name + " Won!")
     elsif @game_rules.is_tie?
-      @io.output_message TIE
+      @io.output_message(tie_memo)
     end
   end
 
+  def set_winner
+    @winner = @current_player.token if @game_rules.winner?
+    self.winner
+  end
 
   private
 
@@ -104,25 +95,28 @@ class Game
   end
 
   def invalid_input_response
-    @io.output_message INVALID_INPUT + "#{size**2}."
+    invalid_input_memo = "That is invalid input.  Please choose open spaces 1 to "
+    @io.output_message(invalid_input_memo + "#{size**2}.")
     display_board
   end
 
   def invalid_cell_response
-    @io.output_message INVALID_CELL
+    invalid_cell_memo = "That spot is already taken.  Please choose an empty spot."
+    @io.output_message(invalid_cell_memo)
     display_board
   end
 
   def get_play_again_response
+    play_again_prompt = "Would you like to play again (y/n)?: "
+
     @play_again_input = nil
     until @play_again_input == "y" || @play_again_input == "n" do
-      @play_again_input = (@io.prompt_for_input PLAY_AGAIN).downcase
+      @play_again_input = (@io.prompt_for_input(play_again_prompt)).downcase
     end
   end
 
   def set_play_again_response
     if @play_again_input == "y"
-      @play_again = true
       @io.clear_screen
       play_again_reset
     elsif @play_again_input == "n"

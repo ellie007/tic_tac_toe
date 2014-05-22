@@ -24,8 +24,8 @@ players = []
 
   if type == 1
     player = HumanPlayer.new(name, token, cl)
-  elsif  type == 2
-    player = AiPlayer.new(name,token, ai, cl)
+  elsif type == 2
+    player = AiPlayer.new(name, token, ai, cl)
   end
 
   players << player
