@@ -71,10 +71,17 @@ class Game
 
   def make_move
     move = @current_player.make_move.to_i
-    valid_move_check(move)
-    @board.fill_cell(move, @current_player.token)
-    @io.clear_screen
-    display_board
+    if !valid_input?(move)
+      invalid_input_response
+      make_move
+    elsif !valid_cell?(move)
+      invalid_cell_response
+      make_move
+    else
+      @board.fill_cell(move, @current_player.token)
+      @io.clear_screen
+      display_board
+    end
   end
 
   def winner_display
@@ -89,16 +96,6 @@ class Game
 
 
   private
-
-  def valid_move_check(move)
-    if !valid_input?(move)
-      invalid_input_response
-      make_move
-    elsif !valid_cell?(move)
-      invalid_cell_response
-      make_move
-    end
-  end
 
   def valid_input?(move)
     (1..size**2).include?(move)

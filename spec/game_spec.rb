@@ -32,7 +32,7 @@ describe Game do
     it "makes a move for a human" do
       game.players = [player_1, player_2]
       game.set_current_player
-      allow(game.players[0]).to receive(:make_move).and_return(1)
+      allow(game.current_player).to receive(:make_move).and_return(1)
       game.make_move
 
       expect(board.cells).to eq([ "E", nil, nil,
@@ -62,7 +62,7 @@ describe Game do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      allow(mock_io).to receive(:prompt_for_input).and_return(1,2)
+      allow(mock_io).to receive(:prompt_for_input).and_return(1, 2)
       game.make_move
 
       expect(board.cells[1]).to eq(player_1.token)
