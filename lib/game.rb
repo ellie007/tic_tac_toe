@@ -1,22 +1,23 @@
 class Game
 
-  attr_accessor :board, :winner, :size, :play_again, :current_player
+  attr_accessor :board, :winner, :size, :play_again, :current_player, :players
 
-  def initialize(board, ai, io, menu, players, game_rules)
+  def initialize(board, ai, io, menu, game_rules)
     @board = board
     @ai = ai
-    @players = players
+    @players = []
     @io = io
     @menu = menu
     @game_rules = game_rules
 
+    @players = []
     @size = board.size.to_i
     @play_again = true
-    @current_player = @players[0]
     @io.size = @size.to_i
   end
 
   def run
+    set_players
     while @play_again == true do
       @io.clear_screen
       @io.display_board(board.cells)
@@ -24,6 +25,25 @@ class Game
       winner_display
       play_again?
     end
+  end
+
+  def set_players
+    (1..2).each do |i|
+      name = @menu.get_player_name(i)
+      token = @menu.get_player_token(i)
+      type = @menu.get_player_type(i)
+      if type == 1
+        player = HumanPlayer.new(name, token, @io)
+      elsif type == 2
+        player = AiPlayer.new(name, token, @ai, @io)
+      end
+      @players << player
+    end
+    set_current_player
+  end
+
+  def set_current_player
+    self.current_player = self.players[0]
   end
 
   def play_again?
@@ -58,16 +78,15 @@ class Game
   end
 
   def winner_display
-    tie_memo = "It was a tie game."
-
     set_winner
     display_board
     if @game_rules.winner?
       @io.output_message(@current_player.name + " Won!")
     elsif @game_rules.is_tie?
-      @io.output_message(tie_memo)
+      @io.output_message("It was a tie game.")
     end
   end
+
 
   private
 

@@ -16,11 +16,23 @@ describe Game do
   let(:player_1) { HumanPlayer.new("Eleanor", "E", mock_io) }
   let(:player_2) { AiPlayer.new("Vivian", "V", ai, mock_io) }
   let(:game_rules) { GameRules.new(board) }
-  let(:game) { Game.new(board, ai, mock_io, menu, [player_1, player_2], game_rules) }
+  let(:game) { Game.new(board, ai, mock_io, menu, game_rules) }
+
+
+  it 'creates a set of players' do
+    allow(menu).to receive(:get_player_name).and_return('fake_name')
+    allow(menu).to receive(:get_player_token).and_return('fake_token')
+    allow(menu).to receive(:get_player_type).and_return(1, 2)
+    game.set_players
+
+    expect(game.players.length).to eq(2)
+  end
 
   context "make move: " do
     it "makes a move for a human" do
-      allow(player_1).to receive(:make_move).and_return(1)
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(game.players[0]).to receive(:make_move).and_return(1)
       game.make_move
 
       expect(board.cells).to eq([ "E", nil, nil,
@@ -29,6 +41,8 @@ describe Game do
     end
 
     it "keeps prompting human for input until valid input" do
+      game.players = [player_1, player_2]
+      game.set_current_player
       allow(mock_io).to receive(:prompt_for_input).and_return(123, 'apple', 5)
       game.make_move
 
@@ -42,6 +56,8 @@ describe Game do
     end
 
     it "keeps prompting human for input until valid cell" do
+      game.players = [player_1, player_2]
+      game.set_current_player
       board.cells = [ "X", nil, nil,
                       nil, nil, nil,
                       nil, nil, nil ]
@@ -69,6 +85,7 @@ describe Game do
   end
 
   it 'toggles the current player' do
+    game.players = [player_1, player_2]
     game.current_player = player_2
     game.toggle_current_player
 
@@ -77,6 +94,8 @@ describe Game do
 
   context "set winner: " do
     it "winner instance variable set with set_winner" do
+      game.players = [player_1, player_2]
+      game.set_current_player
       board.cells = [ "E", nil, nil,
                       nil, "E", nil,
                       nil, nil, "E" ]
@@ -88,6 +107,8 @@ describe Game do
 
   context 'winner_display: ' do
     it "displays the winner of the game when there is a winner" do
+      game.players = [player_1, player_2]
+      game.set_current_player
       board.cells = [ "E", "E", "E",
                       nil, nil, nil,
                       nil, nil, nil ]
