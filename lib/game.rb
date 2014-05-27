@@ -22,8 +22,8 @@ class Game
       @io.clear_screen
       @io.display_board(board.cells)
       game_loop
-      winner_display
-      play_again?
+      display_winner_information
+      ask_to_play_again
     end
   end
 
@@ -46,16 +46,14 @@ class Game
     self.current_player = self.players[0]
   end
 
-  def play_again?
+  def ask_to_play_again
     get_play_again_response
     set_play_again_response
-    self.play_again
   end
 
   def game_loop
     until @game_rules.game_over? do
       make_move
-      break if @game_rules.winner? || @game_rules.is_tie?
       toggle_current_player
     end
     @io.clear_screen
@@ -84,7 +82,7 @@ class Game
     end
   end
 
-  def winner_display
+  def display_winner_information
     set_winner
     display_board
     if @game_rules.winner?
@@ -106,14 +104,14 @@ class Game
   end
 
   def invalid_input_response
-    invalid_input_memo = "That is invalid input.  Please choose open spaces 1 to "
-    @io.output_message(invalid_input_memo + "#{size**2}.")
+    invalid_input_comment = "That is invalid input.  Please choose open spaces 1 to #{size**2}."
+    @io.output_message(invalid_input_comment)
     display_board
   end
 
   def invalid_cell_response
-    invalid_cell_memo = "That spot is already taken.  Please choose an empty spot."
-    @io.output_message(invalid_cell_memo)
+    invalid_cell_comment = "That spot is already taken.  Please choose an empty spot."
+    @io.output_message(invalid_cell_comment)
     display_board
   end
 

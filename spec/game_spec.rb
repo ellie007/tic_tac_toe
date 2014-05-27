@@ -99,7 +99,7 @@ describe Game do
       board.cells = [ "E", nil, nil,
                       nil, "E", nil,
                       nil, nil, "E" ]
-      game.winner_display
+      game.display_winner_information
 
       game.winner.should == player_1.token
     end
@@ -113,7 +113,7 @@ describe Game do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      game.winner_display
+      game.display_winner_information
 
       expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
       expect(mock_io.printed_strings[1]).to match /eleanor won!/i
@@ -124,7 +124,7 @@ describe Game do
                       "V", "V", "E",
                       "E", "E", "V" ]
 
-      game.winner_display
+      game.display_winner_information
 
       expect(mock_io.printed_strings[1]).to match /tie game/
     end
