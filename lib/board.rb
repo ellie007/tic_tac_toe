@@ -2,7 +2,7 @@ class Board
 
   attr_accessor :cells
 
-  def initialize(size)
+  def initialize(size = 3)
     @cells = Array.new(size**2, nil)
   end
 
