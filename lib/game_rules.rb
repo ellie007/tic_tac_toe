@@ -33,7 +33,6 @@ class GameRules
     winner? || is_tie?
   end
 
-
 private
 
   def split_board

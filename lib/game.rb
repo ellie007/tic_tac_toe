@@ -5,7 +5,6 @@ class Game
   def initialize(board, ai, io, menu, game_rules)
     @board = board
     @ai = ai
-    @players = []
     @io = io
     @menu = menu
     @game_rules = game_rules
@@ -35,7 +34,7 @@ class Game
       if type == 1
         player = HumanPlayer.new(name, token, @io)
       elsif type == 2
-        player = AiPlayer.new(name, token, @ai, @io)
+        player = AiPlayer.new(name, token, @ai)
       end
       @players << player
     end
@@ -54,7 +53,7 @@ class Game
   def game_loop
     until @game_rules.game_over? do
       make_move
-      toggle_current_player
+      toggle_current_player unless @game_rules.game_over?
     end
     @io.clear_screen
   end
@@ -77,6 +76,7 @@ class Game
       make_move
     else
       @board.fill_cell(move, @current_player.token)
+      @io.output_message(@current_player.name + " made the move: #{move}.")
       @io.clear_screen
       display_board
     end
@@ -125,7 +125,8 @@ class Game
 
     @play_again_input = nil
     until @play_again_input == "y" || @play_again_input == "n" do
-      @play_again_input = (@io.prompt_for_input(play_again_prompt)).downcase
+      @io.output_message(play_again_prompt)
+      @play_again_input = @io.input_prompt.downcase
     end
   end
 

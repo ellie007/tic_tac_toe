@@ -14,7 +14,7 @@ describe Game do
   let(:board) { Board.new(3) }
   let(:ai) { Ai.new(board.cells) }
   let(:player_1) { HumanPlayer.new("Eleanor", "E", mock_io) }
-  let(:player_2) { AiPlayer.new("Vivian", "V", ai, mock_io) }
+  let(:player_2) { AiPlayer.new("Vivian", "V", ai) }
   let(:game_rules) { GameRules.new(board) }
   let(:game) { Game.new(board, ai, mock_io, menu, game_rules) }
 
@@ -43,14 +43,20 @@ describe Game do
     it "keeps prompting human for input until valid input" do
       game.players = [player_1, player_2]
       game.set_current_player
-      allow(mock_io).to receive(:prompt_for_input).and_return(123, 'apple', 5)
+      allow(mock_io).to receive(:input_prompt).and_return(123, 'apple', 5)
       game.make_move
 
-      expect(mock_io.printed_strings[0]).to match /That is invalid input./
-      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
-      expect(mock_io.printed_strings[2]).to match /That is invalid input./
-      expect(mock_io.printed_strings[3]).to eq(mock_io.display_board_message)
-      expect(mock_io.printed_strings[4]).to eq(mock_io.display_board_message)
+      expect(mock_io.printed_strings[0]).to match /Eleanor's Turn: /
+      expect(mock_io.printed_strings[1]).to match /That is invalid input./
+      expect(mock_io.printed_strings[2]).to eq(mock_io.display_board_message)
+
+      expect(mock_io.printed_strings[3]).to match /Eleanor's Turn: /
+      expect(mock_io.printed_strings[4]).to match /That is invalid input./
+      expect(mock_io.printed_strings[5]).to eq(mock_io.display_board_message)
+
+      expect(mock_io.printed_strings[6]).to match /Eleanor's Turn: /
+      expect(mock_io.printed_strings[7]).to match /Eleanor made the move: 5/
+      expect(mock_io.printed_strings[8]).to eq(mock_io.display_board_message)
 
       expect(board.cells[4]).to eq(player_1.token)
     end
@@ -62,13 +68,18 @@ describe Game do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      allow(mock_io).to receive(:prompt_for_input).and_return(1, 2)
+      allow(mock_io).to receive(:input_prompt).and_return(1, 2)
       game.make_move
 
-      expect(board.cells[1]).to eq(player_1.token)
-      expect(mock_io.printed_strings[0]).to match /That spot is already taken./
-      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
+      expect(mock_io.printed_strings[0]).to match /Eleanor's Turn: /
+      expect(mock_io.printed_strings[1]).to match /That spot is already taken./
       expect(mock_io.printed_strings[2]).to eq(mock_io.display_board_message)
+
+      expect(mock_io.printed_strings[3]).to match /Eleanor's Turn: /
+      expect(mock_io.printed_strings[4]).to match /Eleanor made the move: 2/
+      expect(mock_io.printed_strings[5]).to eq(mock_io.display_board_message)
+
+      expect(board.cells[1]).to eq(player_1.token)
     end
   end
 
@@ -79,7 +90,9 @@ describe Game do
       allow(game.current_player).to receive(:make_move).and_return(5)
       game.make_move
 
-      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
+      expect(mock_io.printed_strings[0]).to match /Vivian made the move: 5/
+      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
+
       expect(board.cells[4]).to eq(game.current_player.token)
     end
   end

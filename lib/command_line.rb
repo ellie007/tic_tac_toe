@@ -23,14 +23,13 @@ class CommandLine
     legend_options
   end
 
-  def prompt_for_input(message)
-    print_new_line
-    print message
-    input = gets.chomp
+  def input_prompt
+    gets.chomp
   end
 
-   def output_message(message)
-    puts "\n" + message
+  def output_message(message)
+    print_new_line
+    print message
   end
 
   def clear_screen
