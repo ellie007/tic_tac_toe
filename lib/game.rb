@@ -2,15 +2,15 @@ class Game
 
   attr_accessor :board, :winner, :size, :play_again, :current_player, :players
 
-  def initialize(board, ai, io, menu, game_rules)
-    @board = board
-    @ai = ai
-    @io = io
-    @menu = menu
-    @game_rules = game_rules
+  def initialize(options)
+    @board = options[:board]
+    @ai = options[:ai]
+    @io = options[:io]
+    @menu = options[:menu]
+    @game_rules = options[:game_rules]
 
     @players = []
-    @size = board.size.to_i
+    @size = options[:board].size.to_i
     @play_again = true
     @io.size = @size.to_i
   end

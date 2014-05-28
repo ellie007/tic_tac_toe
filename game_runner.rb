@@ -15,7 +15,10 @@ menu.get_board_size
 board = Board.new(menu.board_size)
 ai = Ai.new(board.cells)
 game_rules = GameRules.new(board)
-game = Game.new(board, ai, cl, menu, game_rules)
+
+options = { :board => board, :ai => ai, :io => cl, :menu => menu, :game_rules => game_rules }
+
+game = Game.new(options)
 
 game.run
 

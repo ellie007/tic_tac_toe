@@ -16,7 +16,10 @@ describe Game do
   let(:player_1) { HumanPlayer.new("Eleanor", "E", mock_io) }
   let(:player_2) { AiPlayer.new("Vivian", "V", ai) }
   let(:game_rules) { GameRules.new(board) }
-  let(:game) { Game.new(board, ai, mock_io, menu, game_rules) }
+
+  let(:options) { { :board => board, :ai => ai, :io => mock_io, :menu => menu, :game_rules => game_rules } }
+
+  let(:game) { Game.new(options) }
 
   it 'creates a set of players' do
     allow(menu).to receive(:get_player_name).and_return('fake_name')
