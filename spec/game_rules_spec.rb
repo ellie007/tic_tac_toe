@@ -10,7 +10,7 @@ describe GameRules do
   let(:game_rules) { GameRules.new(board) }
 
   context 'is tie?:' do
-    it "is a tie game" do
+    it "determines if a tie game" do
       winner = nil
       board.cells = [ "E", "E", "V",
                       "V", "V", "E",
@@ -60,7 +60,7 @@ describe GameRules do
   end
 
   context 'game over:' do
-    it "true with tie game" do
+    it "determines game is over with tie game" do
       board.cells = [ "E", "E", "V",
                       "V", "V", "E",
                       "E", "E", "V" ]
@@ -68,7 +68,7 @@ describe GameRules do
       game_rules.game_over?.should == true
     end
 
-    it "game over is true with a winner" do
+    it "determines game is over with a winner" do
         board.cells = [ "E", "E", "E",
                         nil, nil, nil,
                         nil, nil, nil ]

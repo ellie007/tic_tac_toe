@@ -18,7 +18,6 @@ describe Game do
   let(:game_rules) { GameRules.new(board) }
   let(:game) { Game.new(board, ai, mock_io, menu, game_rules) }
 
-
   it 'creates a set of players' do
     allow(menu).to receive(:get_player_name).and_return('fake_name')
     allow(menu).to receive(:get_player_token).and_return('fake_token')
@@ -40,7 +39,7 @@ describe Game do
                                    nil, nil, nil ])
     end
 
-    it "keeps prompting human for input until valid input" do
+    it "keeps prompting human for input until valid input (with correct prompts)" do
       game.players = [player_1, player_2]
       game.set_current_player
       allow(mock_io).to receive(:input_prompt).and_return(123, 'apple', 5)
@@ -61,7 +60,7 @@ describe Game do
       expect(board.cells[4]).to eq(player_1.token)
     end
 
-    it "keeps prompting human for input until valid cell" do
+    it "keeps prompting human for input until valid cell (with correct prompts)" do
       game.players = [player_1, player_2]
       game.set_current_player
       board.cells = [ "X", nil, nil,
@@ -106,7 +105,7 @@ describe Game do
   end
 
   context "set winner: " do
-    it "winner instance variable set with set_winner" do
+    it "sets winner setter method" do
       game.players = [player_1, player_2]
       game.set_current_player
       board.cells = [ "E", nil, nil,
@@ -140,6 +139,28 @@ describe Game do
       game.display_winner_information
 
       expect(mock_io.printed_strings[1]).to match /tie game/
+    end
+  end
+
+  context 'asks the player(s) if want play the game again' do
+    it 'resets the board if player(s) want to play again' do
+      board.cells = [ "E", "E", "V",
+                      "V", "V", "E",
+                      "E", "E", "V" ]
+
+      allow(mock_io).to receive(:input_prompt).and_return('y')
+      game.ask_to_play_again
+
+      expect(board.cells).to eq([ nil, nil, nil,
+                                  nil, nil, nil,
+                                  nil, nil, nil ])
+    end
+
+    it 'sets the setter of play again method as false' do
+      allow(mock_io).to receive(:input_prompt).and_return('n')
+      game.ask_to_play_again
+
+      expect(game.play_again).to eq(false)
     end
   end
 
