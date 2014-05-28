@@ -8,9 +8,8 @@ describe Menu do
 
    it 'gets and sets board size for the players' do
     allow(mock_io).to receive(:input_prompt).and_return(3)
-    menu.get_board_size
 
-    expect(menu.board_size).to eq(3)
+    expect(menu.get_board_size).to eq(3)
   end
 
   it 'prompts for player name and capitalizes' do
