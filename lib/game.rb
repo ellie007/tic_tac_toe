@@ -138,7 +138,9 @@ class Game
   end
 
   def play_again_reset
-    @board.cells.each_with_index { |cell, index| @board.fill_cell(index + 1, nil) }
+    @board.cells.each_with_index do |cell, index|
+      @board.fill_cell(index + 1, nil)
+    end
   end
 
   def display_board
