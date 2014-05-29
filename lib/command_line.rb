@@ -23,11 +23,11 @@ class CommandLine
     legend_options
   end
 
-  def input_prompt
+  def input
     gets.chomp
   end
 
-  def output_message(message)
+  def output(message)
     print_new_line
     print message
   end
@@ -70,8 +70,7 @@ class CommandLine
   end
 
   def row_separator
-    print "---+" * (@size-1) + "---"
-    print_new_line
+    puts "---+" * (@size-1) + "---"
   end
 
   def new_board_row?(index)

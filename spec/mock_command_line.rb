@@ -10,19 +10,19 @@ class MockCommandLine
     @printed_strings
   end
 
-  def output_message(message)
-    @printed_strings << message
-  end
-
   def display_board(cells)
-    output_message display_board_message
+    output(display_board_message)
   end
 
   def display_board_message
     "DISPLAY BOARD"
   end
 
-  def prompt_for_input(message)
+  def input
+
+  end
+
+  def output(message)
     @printed_strings << message
   end
 

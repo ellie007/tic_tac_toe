@@ -54,7 +54,7 @@ describe Game do
     it "keeps prompting human for input until valid input (with correct prompts)" do
       game.players = [player_1, player_2]
       game.set_current_player
-      allow(mock_io).to receive(:input_prompt).and_return(123, 'apple', 5)
+      allow(mock_io).to receive(:input).and_return(123, 'apple', 5)
       game.make_move
 
       expect(mock_io.printed_strings[0]).to match /Eleanor's Turn: /
@@ -79,7 +79,7 @@ describe Game do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      allow(mock_io).to receive(:input_prompt).and_return(1, 2)
+      allow(mock_io).to receive(:input).and_return(1, 2)
       game.make_move
 
       expect(mock_io.printed_strings[0]).to match /Eleanor's Turn: /
@@ -160,7 +160,7 @@ describe Game do
                       "V", "V", "E",
                       "E", "E", "V" ]
 
-      allow(mock_io).to receive(:input_prompt).and_return('y')
+      allow(mock_io).to receive(:input).and_return('y')
       game.ask_to_play_again
 
       expect(board.cells).to eq([ nil, nil, nil,
@@ -169,7 +169,7 @@ describe Game do
     end
 
     it 'sets the setter of play again method as false' do
-      allow(mock_io).to receive(:input_prompt).and_return('n')
+      allow(mock_io).to receive(:input).and_return('n')
       game.ask_to_play_again
 
       expect(game.play_again).to eq(false)

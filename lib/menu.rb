@@ -12,28 +12,28 @@ class Menu
 
   def get_board_size
     board_size_prompt = "What board size would you like?\nPlease enter the base dimension. (3 for 3 by 3; 4 for 4 by 4): "
-    @io.output_message(board_size_prompt)
-    @io.input_prompt.to_i
+    @io.output(board_size_prompt)
+    @io.input.to_i
   end
 
   private
 
   def get_player_name(i)
     player_name_prompt = "Enter NAME for Player #{i}: "
-    @io.output_message(player_name_prompt)
-    @io.input_prompt.capitalize
+    @io.output(player_name_prompt)
+    @io.input.capitalize
   end
 
   def get_player_token(i)
     player_token_prompt = "Enter TOKEN for Player #{i}: "
-    @io.output_message(player_token_prompt)
-    @io.input_prompt[0].capitalize
+    @io.output(player_token_prompt)
+    @io.input[0].capitalize
   end
 
   def get_player_type(i)
     player_type_prompt = "Enter TYPE for Player #{i} (1 for human : 2 for ai): "
-    @io.output_message(player_type_prompt)
-    @io.input_prompt.to_i
+    @io.output(player_type_prompt)
+    @io.input.to_i
   end
 
 end

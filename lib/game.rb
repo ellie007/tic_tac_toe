@@ -74,7 +74,7 @@ class Game
       make_move
     else
       @board.fill_cell(move, @current_player.token)
-      @io.output_message(@current_player.name + " made the move: #{move}.")
+      @io.output(@current_player.name + " made the move: #{move}.")
       @io.clear_screen
       display_board
     end
@@ -84,9 +84,9 @@ class Game
     set_winner
     display_board
     if @game_rules.winner?
-      @io.output_message(@current_player.name + " Won!")
+      @io.output(@current_player.name + ' Won!')
     elsif @game_rules.is_tie?
-      @io.output_message("It was a tie game.")
+      @io.output('It was a tie game.')
     end
   end
 
@@ -103,13 +103,13 @@ class Game
 
   def invalid_input_response
     invalid_input_comment = "That is invalid input.  Please choose open spaces 1 to #{size**2}."
-    @io.output_message(invalid_input_comment)
+    @io.output(invalid_input_comment)
     display_board
   end
 
   def invalid_cell_response
     invalid_cell_comment = "That spot is already taken.  Please choose an empty spot."
-    @io.output_message(invalid_cell_comment)
+    @io.output(invalid_cell_comment)
     display_board
   end
 
@@ -123,8 +123,8 @@ class Game
 
     @play_again_input = nil
     until @play_again_input == "y" || @play_again_input == "n" do
-      @io.output_message(play_again_prompt)
-      @play_again_input = @io.input_prompt.downcase
+      @io.output(play_again_prompt)
+      @play_again_input = @io.input.downcase
     end
   end
 

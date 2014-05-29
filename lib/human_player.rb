@@ -9,8 +9,8 @@ class HumanPlayer
   end
 
   def make_move
-    @io.output_message(name + "'s Turn: ")
-    @io.input_prompt
+    @io.output(name + "'s Turn: ")
+    @io.input
   end
 
 end
