@@ -4,7 +4,7 @@ require 'ai_player'
 describe AiPlayer do
 
   let(:ai) { Ai.new({}) }
-  let(:options) { {:name => 'fake_name', :token => 'X'} }
+  let(:options) { {:name => 'fake_name', :token => 'X', :type => 1} }
   let(:ai_player) { AiPlayer.new(options, ai) }
 
   it 'randomly finds an available move' do

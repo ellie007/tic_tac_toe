@@ -25,7 +25,6 @@ describe Game do
   let(:game) { Game.new(game_options) }
 
   it 'creates a set of players' do
-
     allow(menu).to receive(:get_player_name).and_return('fake_name')
     allow(menu).to receive(:get_player_token).and_return('fake_token')
     allow(menu).to receive(:get_player_type).and_return(1, 2)
@@ -98,7 +97,7 @@ describe Game do
     it "ai gets random move, sends correct message, and fills the board" do
       game.current_player = player_2
       #ai.stub find_move: 5
-      allow(game.current_player).to receive(:make_move).and_return(5)
+      allow(player_2).to receive(:make_move).and_return(5)
       game.make_move
 
       expect(mock_io.printed_strings[0]).to match /Vivian made the move: 5/
@@ -136,7 +135,6 @@ describe Game do
       board.cells = [ "E", "E", "E",
                       nil, nil, nil,
                       nil, nil, nil ]
-
       game.display_winner_information
 
       expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
@@ -147,7 +145,6 @@ describe Game do
       board.cells = [ "E", "E", "V",
                       "V", "V", "E",
                       "E", "E", "V" ]
-
       game.display_winner_information
 
       expect(mock_io.printed_strings[1]).to match /tie game/
@@ -159,7 +156,6 @@ describe Game do
       board.cells = [ "E", "E", "V",
                       "V", "V", "E",
                       "E", "E", "V" ]
-
       allow(mock_io).to receive(:input).and_return('y')
       game.ask_to_play_again
 

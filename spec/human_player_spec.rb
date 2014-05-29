@@ -4,7 +4,7 @@ require_relative 'mock_command_line'
 describe HumanPlayer do
 
   let(:mock_io) { MockCommandLine.new }
-  let(:options) { {:name => 'fake_name', :token => 'X'} }
+  let(:options) { {:name => 'fake_name', :token => 'X', :type => 1} }
   let(:human_player) { HumanPlayer.new(options, mock_io) }
 
   it 'gets human player input' do
