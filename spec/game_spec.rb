@@ -38,10 +38,10 @@ describe Game do
     it "makes a move for a human" do
       game.players = [player_1, player_2]
       game.set_current_player
-      allow(game.current_player).to receive(:make_move).and_return(1)
+      allow(player_1).to receive(:make_move).and_return(1)
       game.make_move
 
-      expect(board.cells).to eq([ "E", nil, nil,
+      expect(board.cells).to eq([  "E", nil, nil,
                                    nil, nil, nil,
                                    nil, nil, nil ])
     end
