@@ -11,17 +11,21 @@ describe Game do
 
   let(:mock_io) { MockCommandLine.new }
   let(:menu) { Menu.new(mock_io) }
-  let(:board) { Board.new(3) }
+  let(:board) { Board.new }
   let(:ai) { Ai.new(board.cells) }
-  let(:player_1) { HumanPlayer.new("Eleanor", "E", mock_io) }
-  let(:player_2) { AiPlayer.new("Vivian", "V", ai) }
+
+  let(:human_options) { { :name => 'Eleanor', :token => 'E', :type => 1 } }
+  let(:player_1) { HumanPlayer.new(human_options, mock_io) }
+
+  let(:ai_options) { { :name => 'Vivian', :token => 'V', :type => 2 } }
+  let(:player_2) { AiPlayer.new(ai_options, ai) }
+
   let(:game_rules) { GameRules.new(board) }
-
-  let(:options) { { :board => board, :ai => ai, :io => mock_io, :menu => menu, :game_rules => game_rules } }
-
-  let(:game) { Game.new(options) }
+  let(:game_options) { { :board => board, :ai => ai, :io => mock_io, :menu => menu, :game_rules => game_rules } }
+  let(:game) { Game.new(game_options) }
 
   it 'creates a set of players' do
+
     allow(menu).to receive(:get_player_name).and_return('fake_name')
     allow(menu).to receive(:get_player_token).and_return('fake_token')
     allow(menu).to receive(:get_player_type).and_return(1, 2)
@@ -41,6 +45,11 @@ describe Game do
                                    nil, nil, nil,
                                    nil, nil, nil ])
     end
+
+    # it "doesn't let you enter a number > 9"
+    # it "doesn't let you enter a string"
+    # it "tells you when your input is invalid"
+    # it "keeps prompting the same player until they enter valid input"
 
     it "keeps prompting human for input until valid input (with correct prompts)" do
       game.players = [player_1, player_2]

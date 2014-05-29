@@ -2,9 +2,9 @@ class HumanPlayer
 
   attr_accessor :name, :token
 
-  def initialize(name, token, io)
-    @name = name
-    @token = token
+  def initialize(options, io)
+    @name = options[:name]
+    @token = options[:token]
     @io = io
   end
 

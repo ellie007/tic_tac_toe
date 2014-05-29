@@ -1,12 +1,9 @@
 require 'game_rules'
-require 'human_player'
 require 'board'
 
 describe GameRules do
 
   let(:board) { Board.new(3) }
-  let(:player_1) { Player.new("Eleanor", "E", "human") }
-  let(:player_2) { Player.new("Vivian", "V", "human") }
   let(:game_rules) { GameRules.new(board) }
 
   context 'is tie?:' do

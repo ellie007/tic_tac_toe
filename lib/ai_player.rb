@@ -2,9 +2,9 @@ class AiPlayer
 
   attr_accessor :name, :token
 
-  def initialize(name, token, ai)
-    @name = name
-    @token = token
+  def initialize(options, ai)
+    @name = options[:name]
+    @token = options[:token]
     @ai = ai
   end
 

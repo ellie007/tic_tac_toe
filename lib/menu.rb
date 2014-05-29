@@ -4,11 +4,19 @@ class Menu
     @io = io
   end
 
+  def get_player_options(i)
+    { :name => get_player_name(i),
+      :token => get_player_token(i),
+      :type => get_player_type(i) }
+  end
+
   def get_board_size
     board_size_prompt = "What board size would you like?\nPlease enter the base dimension. (3 for 3 by 3; 4 for 4 by 4): "
     @io.output_message(board_size_prompt)
     @io.input_prompt.to_i
   end
+
+  private
 
   def get_player_name(i)
     player_name_prompt = "Enter NAME for Player #{i}: "

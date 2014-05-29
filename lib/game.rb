@@ -12,7 +12,7 @@ class Game
     @players = []
     @size = options[:board].size.to_i
     @play_again = true
-    @io.size = @size.to_i
+    @io.size = @size
   end
 
   def run
@@ -28,13 +28,11 @@ class Game
 
   def set_players
     (1..2).each do |i|
-      name = @menu.get_player_name(i)
-      token = @menu.get_player_token(i)
-      type = @menu.get_player_type(i)
-      if type == 1
-        player = HumanPlayer.new(name, token, @io)
-      elsif type == 2
-        player = AiPlayer.new(name, token, @ai)
+      player_options = @menu.get_player_options(i)
+      if player_options[:type] == 1
+        player = HumanPlayer.new(player_options, @io)
+      else
+        player = AiPlayer.new(player_options, @ai)
       end
       @players << player
     end
