@@ -1,29 +1,25 @@
 require './lib/board'
 require './lib/ai'
-require './lib/player'
+require './lib/human_player'
+require './lib/ai_player'
 require './lib/game'
 require './lib/command_line'
 require './lib/menu'
 require './lib/game_rules'
 
-game = Game.new({},{},{},{},{},{})
+puts "\nWelcome to Tic Tac Toe!"
 
-while game.play_again do
-  menu = Menu.new
-  menu.get_options
+cl = CommandLine.new
+menu = Menu.new(cl)
+board = Board.new(menu.get_board_size)
+ai = Ai.new(board.cells)
+game_rules = GameRules.new(board)
 
-  board = Board.new(menu.size)
-  ai = Ai.new(board.cells)
+options = { :board => board, :ai => ai, :io => cl, :menu => menu, :game_rules => game_rules }
 
-  menu.num_of_players.times do |i|
-    player = Player.new(menu.get_name(i+1), menu.get_token(i+1), menu.get_type(i+1))
-    menu.players << player
-  end
+game = Game.new(options)
 
-  cl = CommandLine.new(board)
-  game_rules = GameRules.new(board)
-  game = Game.new(board, ai, cl, menu, menu.players, game_rules)
+game.run
 
-  game.run
-end
+
 

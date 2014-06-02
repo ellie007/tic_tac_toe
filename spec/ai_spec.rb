@@ -1,5 +1,5 @@
-require './lib/board'
-require './lib/ai'
+require 'board'
+require 'ai'
 
 describe Ai do
 

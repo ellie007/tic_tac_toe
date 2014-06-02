@@ -14,11 +14,11 @@ class GameRules
   end
 
   def principal_diagonal_winner?
-    diagonal_win_checker(create_diagonal(0, 1))
+    diagonal_win_checker(create_principal_diagonal)
   end
 
   def counter_diagonal_winner?
-    diagonal_win_checker(create_diagonal(@size-1, -1))
+    diagonal_win_checker(create_counter_diagonal)
   end
 
   def winner?
@@ -26,11 +26,11 @@ class GameRules
   end
 
   def is_tie?
-    @board.cells.select { |cell| cell == nil }.empty?
+    @board.cells.select { |cell| cell.nil? }.empty?
   end
 
-  def game_over
-    winner? == true || is_tie?
+  def game_over?
+    winner? || is_tie?
   end
 
 private
@@ -46,6 +46,14 @@ private
       return true if row.uniq.count == 1 && row.uniq[0] != nil
     end
     return false
+  end
+
+  def create_principal_diagonal
+    create_diagonal(0, 1)
+  end
+
+  def create_counter_diagonal
+    create_diagonal(@size-1, -1)
   end
 
   def create_diagonal(i_value, incrementor)

@@ -1,21 +1,17 @@
-require 'menu'
-require 'game'
-require 'player'
 require 'board'
 
 describe Board do
-  let(:menu) { Menu.new }
-  let(:player_1) { Player.new({},{},{}) }
-  let(:player_2) { Player.new({},{},{}) }
-  let(:board) { Board.new(3) }
-  let(:game) { Game.new(board, {}, {}, {}, [player_1, player_2]) }
 
+  let(:board) { Board.new }
+
+  it "initializes the cells" do
+    expect(board.cells.length).to eq(9)
+  end
 
   it "places a move for the player on the board" do
-    player_1.token  = "X"
-    board.fill_cell(4, player_1.token)
+    board.fill_cell(4, "X")
 
-    expect(board.cells[3]).to eq(player_1.token)
+    expect(board.cells[3]).to eq("X")
   end
 
 end

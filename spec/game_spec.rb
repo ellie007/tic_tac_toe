@@ -1,190 +1,221 @@
 require 'game'
 require 'board'
 require 'ai'
-require 'player'
+require 'human_player'
+require 'ai_player'
 require 'menu'
 require 'game_rules'
-require_relative 'mock_commandline'
+require_relative 'mock_command_line'
 
 describe Game do
 
-  let(:menu) { Menu.new }
-  let(:board) { Board.new(3) }
+  let(:mock_io) { MockCommandLine.new }
+  let(:menu) { Menu.new(mock_io) }
+  let(:board) { Board.new }
   let(:ai) { Ai.new(board.cells) }
-  let(:player_1) { Player.new({},{},{}) }
-  let(:player_2) { Player.new({},{},{}) }
-  let(:mock_io) { MockCommandLine.new(board) }
+
+  let(:human_options) { { :name => 'Eleanor', :token => 'E', :type => 1 } }
+  let(:player_1) { HumanPlayer.new(human_options, mock_io) }
+
+  let(:ai_options) { { :name => 'Vivian', :token => 'V', :type => 2 } }
+  let(:player_2) { AiPlayer.new(ai_options, ai) }
+
   let(:game_rules) { GameRules.new(board) }
-  let(:game) { Game.new(board, ai, mock_io, menu, [player_1, player_2], game_rules) }
+  let(:game_options) { { :board => board, :ai => ai, :io => mock_io, :menu => menu, :game_rules => game_rules } }
+  let(:game) { Game.new(game_options) }
 
+  it 'creates a set of players' do
+    allow(menu).to receive(:get_player_name).and_return('fake_name')
+    allow(menu).to receive(:get_player_token).and_return('fake_token')
+    allow(menu).to receive(:get_player_type).and_return(1, 2)
+    game.set_players
 
-  context 'run' do
-    it 'prints the welcome message and displays the board' do #, t:true do3
-      game.stub(:game_loop)
-      game.stub(:winner_display)
-      game.stub(:play_again?)
-      game.run
+    expect(game.players.length).to eq(2)
+  end
 
-      expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
+  context "make move" do
+    it "makes a move for a human" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(player_1).to receive(:make_move).and_return(1)
+      game.make_move
+
+      expect(board.cells).to eq([  "E", nil, nil,
+                                   nil, nil, nil,
+                                   nil, nil, nil ])
+    end
+
+    it 'toggles current player after each move' do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(player_1).to receive(:make_move).and_return(1)
+
+      expect(game.current_player).to eq(player_1)
+      game.make_move
+      expect(game.current_player).to eq(player_2)
     end
   end
 
-  context "play again: " do
-    it "ask player to play again with only y and n" do
-      allow(mock_io).to receive(:player_input).and_return('for sure', 'y', 1, 'n')
-      game.play_again?
-      game.play_again.should == true
-      game.play_again?
-      game.play_again.should == false
+  context "make move - testing valid input" do
+    it "doesn't let you enter a number < 1" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(player_1).to receive(:make_move).and_return(-1, 1)
+      game.make_move
+
+      expect(board.cells).to eq([  "E", nil, nil,
+                                   nil, nil, nil,
+                                   nil, nil, nil ])
+    end
+
+    it "doesn't let you enter a number > 9" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(player_1).to receive(:make_move).and_return(10, 1)
+      game.make_move
+
+      expect(board.cells).to eq([  "E", nil, nil,
+                                   nil, nil, nil,
+                                   nil, nil, nil ])
+    end
+
+    it "doesn't let you enter a string" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(player_1).to receive(:make_move).and_return('apple', 1)
+      game.make_move
+
+      expect(board.cells).to eq([  "E", nil, nil,
+                                   nil, nil, nil,
+                                   nil, nil, nil ])
+    end
+
+    it "tells you when your input is invalid" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(player_1).to receive(:make_move).and_return('apple', 1)
+      game.make_move
+
+      expect(mock_io.printed_strings.include?("That is invalid input.  Please choose open spaces 1 to 9.")).to eq(true)
+    end
+
+    it "keeps prompting human for input until valid" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(mock_io).to receive(:input).and_return(-1, 123, 'apple', 5)
+      game.make_move
+
+      expect(board.cells).to eq([  nil, nil, nil,
+                                   nil, "E", nil,
+                                   nil, nil, nil ])
+      expect(mock_io.printed_strings.include?("That is invalid input.  Please choose open spaces 1 to 9.")).to eq(true)
     end
   end
 
-  context 'toggle current player' do
-    it 'current player should be next player' do
-      game.current_player = player_2
-      game.toggle_current_player
-
-      game.current_player.should == player_1
-    end
-  end
-
-  context "human turn" do
-    it "keeps prompting human for input until valid input" do
-      player_1.name = "Eleanor"
-      player_1.token = "X"
-      allow(mock_io).to receive(:player_input).and_return(123, 'a', 5)
-      game.human_turn
-
-      expect(mock_io.printed_strings[0]).to match /That is invalid input./
-      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
-      expect(mock_io.printed_strings[2]).to match /That is invalid input./
-      expect(mock_io.printed_strings[3]).to eq(mock_io.display_board_message)
-
-      expect(board.cells[4]).to eq(player_1.token)
-    end
-
-    it "keeps prompting human for input until valid cell" do
-      player_1.name = "Eleanor"
-      player_1.token = "X"
+  context "make move - testing valid cell" do
+    it "does not let you enter a token in a non-valid cell" do
+      game.players = [player_1, player_2]
+      game.set_current_player
       board.fill_cell(1, player_1.token)
-      allow(mock_io).to receive(:player_input).and_return(1,2)
-      game.human_turn
+      allow(player_1).to receive(:make_move).and_return(1, 2)
+      game.make_move
 
-      expect(board.cells[1]).to eq(player_1.token)
-      expect(mock_io.printed_strings[0]).to match /That spot is already taken./
-      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
+      expect(board.cells).to eq(["E", "E", nil,
+                                 nil, nil, nil,
+                                 nil, nil, nil])
     end
 
-    it "restarts the game with same options if player commands 'restart'" do
-      player_1.name = "Eleanor"
-      player_1.token = "X"
-      board.fill_cell(1, player_1.token)
-      game.stub(:run)
-      allow(mock_io).to receive(:player_input).and_return('Restart', 2)
-      game.human_turn
+    it "tells you that a cell is invalid" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      board.fill_cell(1, player_2.token)
+      allow(player_1).to receive(:make_move).and_return(1, 2)
+      game.make_move
 
-      #expect(game).to have_received(:player_input)
-      expect(board.cells[0]).to eq(nil)
-      expect(board.cells[1]).to eq(player_1.token)
+      expect(mock_io.printed_strings.include?("That spot is already taken.  Please choose an empty spot.")).to eq(true)
     end
 
-    it "restarts the game with new menu option if player commands 'menu'" do
-      player_1.name = "Eleanor"
-      player_1.token = "X"
-      game.stub(:run)
-      allow(mock_io).to receive(:player_input).and_return('Menu', 2)
-      allow(game).to receive(:menu_reset)
+    it "keeps prompting human player until a valid cell move is made" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      board.cells = ["E", "V", "E",
+                     "V", nil, nil,
+                     nil, nil, nil ]
+      allow(player_1).to receive(:make_move).and_return(1, 2, 3, 4, 5)
+      game.make_move
 
-      game.human_turn
-
-      expect(game).to have_received(:menu_reset)
+      expect(board.cells).to eq( ["E", "V", "E",
+                                  "V", "E", nil,
+                                  nil, nil, nil ])
     end
   end
 
   context "ai turn" do
     it "ai gets random move, sends correct message, and fills the board" do
-      player_1.name = "Eleanor"
-      player_1.token = "X"
-      #ai.stub find_move: 5
-      allow(ai).to receive(:find_move).and_return(5)
-      game.ai_turn
+      game.current_player = player_2
+      allow(player_2).to receive(:make_move).and_return(5)
+      game.make_move
 
-      expect(mock_io.printed_strings[0]).to match /Eleanor's turn: 5/i
-      expect(board.cells[4]).to eq(player_1.token)
+      expect(mock_io.printed_strings[0]).to match /Vivian made the move: 5/
+      expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
+      expect(board.cells[4]).to eq(player_2.token)
     end
   end
 
   context "set winner: " do
-    it "winner instance variable set with set_winner" do
-      player_1.token = "X"
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(5, player_1.token)
-      board.fill_cell(9, player_1.token)
+    it "sets the winner of the game" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      board.cells = [ "E", nil, nil,
+                      nil, "E", nil,
+                      nil, nil, "E" ]
+      game.display_winner_information
 
-      game.set_winner.should == player_1.token
-    end
-  end
-
-  context "player input validation" do
-    it "should correctly determine if invalid input type" do
-      player_1.name = "Eleanor"
-      player_1.token = "X"
-      allow(mock_io).to receive(:player_input).and_return('apple', 0, 5)
-      game.human_turn
-
-      expect(mock_io.printed_strings[0]).to match /That is invalid input.  Please choose open spaces 1 to 9/
-      expect(mock_io.printed_strings[2]).to match /That is invalid input.  Please choose open spaces 1 to 9/
-    end
-
-    it "should not allow the player to place in a taken cell" do
-      player_1.name = "Eleanor"
-      player_1.token = 'X'
-      board.fill_cell(5, player_1.token)
-      allow(mock_io).to receive(:player_input).and_return(5, 4)
-      game.human_turn
-
-      expect(mock_io.printed_strings[0]).to match /That spot is already taken.  Please choose an empty spot./
-    end
-
-    it "should allow the player to place in an empty cell" do
-      player_1.name = "Eleanor"
-      player_1.token = 'X'
-      allow(mock_io).to receive(:player_input).and_return(5)
-      game.human_turn
-
-      expect(board.cells[4]).to eq(player_1.token)
+      game.winner.should == player_1.token
     end
   end
 
   context 'winner_display: ' do
     it "displays the winner of the game when there is a winner" do
-      player_1.name = "Eleanor"
-      player_1.token = 'X'
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(2, player_1.token)
-      board.fill_cell(3, player_1.token)
-      game.winner_display
+      game.players = [player_1, player_2]
+      game.set_current_player
+      board.cells = [ "E", "E", "E",
+                      nil, nil, nil,
+                      nil, nil, nil ]
+      game.display_winner_information
 
       expect(mock_io.printed_strings[0]).to eq(mock_io.display_board_message)
       expect(mock_io.printed_strings[1]).to match /eleanor won!/i
     end
 
     it 'displays it was a tie game' do
-      player_1.token = "X"
-      player_2.token = "O"
-
-      board.fill_cell(1, player_1.token)
-      board.fill_cell(2, player_1.token)
-      board.fill_cell(3, player_2.token)
-      board.fill_cell(4, player_2.token)
-      board.fill_cell(5, player_2.token)
-      board.fill_cell(6, player_1.token)
-      board.fill_cell(7, player_1.token)
-      board.fill_cell(8, player_2.token)
-      board.fill_cell(9, player_1.token)
-      game.winner_display
+      board.cells = [ "E", "E", "V",
+                      "V", "V", "E",
+                      "E", "E", "V" ]
+      game.display_winner_information
 
       expect(mock_io.printed_strings[1]).to match /tie game/
+    end
+  end
+
+  context 'asks the player(s) if want(s) to play the game again' do
+    it 'resets the board if player(s) want(s) to play again' do
+      board.cells = [ "E", "E", "V",
+                      "V", "V", "E",
+                      "E", "E", "V" ]
+      allow(mock_io).to receive(:input).and_return('y')
+      game.ask_to_play_again
+
+      expect(board.cells).to eq([ nil, nil, nil,
+                                  nil, nil, nil,
+                                  nil, nil, nil ])
+    end
+
+    it 'if player(s) respond(s) no to play again, exits out of the game loop' do
+      allow(mock_io).to receive(:input).and_return('n')
+      game.ask_to_play_again
+
+      expect(game.play_again).to eq(false)
     end
   end
 

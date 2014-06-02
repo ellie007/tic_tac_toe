@@ -1,162 +1,99 @@
 class Game
 
-  PLAY_AGAIN = "Would you like to play again (y/n)?: "
+  attr_accessor :board, :winner, :size, :play_again, :current_player, :players
 
-  CURRENT_PLAYER_TURN = "'s Turn: "
+  def initialize(options)
+    @board = options[:board]
+    @ai = options[:ai]
+    @io = options[:io]
+    @menu = options[:menu]
+    @game_rules = options[:game_rules]
 
-  INVALID_INPUT = "That is invalid input.  Please choose open spaces 1 to "
-  INVALID_CELL = "That spot is already taken.  Please choose an empty spot."
-
-  CURRENT_PLAYER_WON = " Won!"
-  TIE = "It is a tie game."
-
-  attr_accessor :board, :winner, :sum, :size, :play_again, :current_player
-
-
-  def initialize(board, ai, io, menu, players, game_rules)
-    @board = board
-    @ai = ai
-    @io = io
-    @menu = menu
-    @players = players
-    @game_rules = game_rules
-
-    @size = board.size
-    @current_player = @players[0]
+    @players = []
+    @size = options[:board].size.to_i
     @play_again = true
+    @io.size = @size
   end
 
   def run
-    @io.clear_screen
-    @io.display_board
-    game_loop
-    winner_display
-    play_again?
+    set_players
+    while @play_again == true do
+      @io.clear_screen
+      @io.display_board(board.cells)
+      game_loop
+      display_winner_information
+      ask_to_play_again
+    end
   end
 
-  def play_again?
-    @play_again_input = nil
+  def set_players
+    (1..2).each do |i|
+      player_options = @menu.get_player_options(i)
+      if player_options[:type] == 1
+        player = HumanPlayer.new(player_options, @io)
+      else
+        player = AiPlayer.new(player_options, @ai)
+      end
+      @players << player
+    end
+    set_current_player
+  end
+
+  def set_current_player
+    self.current_player = self.players[0]
+  end
+
+  def ask_to_play_again
     get_play_again_response
     set_play_again_response
-    @play_again
-  end
-
-  def make_move
-    if @current_player.type == "ai"
-      ai_turn
-    elsif @current_player.type == "human"
-      human_turn
-    end
   end
 
   def game_loop
-    until @game_rules.game_over do
+    until @game_rules.game_over? do
       make_move
-      @io.clear_screen
-      break if @game_rules.winner? || @game_rules.is_tie?
-      @io.display_board
-      toggle_current_player
-    end
-  end
-
-  def toggle_current_player
-    current_player_index = @players.index(@current_player)
-    next_player_index = (current_player_index + 1) % @players.size
-    @current_player = @players[next_player_index]
-  end
-
-  def human_turn
-    move = @io.player_input @current_player.name + CURRENT_PLAYER_TURN
-    run if human_alternative_options(move)
-    move = move.to_i
-    if !valid_input?(move)
-      invalid_input_response
-      human_turn
-    elsif !valid_cell?(move)
-      invalid_cell_response
-      human_turn
-    else
-      @board.fill_cell(move, @current_player.token)
-    end
-  end
-
-  def human_alternative_options(move)
-    if move.is_a?(String)
-      if move.downcase == 'restart'
-        clear_board
-        return true
-      elsif move.downcase == 'menu'
-        @io.clear_screen
-        menu_reset
-        return true
-      end
-    end
-  end
-
-  def menu_reset
-    @menu.get_options
-    @board = Board.new(@menu.size)
-    @ai = Ai.new(@board.cells)
-    @io = CommandLine.new(@board)
-    @size = @menu.size
-  end
-
-  def ai_turn
-    move = @ai.find_move
-    @io.output_message @current_player.name + CURRENT_PLAYER_TURN + "#{move}"
-    @board.fill_cell(move, @current_player.token)
-  end
-
-  def set_winner
-    @winner = @current_player.token if @game_rules.winner? == true
-    @winner
-  end
-
-  def winner_display
-    @io.display_board
-    set_winner
-    if @game_rules.winner?
-      @io.output_message @current_player.name + CURRENT_PLAYER_WON
-    elsif @game_rules.is_tie?
-      @io.output_message TIE
-    end
-  end
-
-
-  private
-
-  def get_play_again_response
-    play_again_input = @io.player_input PLAY_AGAIN
-
-    until @play_again_input == "y" || @play_again_input == "n" do
-      @play_again_input = (@io.player_input PLAY_AGAIN).downcase
-    end
-  end
-
-  def set_play_again_response
-    if @play_again_input == "y"
-      @play_again = true
-      @io.clear_screen
-    elsif @play_again_input == "n"
-      @play_again = false
-    end
-  end
-
-  def clear_board
-    (1..size**2).each do |move|
-      @board.fill_cell(move, nil)
     end
     @io.clear_screen
   end
 
-  def invalid_input_response
-    @io.output_message INVALID_INPUT + "#{size**2}"
-    @io.display_board
+  def make_move
+    move = @current_player.make_move.to_i
+    if !valid_input?(move)
+      invalid_input_response
+      make_move
+    elsif !valid_cell?(move)
+      invalid_cell_response
+      make_move
+    else
+      play_successful_move(move)
+    end
   end
 
-  def invalid_cell_response
-    @io.output_message INVALID_CELL
-    @io.display_board
+  def play_successful_move(move)
+    @board.fill_cell(move, @current_player.token)
+    @io.output(@current_player.name + " made the move: #{move}.")
+    @io.clear_screen
+    display_board
+    toggle_current_player unless @game_rules.game_over?
+  end
+
+  def display_winner_information
+    set_winner
+    display_board
+    if @game_rules.winner?
+      @io.output(@current_player.name + ' Won!')
+    elsif @game_rules.is_tie?
+      @io.output('It was a tie game.')
+    end
+  end
+
+  private
+
+  def toggle_current_player
+    if self.current_player == @players[0]
+      @current_player = @players[1]
+    else
+      @current_player = @players[0]
+    end
   end
 
   def valid_input?(move)
@@ -164,7 +101,52 @@ class Game
   end
 
   def valid_cell?(move)
-    @board.cells[move - 1] == nil
+    @board.cells[move - 1].nil?
+  end
+
+  def invalid_input_response
+    invalid_input_comment = "That is invalid input.  Please choose open spaces 1 to #{size**2}."
+    @io.output(invalid_input_comment)
+    display_board
+  end
+
+  def invalid_cell_response
+    invalid_cell_comment = "That spot is already taken.  Please choose an empty spot."
+    @io.output(invalid_cell_comment)
+    display_board
+  end
+
+  def set_winner
+    @winner = @current_player.token if @game_rules.winner?
+    self.winner
+  end
+
+  def get_play_again_response
+    play_again_prompt = "Would you like to play again (y/n)?: "
+    @play_again_input = nil
+    until @play_again_input == "y" || @play_again_input == "n" do
+      @io.output(play_again_prompt)
+      @play_again_input = @io.input.downcase
+    end
+  end
+
+  def set_play_again_response
+    if @play_again_input == "y"
+      @io.clear_screen
+      play_again_reset
+    elsif @play_again_input == "n"
+      @play_again = false
+    end
+  end
+
+  def play_again_reset
+    @board.cells.each_with_index do |cell, index|
+      @board.fill_cell(index + 1, nil)
+    end
+  end
+
+  def display_board
+    @io.display_board(board.cells)
   end
 
 end
