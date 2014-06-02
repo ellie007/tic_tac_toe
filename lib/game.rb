@@ -51,17 +51,8 @@ class Game
   def game_loop
     until @game_rules.game_over? do
       make_move
-      toggle_current_player unless @game_rules.game_over?
     end
     @io.clear_screen
-  end
-
-  def toggle_current_player
-    if self.current_player == @players[0]
-      @current_player = @players[1]
-    else
-      @current_player = @players[0]
-    end
   end
 
   def make_move
@@ -73,11 +64,16 @@ class Game
       invalid_cell_response
       make_move
     else
-      @board.fill_cell(move, @current_player.token)
-      @io.output(@current_player.name + " made the move: #{move}.")
-      @io.clear_screen
-      display_board
+      play_successful_move(move)
     end
+  end
+
+  def play_successful_move(move)
+    @board.fill_cell(move, @current_player.token)
+    @io.output(@current_player.name + " made the move: #{move}.")
+    @io.clear_screen
+    display_board
+    toggle_current_player unless @game_rules.game_over?
   end
 
   def display_winner_information
@@ -90,11 +86,18 @@ class Game
     end
   end
 
-
   private
 
+  def toggle_current_player
+    if self.current_player == @players[0]
+      @current_player = @players[1]
+    else
+      @current_player = @players[0]
+    end
+  end
+
   def valid_input?(move)
-    (1..size**2).include?(move)
+    (1..@size**2).include?(move)
   end
 
   def valid_cell?(move)

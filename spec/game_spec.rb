@@ -45,30 +45,70 @@ describe Game do
                                    nil, nil, nil ])
     end
 
-    # it "doesn't let you enter a number > 9"
-    # it "doesn't let you enter a string"
-    # it "tells you when your input is invalid"
-    # it "keeps prompting the same player until they enter valid input"
-
-    it "keeps prompting human for input until valid input (with correct prompts)" do
+    it 'toggles current player after each move' do
       game.players = [player_1, player_2]
       game.set_current_player
-      allow(mock_io).to receive(:input).and_return(123, 'apple', 5)
+      allow(player_1).to receive(:make_move).and_return(1)
       game.make_move
 
-      expect(mock_io.printed_strings[0]).to match /Eleanor's Turn: /
-      expect(mock_io.printed_strings[1]).to match /That is invalid input./
-      expect(mock_io.printed_strings[2]).to eq(mock_io.display_board_message)
+      expect(game.current_player).to eq(player_2)
+    end
 
-      expect(mock_io.printed_strings[3]).to match /Eleanor's Turn: /
-      expect(mock_io.printed_strings[4]).to match /That is invalid input./
-      expect(mock_io.printed_strings[5]).to eq(mock_io.display_board_message)
+    it "doesn't let you enter a number < 1" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(player_1).to receive(:make_move).and_return(-1, 1)
+      game.make_move
 
-      expect(mock_io.printed_strings[6]).to match /Eleanor's Turn: /
-      expect(mock_io.printed_strings[7]).to match /Eleanor made the move: 5/
-      expect(mock_io.printed_strings[8]).to eq(mock_io.display_board_message)
+      expect(board.cells).to eq([  "E", nil, nil,
+                                   nil, nil, nil,
+                                   nil, nil, nil ])
+    end
 
-      expect(board.cells[4]).to eq(player_1.token)
+    it "doesn't let you enter a number > 9" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(player_1).to receive(:make_move).and_return(10, 1)
+      game.make_move
+
+      expect(board.cells).to eq([  "E", nil, nil,
+                                   nil, nil, nil,
+                                   nil, nil, nil ])
+    end
+
+    it "doesn't let you enter a string" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(player_1).to receive(:make_move).and_return('apple', 1)
+
+      expect(game.current_player).to eq(player_1)
+      game.make_move
+
+      expect(game.current_player).to eq(player_2)
+      expect(board.cells).to eq([  "E", nil, nil,
+                                   nil, nil, nil,
+                                   nil, nil, nil ])
+    end
+
+    it "tells you when your input is invalid" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(player_1).to receive(:make_move).and_return('apple', 1)
+      game.make_move
+
+      expect(mock_io.printed_strings.include?("That is invalid input.  Please choose open spaces 1 to 9.")).to eq(true)
+    end
+
+    it "keeps prompting human for input until valid input" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      allow(mock_io).to receive(:input).and_return(-1, 123, 'apple', 5)
+      game.make_move
+
+      expect(board.cells).to eq([  nil, nil, nil,
+                                   nil, "E", nil,
+                                   nil, nil, nil ])
+      expect(mock_io.printed_strings.include?("That is invalid input.  Please choose open spaces 1 to 9.")).to eq(true)
     end
 
     it "keeps prompting human for input until valid cell (with correct prompts)" do
@@ -96,23 +136,14 @@ describe Game do
   context "ai turn" do
     it "ai gets random move, sends correct message, and fills the board" do
       game.current_player = player_2
-      #ai.stub find_move: 5
       allow(player_2).to receive(:make_move).and_return(5)
       game.make_move
 
       expect(mock_io.printed_strings[0]).to match /Vivian made the move: 5/
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
 
-      expect(board.cells[4]).to eq(game.current_player.token)
+      expect(board.cells[4]).to eq(player_2.token)
     end
-  end
-
-  it 'toggles the current player' do
-    game.players = [player_1, player_2]
-    game.current_player = player_2
-    game.toggle_current_player
-
-    expect(game.current_player).to eq(player_1)
   end
 
   context "set winner: " do
