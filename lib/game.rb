@@ -97,7 +97,7 @@ class Game
   end
 
   def valid_input?(move)
-    (1..@size**2).include?(move)
+    (1..size**2).include?(move)
   end
 
   def valid_cell?(move)
