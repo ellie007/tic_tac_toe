@@ -56,16 +56,24 @@ class Game
   end
 
   def make_move
-    move = @current_player.make_move.to_i
-    if !valid_input?(move)
+    move = @current_player.make_move
+    if move == 'restart'
+      restart_game
+    elsif !valid_input?(move.to_i)
       invalid_input_response
       make_move
-    elsif !valid_cell?(move)
+    elsif !valid_cell?(move.to_i)
       invalid_cell_response
       make_move
     else
-      play_successful_move(move)
+      play_successful_move(move.to_i)
     end
+  end
+
+  def restart_game
+    clear_board
+    @io.clear_screen
+    display_board
   end
 
   def play_successful_move(move)
@@ -86,7 +94,7 @@ class Game
     end
   end
 
-  private
+private
 
   def toggle_current_player
     if self.current_player == @players[0]
@@ -133,13 +141,13 @@ class Game
   def set_play_again_response
     if @play_again_input == "y"
       @io.clear_screen
-      play_again_reset
+      clear_board
     elsif @play_again_input == "n"
       @play_again = false
     end
   end
 
-  def play_again_reset
+  def clear_board
     @board.cells.each_with_index do |cell, index|
       @board.fill_cell(index + 1, nil)
     end

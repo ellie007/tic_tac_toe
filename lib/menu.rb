@@ -16,7 +16,7 @@ class Menu
     @io.input.to_i
   end
 
-  private
+private
 
   def get_player_name(i)
     player_name_prompt = "Enter NAME for Player #{i}: "
