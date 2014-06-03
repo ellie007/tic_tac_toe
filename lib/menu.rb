@@ -16,6 +16,12 @@ class Menu
     @io.input.to_i
   end
 
+  def get_number_of_players
+    num_of_players_prompt = "How many players would you like for the game?: "
+    @io.output(num_of_players_prompt)
+    @io.input.to_i
+  end
+
 private
 
   def get_player_name(i)

@@ -27,7 +27,7 @@ class Game
   end
 
   def set_players
-    (1..2).each do |i|
+    (1..@menu.get_number_of_players).each do |i|
       player_options = @menu.get_player_options(i)
       if player_options[:type] == 1
         player = HumanPlayer.new(player_options, @io)
@@ -104,11 +104,9 @@ class Game
 private
 
   def toggle_current_player
-    if self.current_player == @players[0]
-      @current_player = @players[1]
-    else
-      @current_player = @players[0]
-    end
+    current_player_index = players.index(current_player)
+    next_player_index = (current_player_index + 1) % players.size
+    self.current_player = players[next_player_index]
   end
 
   def valid_input?(move)

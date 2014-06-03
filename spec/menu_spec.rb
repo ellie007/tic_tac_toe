@@ -12,28 +12,40 @@ describe Menu do
     expect(menu.get_board_size).to eq(3)
   end
 
-  it 'prompts for player name and capitalizes' do
-    allow(mock_io).to receive(:input).and_return('eleanor')
+  it 'gets and sets number of players for a game' do
+    allow(mock_io).to receive(:input).and_return(5)
 
-    expect(menu.get_player_options(0)[:name]).to eq("Eleanor")
+    expect(menu.get_number_of_players).to eq(5)
   end
 
-  it 'prompts for player token' do
-    allow(mock_io).to receive(:input).and_return('A')
+  context 'player name: ' do
+    it 'prompts for player name and capitalizes' do
+      allow(mock_io).to receive(:input).and_return('eleanor')
 
-    expect(menu.get_player_options(0)[:token]).to eq('A')
+      expect(menu.get_player_options(0)[:name]).to eq("Eleanor")
+    end
   end
 
-  it 'takes only the first letter of the player token and capitalizes' do
-    allow(mock_io).to receive(:input).and_return('asdf')
+  context 'player token: ' do
+    it 'prompts for player token' do
+      allow(mock_io).to receive(:input).and_return('A')
 
-    expect(menu.get_player_options(0)[:token]).to eq('A')
+      expect(menu.get_player_options(0)[:token]).to eq('A')
+    end
+
+    it 'takes only the first letter of the player token and capitalizes' do
+      allow(mock_io).to receive(:input).and_return('asdf')
+
+      expect(menu.get_player_options(0)[:token]).to eq('A')
+    end
   end
 
-  it 'prompts for player type' do
-    allow(mock_io).to receive(:input).and_return('1')
+  context 'player type: ' do
+    it 'prompts for player type' do
+      allow(mock_io).to receive(:input).and_return('1')
 
-    expect(menu.get_player_options(0)[:type]).to eq(1)
+      expect(menu.get_player_options(0)[:type]).to eq(1)
+    end
   end
 
   it 'gets the player name, then token, then type' do

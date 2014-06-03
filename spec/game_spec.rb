@@ -25,12 +25,13 @@ describe Game do
   let(:game) { Game.new(game_options) }
 
   it 'creates a set of players' do
+    allow(menu).to receive(:get_number_of_players).and_return(5)
     allow(menu).to receive(:get_player_name).and_return('fake_name')
     allow(menu).to receive(:get_player_token).and_return('fake_token')
-    allow(menu).to receive(:get_player_type).and_return(1, 2)
+    allow(menu).to receive(:get_player_type).and_return(1, 1, 1, 2, 2)
     game.set_players
 
-    expect(game.players.length).to eq(2)
+    expect(game.players.length).to eq(5)
   end
 
   context "make move" do
@@ -183,6 +184,7 @@ describe Game do
 
   context "ai turn" do
     it "ai gets random move, sends correct message, and fills the board" do
+      game.players = [player_1, player_2]
       game.current_player = player_2
       allow(player_2).to receive(:make_move).and_return(5)
       game.make_move
