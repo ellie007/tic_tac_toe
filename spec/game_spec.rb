@@ -57,7 +57,22 @@ describe Game do
   end
 
   context "other input options for human player - " do
-    it "player asks to restart the game with same options" do
+    it "restarts the game with same options" do
+      game.players = [player_1, player_2]
+      game.set_current_player
+      board.cells = [ "E", nil, "V",
+                      nil, "E", nil,
+                      "V", nil, nil ]
+      allow(player_1).to receive(:make_move).and_return('restart')
+      game.make_move
+
+      expect(board.cells).to eq([ nil, nil, nil,
+                                  nil, nil, nil,
+                                  nil, nil, nil ])
+      expect(game.current_player).to eq(player_1)
+    end
+
+    it "resets menu and starts new game with those options" do
       game.players = [player_1, player_2]
       game.set_current_player
       board.cells = [ "E", nil, "V",

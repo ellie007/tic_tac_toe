@@ -58,7 +58,9 @@ class Game
   def make_move
     move = @current_player.make_move
     if move == 'restart'
-      restart_game
+      restart_current_game
+    elsif move == 'menu'
+      start_new_game
     elsif !valid_input?(move.to_i)
       invalid_input_response
       make_move
@@ -70,10 +72,15 @@ class Game
     end
   end
 
-  def restart_game
+  def restart_current_game
     clear_board
     @io.clear_screen
     display_board
+  end
+
+  def start_new_game
+    @io.clear_screen
+    GameInstantiation.new.new_game_instantiation
   end
 
   def play_successful_move(move)
