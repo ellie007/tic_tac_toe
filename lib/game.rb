@@ -95,7 +95,7 @@ class Game
     set_winner
     display_board
     if @game_rules.winner?
-      @io.output(@current_player.name + ' Won!')
+      @io.output("#{current_player.name} Won!")
     elsif @game_rules.is_tie?
       @io.output('It was a tie game.')
     end

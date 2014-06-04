@@ -9,16 +9,16 @@ require './lib/game_rules'
 
 class GameInstantiation
 
-  def game_objects_instantiation
+  def instantiate_game_objects
     welcome_message
-    create_game_objects
+    game_objects
   end
 
   def welcome_message
     puts "\nWelcome to Tic Tac Toe!"
   end
 
-  def create_game_objects
+  def game_objects
     cl = CommandLine.new
     menu = Menu.new(cl)
     board = Board.new(menu.get_board_size, menu.get_board_dimension)
