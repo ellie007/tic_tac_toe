@@ -80,7 +80,7 @@ class Game
 
   def start_new_game
     @io.clear_screen
-    GameInstantiation.new.new_game_instantiation
+    GameInstantiation.new.game_objects_instantiation
   end
 
   def play_successful_move(move)
@@ -110,7 +110,7 @@ private
   end
 
   def valid_input?(move)
-    (1..size**2).include?(move)
+    (1..board.cells.count).include?(move)
   end
 
   def valid_cell?(move)

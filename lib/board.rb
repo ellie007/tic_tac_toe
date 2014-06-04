@@ -1,18 +1,16 @@
 class Board
 
-  attr_accessor :cells
+  attr_accessor :cells, :size, :dimension
 
-  def initialize(size = 3)
-    @cells = Array.new(size**2, nil)
+  def initialize(size = 3, dimension = 2)
+    @size = size
+    @dimension = dimension
+    @cells = Array.new(size**dimension, nil)
   end
 
   def fill_cell(value, token)
     @cells[value - 1] = token
     @cells
-  end
-
-  def size
-    Math.sqrt(@cells.length)
   end
 
 end

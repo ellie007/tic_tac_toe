@@ -57,7 +57,7 @@ describe Game do
     end
   end
 
-  context "other input options for human player - " do
+  context "other input options for human player" do
     it "restarts the game with same options" do
       game.players = [player_1, player_2]
       game.set_current_player
