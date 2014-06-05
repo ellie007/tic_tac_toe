@@ -6,11 +6,11 @@ class GameRules
   end
 
   def row_winner?(board)
-    row_column_win_checker(split_board(board))
+    row_column_win_checker(split_board_into_rows(board))
   end
 
   def column_winner?(board)
-    row_column_win_checker(split_board(board).transpose)
+    row_column_win_checker(split_board_into_rows(board).transpose)
   end
 
   def principal_diagonal_winner?(board)
@@ -22,7 +22,7 @@ class GameRules
   end
 
   def winner?
-    dice_dimensional_board.each_with_index do |board, index|
+    dice_dimensional_board.each do |board|
       return true if row_winner?(board) ||
         column_winner?(board) ||
         principal_diagonal_winner?(board) ||
@@ -74,7 +74,7 @@ private
     @size.times { |i| @boards << board.flatten.map { |x| @board.cells[x + (@size * i)]} }
   end
 
-  def split_board(board)
+  def split_board_into_rows(board)
     split_board = []
     board.each_slice(@board.size) { |row| split_board << row }
     split_board
