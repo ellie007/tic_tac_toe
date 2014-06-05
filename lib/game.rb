@@ -82,7 +82,7 @@ class Game
 
   def start_new_game
     @io.clear_screen
-    GameInstantiation.new.game_objects_instantiation
+    GameInstantiation.new(@io).start_game
   end
 
   def play_successful_move(move)

@@ -7,6 +7,7 @@ class CommandLine
     puts "Current State of Game:"
     cells.each_with_index do |element, index|
       display_element(element, index)
+      board_separator if end_of_board?(index)
       print_new_line if new_board_row?(index)
       row_separator if new_board_row?(index) && !end_of_board?(index)
     end
@@ -18,6 +19,7 @@ class CommandLine
     puts "Legend:"
     cells.each_with_index do |element, index|
       print " #{index + 1} "
+      board_separator if end_of_board?(index)
       print_new_line if new_board_row?(index)
     end
     legend_options
@@ -36,7 +38,7 @@ class CommandLine
     system('clear')
   end
 
-  private
+private
 
   def legend_options
     print_new_line
@@ -73,8 +75,8 @@ class CommandLine
     puts "---+" * (@size-1) + "---"
   end
 
-  def new_board?(index)
-    (index + 1) % @size == 0
+  def board_separator
+    print "\n" if dimension == 3
   end
 
   def new_board_row?(index)
@@ -82,15 +84,11 @@ class CommandLine
   end
 
   def end_of_board?(index)
-    (index + 1) >= @size**2
+    (index + 1) % @size**2 == 0
   end
 
   def print_new_line
     print "\n"
-  end
-
-  def print_board_space
-    print "\n\n\n"
   end
 
 end
