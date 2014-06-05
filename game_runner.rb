@@ -1,3 +1,5 @@
 require './lib/game_instantiation'
+require './lib/command_line'
 
-GameInstantiation.new.instantiate_game_objects
+io = CommandLine.new
+GameInstantiation.new(io).start_game

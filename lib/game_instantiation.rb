@@ -6,27 +6,31 @@ require './lib/game'
 require './lib/command_line'
 require './lib/menu'
 require './lib/game_rules'
+require './spec/mock_command_line'
 
 class GameInstantiation
 
-  def instantiate_game_objects
-    welcome_message
-    game_objects
+  def initialize(io)
+    @io = io
   end
 
-  def welcome_message
-    puts "\nWelcome to Tic Tac Toe!"
+  def start_game
+    display_welcome_message
+    create_game_objects
+    @game.run
   end
 
-  def game_objects
-    cl = CommandLine.new
-    menu = Menu.new(cl)
+  def display_welcome_message
+    @io.output("\nWelcome to Tic Tac Toe!")
+  end
+
+  def create_game_objects
+    menu = Menu.new(@io)
     board = Board.new(menu.get_board_size, menu.get_board_dimension)
     ai = Ai.new(board.cells)
     game_rules = GameRules.new(board)
-    options = { :board => board, :ai => ai, :io => cl, :menu => menu, :game_rules => game_rules }
-    game = Game.new(options)
-    game.run
+    options = { :board => board, :ai => ai, :io => @io, :menu => menu, :game_rules => game_rules }
+    @game = Game.new(options)
   end
 
 end

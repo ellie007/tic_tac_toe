@@ -12,7 +12,9 @@ class Game
     @players = []
     @size = options[:board].size.to_i
     @play_again = true
+
     @io.size = @size
+    @io.dimension = options[:board].dimension.to_i
   end
 
   def run

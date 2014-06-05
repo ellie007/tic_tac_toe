@@ -1,6 +1,6 @@
 class MockCommandLine
 
-  attr_accessor :size
+  attr_accessor :size, :dimension
 
   def initialize
     @printed_strings = []

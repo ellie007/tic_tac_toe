@@ -1,6 +1,6 @@
 class CommandLine
 
-  attr_accessor :size
+  attr_accessor :size, :dimension
 
   def display_board(cells)
     print_new_line
@@ -8,6 +8,7 @@ class CommandLine
     cells.each_with_index do |element, index|
       display_element(element, index)
       print_new_line if new_board_row?(index)
+      print_board_separator
       row_separator if new_board_row?(index) && !end_of_board?(index)
     end
     legend(cells)
@@ -45,7 +46,7 @@ class CommandLine
     puts "Enter at anytime:\nMENU to restart with new options\nRESTART to begin again with same options\nQUIT to leave the game."
   end
 
-   def display_element(element, index)
+  def display_element(element, index)
     if element.nil?
       print_empty_space(index)
     else
@@ -73,6 +74,10 @@ class CommandLine
     puts "---+" * (@size-1) + "---"
   end
 
+  def new_board?(index)
+    (index + 1) % @size == 0
+  end
+
   def new_board_row?(index)
     (index + 1) % @size == 0
   end
@@ -83,6 +88,10 @@ class CommandLine
 
   def print_new_line
     print "\n"
+  end
+
+  def print_board_space
+    print "\n\n\n"
   end
 
 end
