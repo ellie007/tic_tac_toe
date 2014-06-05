@@ -204,7 +204,7 @@ describe Game do
                       nil, nil, "E" ]
       game.display_winner_information
 
-      game.winner.should == player_1.token
+      expect(game.winner).to eq(player_1.token)
     end
   end
 
