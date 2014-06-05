@@ -8,7 +8,6 @@ class CommandLine
     cells.each_with_index do |element, index|
       display_element(element, index)
       print_new_line if new_board_row?(index)
-      print_board_separator
       row_separator if new_board_row?(index) && !end_of_board?(index)
     end
     legend(cells)

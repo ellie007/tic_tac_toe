@@ -21,7 +21,7 @@ class GameInstantiation
   end
 
   def display_welcome_message
-    @io.output("\nWelcome to Tic Tac Toe!")
+    @io.output("Welcome to Tic Tac Toe!\n")
   end
 
   def create_game_objects

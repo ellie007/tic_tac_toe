@@ -16,7 +16,7 @@ class Menu
     @io.input.to_i
   end
 
-   def get_board_dimension
+  def get_board_dimension
     dimension_type_prompt = "What dimension type do you want for your board (2 for 2D: 3 for 3D): "
     @io.output(dimension_type_prompt)
     @io.input.to_i

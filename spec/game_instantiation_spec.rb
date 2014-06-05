@@ -9,7 +9,7 @@ describe GameInstantiation do
   it 'sends the right welcome message at the beginning of the game' do
     game_instantiation.display_welcome_message
 
-    expect(mock_io.printed_strings[0]).to eq("\nWelcome to Tic Tac Toe!")
+    expect(mock_io.printed_strings[0]).to match(/Welcome to Tic Tac Toe!/)
   end
 
 end
