@@ -59,10 +59,7 @@ class Game
 
   def make_move
     move = @current_player.make_move
-    if move == 'restart'
-      restart_current_game
-    elsif move == 'menu'
-      start_new_game
+    if other_player_options(move)
     elsif !valid_input?(move.to_i)
       invalid_input_response
       make_move
@@ -71,6 +68,32 @@ class Game
       make_move
     else
       play_successful_move(move.to_i)
+    end
+  end
+
+  def display_winner_information
+    set_winner
+    display_board
+    if @game_rules.winner?
+      @io.output("#{current_player.name} Won!")
+    elsif @game_rules.is_tie?
+      @io.output('It was a tie game.')
+    end
+  end
+
+private
+
+  def toggle_current_player
+    current_player_index = players.index(current_player)
+    next_player_index = (current_player_index + 1) % players.size
+    self.current_player = players[next_player_index]
+  end
+
+  def other_player_options(move)
+    if move =='restart'
+      restart_current_game
+    elsif move == 'menu'
+      start_new_game
     end
   end
 
@@ -91,24 +114,6 @@ class Game
     @io.clear_screen
     display_board
     toggle_current_player unless @game_rules.game_over?
-  end
-
-  def display_winner_information
-    set_winner
-    display_board
-    if @game_rules.winner?
-      @io.output("#{current_player.name} Won!")
-    elsif @game_rules.is_tie?
-      @io.output('It was a tie game.')
-    end
-  end
-
-private
-
-  def toggle_current_player
-    current_player_index = players.index(current_player)
-    next_player_index = (current_player_index + 1) % players.size
-    self.current_player = players[next_player_index]
   end
 
   def valid_input?(move)

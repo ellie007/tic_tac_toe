@@ -24,6 +24,8 @@ class GameInstantiation
     @io.output("Welcome to Tic Tac Toe!\n")
   end
 
+private
+
   def create_game_objects
     menu = Menu.new(@io)
     board = Board.new(menu.get_board_size, menu.get_board_dimension)
