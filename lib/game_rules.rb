@@ -10,12 +10,11 @@ class GameRules
   end
 
   def winner?
-    dice_dimensional_board.each do |board|
+    dice_dimensional_board.each { |board|
       return true if row_winner?(board) ||
         column_winner?(board) ||
         principal_diagonal_winner?(board) ||
-        counter_diagonal_winner?(board)
-    end
+        counter_diagonal_winner?(board) }
     return true if three_d_diagonal_winner? && @board.dimension == 3
     return false
   end
@@ -53,9 +52,9 @@ private
     if @board.dimension == 2
       @boards << @board.cells
     else
-      x_axis
-      z_axis
-      y_axis
+      create_x_axis_boards
+      create_z_axis_boards
+      create_y_axis_boards
     end
     @boards
   end
@@ -123,11 +122,11 @@ private
     @size * (@size - 1) + 1
   end
 
-  def x_axis
+  def create_x_axis_boards
     @board.cells.each_slice(@size**2) { |sub_board| @boards << sub_board }
   end
 
-  def z_axis
+  def create_z_axis_boards
     temp = []
     @size.times { |i| temp << @size * (@size * i) }
     board = []
@@ -135,7 +134,7 @@ private
     @size.times { |i| @boards << board.flatten.map { |x| @board.cells[x + i] } }
   end
 
-  def y_axis
+  def create_y_axis_boards
     temp = []
     @size.times { |i| temp << i }
     board = []
