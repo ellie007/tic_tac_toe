@@ -5,20 +5,8 @@ class GameRules
     @size = board.size
   end
 
-  def row_winner?(board)
-    row_column_win_checker(split_board_into_rows(board))
-  end
-
-  def column_winner?(board)
-    row_column_win_checker(split_board_into_rows(board).transpose)
-  end
-
-  def principal_diagonal_winner?(board)
-    diagonal_win_checker(create_principal_diagonal(board))
-  end
-
-  def counter_diagonal_winner?(board)
-    diagonal_win_checker(create_counter_diagonal(board))
+  def game_over?
+    winner? || is_tie?
   end
 
   def winner?
@@ -28,6 +16,7 @@ class GameRules
         principal_diagonal_winner?(board) ||
         counter_diagonal_winner?(board)
     end
+    return true if three_d_diagonal_winner? && @board.dimension == 3
     return false
   end
 
@@ -35,11 +24,29 @@ class GameRules
     @board.cells.select { |cell| cell.nil? }.empty?
   end
 
-  def game_over?
-    winner? || is_tie?
-  end
 
 private
+
+  def row_winner?(board)
+    row_column_winner?(split_board_into_rows(board))
+  end
+
+  def column_winner?(board)
+    row_column_winner?(split_board_into_rows(board).transpose)
+  end
+
+  def principal_diagonal_winner?(board)
+    diagonal_winner?(create_principal_diagonal(board))
+  end
+
+  def counter_diagonal_winner?(board)
+    diagonal_winner?(create_counter_diagonal(board))
+  end
+
+  def three_d_diagonal_winner?
+    create_3d_diagonals.each { |diagonal| return true if diagonal_winner?(diagonal) }
+    return false
+  end
 
   def dice_dimensional_board
     @boards = []
@@ -53,34 +60,13 @@ private
     @boards
   end
 
-  def x_axis
-    @board.cells.each_slice(@size**2) { |sub_board| @boards << sub_board }
-  end
-
-  def z_axis
-    temp = []
-    @size.times { |i| temp << @size * (@size * i) }
-    board = []
-    @size.times { |i| board << temp.map { |x| x + (i * @size) } }
-    @size.times { |i| @boards << board.flatten.map { |x| @board.cells[x + i] } }
-  end
-
-  def y_axis
-    temp = []
-    @size.times { |i| temp << i }
-    board = []
-    @size.times { |i| board << temp.map { |x| x + (i * @size**2) } }
-    boards = []
-    @size.times { |i| @boards << board.flatten.map { |x| @board.cells[x + (@size * i)]} }
-  end
-
   def split_board_into_rows(board)
     split_board = []
     board.each_slice(@board.size) { |row| split_board << row }
     split_board
   end
 
-  def row_column_win_checker(split_board)
+  def row_column_winner?(split_board)
     split_board.each do |row|
       return true if row.uniq.count == 1 && row.uniq[0] != nil
     end
@@ -106,9 +92,56 @@ private
     values
   end
 
-  def diagonal_win_checker(values)
+  def diagonal_winner?(values)
     return true if values.uniq.count == 1 && values.uniq[0] != nil
     return false
+  end
+
+  def create_3d_diagonals
+    @diagonals = []
+    create_3d_sub_diagonal(0, upper_left_and_right_diagonal_incrementor)
+    create_3d_sub_diagonal(@size - 1, upper_left_and_right_diagonal_incrementor - 2)
+    create_3d_sub_diagonal(@size**2 - @size, lower_left_and_right_diagonal_incrementor)
+    create_3d_sub_diagonal(@size**2 - 1, lower_left_and_right_diagonal_incrementor - 2)
+    @diagonals
+  end
+
+  def create_3d_sub_diagonal(i, inner_diagonal_i)
+    sub_diagonal = []
+    @size.times do
+      sub_diagonal << @board.cells[i]
+      i += inner_diagonal_i
+    end
+    @diagonals << sub_diagonal
+  end
+
+  def upper_left_and_right_diagonal_incrementor
+    @board.cells.length / (@size - 1)
+  end
+
+  def lower_left_and_right_diagonal_incrementor
+    @size * (@size - 1) + 1
+  end
+
+  def x_axis
+    @board.cells.each_slice(@size**2) { |sub_board| @boards << sub_board }
+  end
+
+  def z_axis
+    temp = []
+    @size.times { |i| temp << @size * (@size * i) }
+    board = []
+    @size.times { |i| board << temp.map { |x| x + (i * @size) } }
+    @size.times { |i| @boards << board.flatten.map { |x| @board.cells[x + i] } }
+  end
+
+  def y_axis
+    temp = []
+    @size.times { |i| temp << i }
+    board = []
+    @size.times { |i| board << temp.map { |x| x + (i * @size**2) } }
+    boards = []
+    @size.times { |i| @boards << board.flatten.map { |x| @board.cells[x + (@size * i)]} }
   end
 
 end

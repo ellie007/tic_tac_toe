@@ -59,7 +59,7 @@ class Game
 
   def make_move
     move = @current_player.make_move
-    if other_player_options(move)
+    if other_player_options?(move)
     elsif !valid_input?(move.to_i)
       invalid_input_response
       make_move
@@ -89,12 +89,15 @@ private
     self.current_player = players[next_player_index]
   end
 
-  def other_player_options(move)
+  def other_player_options?(move)
     if move =='restart'
       restart_current_game
+      return true
     elsif move == 'menu'
       start_new_game
+      return true
     end
+    return false
   end
 
   def restart_current_game
