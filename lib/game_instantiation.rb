@@ -5,7 +5,6 @@ require_relative 'ai_player'
 require_relative 'game'
 require_relative 'command_line'
 require_relative 'menu'
-require_relative 'game_rules'
 require './spec/mock_command_line'
 
 class GameInstantiation
@@ -30,8 +29,7 @@ private
     menu = Menu.new(@io)
     board = Board.new(menu.get_board_size, menu.get_board_dimension)
     ai = Ai.new(board.cells)
-    game_rules = GameRules.new(board)
-    options = { :board => board, :ai => ai, :io => @io, :menu => menu, :game_rules => game_rules }
+    options = { :board => board, :ai => ai, :io => @io, :menu => menu}
     @game = Game.new(options)
   end
 

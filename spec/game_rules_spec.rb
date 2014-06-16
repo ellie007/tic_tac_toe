@@ -4,7 +4,7 @@ require 'board'
 describe GameRules, "2D board" do
 
   let(:board) { Board.new }
-  let(:game_rules) { GameRules.new(board) }
+  let(:game_rules) { GameRules }
 
   context 'is tie?:' do
     it "determines if a tie game" do
@@ -13,13 +13,13 @@ describe GameRules, "2D board" do
                       "V", "V", "E",
                       "E", "E", "V" ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
   end
 
   context "game winner determination:" do
     it "has no winner at the beginning of the game" do
-      expect(game_rules.game_over?).to eq(false)
+      expect(game_rules.game_over?(board)).to eq(false)
     end
 
     it "player wins the game with a row" do
@@ -27,7 +27,7 @@ describe GameRules, "2D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a column" do
@@ -35,7 +35,7 @@ describe GameRules, "2D board" do
                       "E", nil, nil,
                       "E", nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a principal diagonal" do
@@ -43,7 +43,7 @@ describe GameRules, "2D board" do
                       nil, "E", nil,
                       nil, nil, "E" ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a counter diagonal" do
@@ -51,7 +51,7 @@ describe GameRules, "2D board" do
                       nil, "E", nil,
                       "E", nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
   end
 
@@ -61,7 +61,7 @@ describe GameRules, "2D board" do
                       "V", "V", "E",
                       "E", "E", "V" ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "determines game is over with a winner" do
@@ -69,11 +69,11 @@ describe GameRules, "2D board" do
                         nil, nil, nil,
                         nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "game is not over with no winner" do
-      expect(game_rules.game_over?).to eq(false)
+      expect(game_rules.game_over?(board)).to eq(false)
     end
 
     it "game is not over mid game" do
@@ -81,7 +81,7 @@ describe GameRules, "2D board" do
                       nil, "V", nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(false)
+      expect(game_rules.game_over?(board)).to eq(false)
     end
   end
 
@@ -91,7 +91,7 @@ end
 describe GameRules, "3D board" do
 
   let(:board) { Board.new(3, 3) }
-  let(:game_rules) { GameRules.new(board) }
+  let(:game_rules) { GameRules }
 
   context "x axis winner" do
     it "player wins the game with a row" do
@@ -107,7 +107,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a column" do
@@ -123,7 +123,7 @@ describe GameRules, "3D board" do
                       nil, "E", nil,
                       nil, "E", nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a principal diagonal" do
@@ -139,7 +139,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a counter diagonal" do
@@ -155,7 +155,7 @@ describe GameRules, "3D board" do
                       nil, "E", nil,
                       "E", nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
   end
 
@@ -173,7 +173,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a column" do
@@ -189,7 +189,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a principal diagonal" do
@@ -205,7 +205,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       "E", nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a counter diagonal" do
@@ -221,7 +221,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
   end
 
@@ -239,7 +239,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a column" do
@@ -255,7 +255,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a principal diagonal" do
@@ -271,7 +271,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins the game with a counter diagonal" do
@@ -287,7 +287,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
   end
 
@@ -305,7 +305,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, "E" ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
     it "player wins game with a 3D diagonal (starting at top right)" do
@@ -321,7 +321,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       "E", nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
       it "player wins game with a 3D diagonal (starting at bottom left)" do
@@ -337,7 +337,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
 
       it "player wins game with a 3D diagonal (starting at bottom right)" do
@@ -353,7 +353,7 @@ describe GameRules, "3D board" do
                       nil, nil, nil,
                       nil, nil, nil ]
 
-      expect(game_rules.game_over?).to eq(true)
+      expect(game_rules.game_over?(board)).to eq(true)
     end
   end
 

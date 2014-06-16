@@ -1,89 +1,83 @@
 class GameRules
 
-  def initialize(board)
-    @board = board
-    @size = board.size
+  def self.game_over?(board)
+    winner?(board) || is_tie?(board)
   end
 
-  def game_over?
-    winner? || is_tie?
-  end
-
-  def winner?
-    dice_dimensional_board.each { |board|
-      return true if row_winner?(board) ||
-        column_winner?(board) ||
-        principal_diagonal_winner?(board) ||
-        counter_diagonal_winner?(board) }
-    return true if three_d_diagonal_winner? && @board.dimension == 3
+  def self.winner?(board)
+    dice_dimensional_board(board).each { |sub_board|
+      return true if row_winner?(sub_board) ||
+        column_winner?(sub_board) ||
+        principal_diagonal_winner?(sub_board) ||
+        counter_diagonal_winner?(sub_board) }
+    return true if board.dimension == 3 && three_d_diagonal_winner?(board)
     return false
   end
 
-  def is_tie?
-    @board.cells.select { |cell| cell.nil? }.empty?
+  def self.is_tie?(board)
+    board.cells.select { |cell| cell.nil? }.empty?
   end
-
 
 private
 
-  def row_winner?(board)
-    row_column_winner?(split_board_into_rows(board))
+  def self.row_winner?(sub_board)
+    row_column_winner?(split_board_into_rows(sub_board))
   end
 
-  def column_winner?(board)
-    row_column_winner?(split_board_into_rows(board).transpose)
+  def self.column_winner?(sub_board)
+    row_column_winner?(split_board_into_rows(sub_board).transpose)
   end
 
-  def principal_diagonal_winner?(board)
-    diagonal_winner?(create_principal_diagonal(board))
+  def self.principal_diagonal_winner?(sub_board)
+    diagonal_winner?(create_principal_diagonal(sub_board))
   end
 
-  def counter_diagonal_winner?(board)
-    diagonal_winner?(create_counter_diagonal(board))
+  def self.counter_diagonal_winner?(sub_board)
+    diagonal_winner?(create_counter_diagonal(sub_board))
   end
 
-  def three_d_diagonal_winner?
-    create_3d_diagonals.each { |diagonal| return true if diagonal_winner?(diagonal) }
+  def self.three_d_diagonal_winner?(board)
+    create_3d_diagonals(board).each { |diagonal| return true if diagonal_winner?(diagonal) }
     return false
   end
 
-  def dice_dimensional_board
+  def self.dice_dimensional_board(board)
     @boards = []
-    if @board.dimension == 2
-      @boards << @board.cells
+    if board.dimension == 2
+      @boards << board.cells
     else
-      create_x_axis_boards
-      create_z_axis_boards
-      create_y_axis_boards
+      create_x_axis_boards(board)
+      create_z_axis_boards(board)
+      create_y_axis_boards(board)
     end
     @boards
   end
 
-  def split_board_into_rows(board)
+  def self.split_board_into_rows(board)
     split_board = []
-    board.each_slice(@board.size) { |row| split_board << row }
+    board.each_slice(Math.sqrt(board.length)) { |row| split_board << row }
     split_board
   end
 
-  def row_column_winner?(split_board)
+  def self.row_column_winner?(split_board)
     split_board.each do |row|
       return true if row.uniq.count == 1 && row.uniq[0] != nil
     end
     return false
   end
 
-  def create_principal_diagonal(board)
+  def self.create_principal_diagonal(board)
     create_diagonal(board, 0, 1)
   end
 
-  def create_counter_diagonal(board)
-    create_diagonal(board, @size-1, -1)
+  def self.create_counter_diagonal(board)
+    create_diagonal(board, Math.sqrt(board.length) - 1, -1)
   end
 
-  def create_diagonal(board, i_value, incrementor)
+  def self.create_diagonal(board, i_value, incrementor)
     values = []
     board.each_with_index do |cell, index|
-      if index % @size == 0
+      if index % Math.sqrt(board.length) == 0
         values << board[index + i_value]
         i_value += incrementor
       end
@@ -91,56 +85,56 @@ private
     values
   end
 
-  def diagonal_winner?(values)
+  def self.diagonal_winner?(values)
     return true if values.uniq.count == 1 && values.uniq[0] != nil
     return false
   end
 
-  def create_3d_diagonals
+  def self.create_3d_diagonals(board)
     @diagonals = []
-    create_3d_sub_diagonal(0, upper_left_and_right_diagonal_incrementor)
-    create_3d_sub_diagonal(@size - 1, upper_left_and_right_diagonal_incrementor - 2)
-    create_3d_sub_diagonal(@size**2 - @size, lower_left_and_right_diagonal_incrementor)
-    create_3d_sub_diagonal(@size**2 - 1, lower_left_and_right_diagonal_incrementor - 2)
+    create_3d_sub_diagonal(board, 0, upper_left_and_right_diagonal_incrementor(board))
+    create_3d_sub_diagonal(board, board.size - 1, upper_left_and_right_diagonal_incrementor(board) - 2)
+    create_3d_sub_diagonal(board, board.size**2 - board.size, lower_left_and_right_diagonal_incrementor(board))
+    create_3d_sub_diagonal(board, board.size**2 - 1, lower_left_and_right_diagonal_incrementor(board) - 2)
     @diagonals
   end
 
-  def create_3d_sub_diagonal(i, inner_diagonal_i)
+  def self.create_3d_sub_diagonal(board, i, inner_diagonal_i)
     sub_diagonal = []
-    @size.times do
-      sub_diagonal << @board.cells[i]
+    board.size.times do
+      sub_diagonal << board.cells[i]
       i += inner_diagonal_i
     end
     @diagonals << sub_diagonal
   end
 
-  def upper_left_and_right_diagonal_incrementor
-    @board.cells.length / (@size - 1)
+  def self.upper_left_and_right_diagonal_incrementor(board)
+    board.cells.length / (board.size - 1)
   end
 
-  def lower_left_and_right_diagonal_incrementor
-    @size * (@size - 1) + 1
+  def self.lower_left_and_right_diagonal_incrementor(board)
+    board.size * (board.size - 1) + 1
   end
 
-  def create_x_axis_boards
-    @board.cells.each_slice(@size**2) { |sub_board| @boards << sub_board }
+  def self.create_x_axis_boards(board)
+    board.cells.each_slice(board.size**2) { |sub_board| @boards << sub_board }
   end
 
-  def create_z_axis_boards
+  def self.create_z_axis_boards(board)
     temp = []
-    @size.times { |i| temp << @size * (@size * i) }
-    board = []
-    @size.times { |i| board << temp.map { |x| x + (i * @size) } }
-    @size.times { |i| @boards << board.flatten.map { |x| @board.cells[x + i] } }
+    board.size.times { |i| temp << board.size * (board.size * i) }
+    single_board = []
+    board.size.times { |i| single_board << temp.map { |x| x + (i * board.size) } }
+    board.size.times { |i| @boards << single_board.flatten.map { |x| board.cells[x] } }
+
   end
 
-  def create_y_axis_boards
+  def self.create_y_axis_boards(board)
     temp = []
-    @size.times { |i| temp << i }
-    board = []
-    @size.times { |i| board << temp.map { |x| x + (i * @size**2) } }
-    boards = []
-    @size.times { |i| @boards << board.flatten.map { |x| @board.cells[x + (@size * i)]} }
+    board.size.times { |i| temp << i }
+    single_board = []
+    board.size.times { |i| single_board << temp.map { |x| x + (i * board.size**2) } }
+    board.size.times { |i| @boards << single_board.flatten.map { |x| board.cells[x + (board.size * i)]} }
   end
 
 end

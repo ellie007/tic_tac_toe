@@ -1,3 +1,5 @@
+require_relative 'game_rules'
+
 class Game
 
   attr_accessor :board, :winner, :size, :play_again, :current_player, :players
@@ -7,7 +9,6 @@ class Game
     @ai = options[:ai]
     @io = options[:io]
     @menu = options[:menu]
-    @game_rules = options[:game_rules]
 
     @players = []
     @size = options[:board].size.to_i
@@ -51,7 +52,7 @@ class Game
   end
 
   def game_loop
-    until @game_rules.game_over? do
+    until GameRules.game_over?(@board) do
       make_move
     end
     @io.clear_screen
@@ -74,9 +75,9 @@ class Game
   def display_winner_information
     set_winner
     display_board
-    if @game_rules.winner?
+    if GameRules.winner?(@board)
       @io.output("#{current_player.name} Won!")
-    elsif @game_rules.is_tie?
+    elsif GameRules.is_tie?(@board)
       @io.output('It was a tie game.')
     end
   end
@@ -116,7 +117,7 @@ private
     @io.output(@current_player.name + " made the move: #{move}.")
     @io.clear_screen
     display_board
-    toggle_current_player unless @game_rules.game_over?
+    toggle_current_player unless GameRules.game_over?(@board)
   end
 
   def valid_input?(move)
@@ -140,7 +141,7 @@ private
   end
 
   def set_winner
-    @winner = @current_player.token if @game_rules.winner?
+    @winner = @current_player.token if GameRules.winner?(@board)
     self.winner
   end
 

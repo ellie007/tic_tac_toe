@@ -4,7 +4,6 @@ require 'ai'
 require 'human_player'
 require 'ai_player'
 require 'menu'
-require 'game_rules'
 require_relative 'mock_command_line'
 
 describe Game do
@@ -20,8 +19,7 @@ describe Game do
   let(:ai_options) { { :name => 'Vivian', :token => 'V', :type => 2 } }
   let(:player_2) { AiPlayer.new(ai_options, ai) }
 
-  let(:game_rules) { GameRules.new(board) }
-  let(:game_options) { { :board => board, :ai => ai, :io => mock_io, :menu => menu, :game_rules => game_rules } }
+  let(:game_options) { { :board => board, :ai => ai, :io => mock_io, :menu => menu } }
   let(:game) { Game.new(game_options) }
 
   it 'creates a set of players' do
