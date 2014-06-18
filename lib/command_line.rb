@@ -18,7 +18,7 @@ class CommandLine
     print_new_line
     puts "Legend:"
     cells.each_with_index do |element, index|
-      print " #{index + 1} "
+      print " #{index} "
       board_separator if end_of_board?(index)
       print_new_line if new_board_row?(index)
     end

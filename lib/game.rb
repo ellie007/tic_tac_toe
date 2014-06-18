@@ -121,11 +121,11 @@ private
   end
 
   def valid_input?(move)
-    (1..board.cells.count).include?(move)
+    (0..board.cells.count - 1).include?(move)
   end
 
   def valid_cell?(move)
-    @board.cells[move - 1].nil?
+    @board.cells[move].nil?
   end
 
   def invalid_input_response
@@ -165,7 +165,7 @@ private
 
   def clear_board
     @board.cells.each_with_index do |cell, index|
-      @board.fill_cell(index + 1, nil)
+      @board.fill_cell(index, nil)
     end
   end
 

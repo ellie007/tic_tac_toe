@@ -16,7 +16,6 @@ describe Ai do
                     "O", nil, nil,
                     nil, nil, nil ]
 
-    puts ai.minimax(board)
     ai.minimax(board)
   end
 
@@ -25,7 +24,6 @@ describe Ai do
                     nil, nil, nil,
                     nil, nil, nil ]
 
-    puts ai.minimax(board)
     ai.minimax(board)
   end
 

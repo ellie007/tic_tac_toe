@@ -9,7 +9,7 @@ class Board
   end
 
   def fill_cell(value, token)
-    @cells[value - 1] = token
+    @cells[value] = token
     @cells
   end
 
