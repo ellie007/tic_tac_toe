@@ -9,7 +9,7 @@ class AiPlayer
   end
 
   def make_move
-    @ai.find_move
+    @ai.minimax
   end
 
 end

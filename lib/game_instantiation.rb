@@ -28,7 +28,7 @@ private
   def create_game_objects
     menu = Menu.new(@io)
     board = Board.new(menu.get_board_size, menu.get_board_dimension)
-    ai = Ai.new(board.cells)
+    ai = Ai.new(board)
     options = { :board => board, :ai => ai, :io => @io, :menu => menu}
     @game = Game.new(options)
   end
