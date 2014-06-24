@@ -126,7 +126,6 @@ private
     single_board = []
     board.size.times { |i| single_board << temp.map { |x| x + (i * board.size) } }
     board.size.times { |i| @boards << single_board.flatten.map { |x| board.cells[x] } }
-
   end
 
   def self.create_y_axis_boards(board)

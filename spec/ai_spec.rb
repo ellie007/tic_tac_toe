@@ -1,30 +1,42 @@
 require 'ai'
 require 'board'
-require 'ai'
+require 'ai_player'
+require 'human_player'
 
 describe Ai do
 
   let(:board) { Board.new }
   let(:ai) { Ai.new(board) }
 
-  # it "finds a random move" do
-  #   expect((1..board.size**2).include?(ai.find_move)).to eq(true)
-  # end
+  let(:human_options) { {:name => 'min', :token => 'X', :type => 1} }
+  let(:player_1) { HumanPlayer.new(human_options, {}) }
 
-  it "strikes when there is an advantage/path towards winning" do
-    board.cells = [ "X", nil, nil,
-                    "O", nil, nil,
-                    nil, nil, nil ]
+  let(:ai_options) { {:name => 'max', :token => 'O', :type => 2} }
+  let(:player_2) { AiPlayer.new(ai_options, ai) }
 
-    ai.minimax(board)
+
+  it "strikes with a winning move" do
+    board.cells = [ "O", "X", "O",
+                    nil, "X", nil,
+                    "X", nil, "O" ]
+
+    expect(ai.find_move(player_2, [player_1, player_2], board)).to eq(5)
   end
 
-   xit "blocks an opponent move" do
-    board.cells = [ nil, nil, nil,
-                    nil, nil, nil,
-                    nil, nil, nil ]
+  it "blocks an opponent move" do
+    board.cells = [ "X", nil, nil,
+                    nil, "O", nil,
+                    "X", nil, nil ]
 
-    ai.minimax(board)
+    expect(ai.find_move(player_2, [player_1, player_2], board)).to eq(3)
+  end
+
+  it "blocks an opponent fork" do
+    board.cells = [ "X", nil, nil,
+                    nil, "O", nil,
+                    nil, nil, "X" ]
+
+    expect(ai.find_move(player_2, [player_1, player_2], board)).to eq(1)
   end
 
 end

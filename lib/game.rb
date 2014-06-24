@@ -59,7 +59,7 @@ class Game
   end
 
   def make_move
-    move = @current_player.make_move
+    move = @current_player.make_move(self.current_player, players)
     if other_player_options?(move)
     elsif !valid_input?(move.to_i)
       invalid_input_response

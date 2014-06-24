@@ -8,7 +8,7 @@ class HumanPlayer
     @io = io
   end
 
-  def make_move
+  def make_move(current_player, players)
     @io.output("#{name}'s Turn: ")
     @io.input
   end

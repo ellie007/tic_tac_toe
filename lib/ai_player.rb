@@ -8,8 +8,8 @@ class AiPlayer
     @ai = ai
   end
 
-  def make_move
-    @ai.minimax
+  def make_move(current_player, players)
+    @ai.find_move(current_player, players)
   end
 
 end
