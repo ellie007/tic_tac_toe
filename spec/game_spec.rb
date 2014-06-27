@@ -11,12 +11,12 @@ describe Game do
   let(:mock_io) { MockCommandLine.new }
   let(:menu) { Menu.new(mock_io) }
   let(:board) { Board.new }
-  let(:ai) { Ai.new(board.cells) }
+  let(:ai) { Ai.new(board) }
 
-  let(:human_options) { { :name => 'Eleanor', :token => 'E', :type => 1 } }
+  let(:human_options) { { :name => 'Eleanor', :token => 'E' } }
   let(:player_1) { HumanPlayer.new(human_options, mock_io) }
 
-  let(:ai_options) { { :name => 'Vivian', :token => 'V', :type => 2 } }
+  let(:ai_options) { { :name => 'Vivian', :token => 'V' } }
   let(:player_2) { AiPlayer.new(ai_options, ai) }
 
   let(:game_options) { { :board => board, :ai => ai, :io => mock_io, :menu => menu } }
@@ -35,34 +35,44 @@ describe Game do
   context "make move" do
     it "makes a move for a human" do
       game.players = [player_1, player_2]
-      game.set_current_player
-      allow(player_1).to receive(:make_move).and_return(1)
+      game.set_current_and_opponent_player
+      allow(game.current_player).to receive(:make_move).and_return(1)
       game.make_move
 
-      expect(board.cells).to eq([  "E", nil, nil,
+      expect(board.cells).to eq([  nil, "E", nil,
                                    nil, nil, nil,
                                    nil, nil, nil ])
     end
 
     it 'toggles current player after each move' do
       game.players = [player_1, player_2]
-      game.set_current_player
-      allow(player_1).to receive(:make_move).and_return(1)
+      game.set_current_and_opponent_player
+      allow(game.current_player).to receive(:make_move).and_return(1)
 
       expect(game.current_player).to eq(player_1)
       game.make_move
       expect(game.current_player).to eq(player_2)
     end
+
+    it 'toggles opponent player after each move' do
+      game.players = [player_1, player_2]
+      game.set_current_and_opponent_player
+      allow(game.current_player).to receive(:make_move).and_return(1)
+
+      expect(game.opponent_player).to eq(player_2)
+      game.make_move
+      expect(game.opponent_player).to eq(player_1)
+    end
   end
 
-  context "other input options for human player" do
+  context "other input options for human player: " do
     it "restarts the game with same options" do
       game.players = [player_1, player_2]
-      game.set_current_player
+      game.set_current_and_opponent_player
       board.cells = [ "E", nil, "V",
                       nil, "E", nil,
                       "V", nil, nil ]
-      allow(player_1).to receive(:make_move).and_return('restart')
+      allow(game.current_player).to receive(:make_move).and_return('restart')
       game.make_move
 
       expect(board.cells).to eq([ nil, nil, nil,
@@ -71,95 +81,92 @@ describe Game do
       expect(game.current_player).to eq(player_1)
     end
 
-    it "resets menu and starts new game with those options" do
+    it "resets menu options and starts new game with those options" do
       game.players = [player_1, player_2]
-      game.set_current_player
-      board.cells = [ "E", nil, "V",
-                      nil, "E", nil,
-                      "V", nil, nil ]
-      allow(player_1).to receive(:make_move).and_return('restart')
+      game.set_current_and_opponent_player
+      allow(game.current_player).to receive(:make_move).and_return('menu')
+      game.stub(:start_new_game)
       game.make_move
 
-      expect(board.cells).to eq([ nil, nil, nil,
-                                  nil, nil, nil,
-                                  nil, nil, nil ])
+      expect(game).to have_received(:start_new_game)
     end
   end
 
-  context "make move - testing valid input" do
-    it "doesn't let you enter a number < 1" do
+  context "human make move - testing valid input - " do
+    it "doesn't let you enter a number < 0" do
       game.players = [player_1, player_2]
-      game.set_current_player
-      allow(player_1).to receive(:make_move).and_return(-1, 1)
+      game.set_current_and_opponent_player
+      allow(game.current_player).to receive(:make_move).and_return(-1, 1)
       game.make_move
 
-      expect(board.cells).to eq([  "E", nil, nil,
+      expect(board.cells).to eq([  nil, "E", nil,
                                    nil, nil, nil,
                                    nil, nil, nil ])
     end
 
-    it "doesn't let you enter a number > 9" do
+    it "doesn't let you enter a number > 8" do
       game.players = [player_1, player_2]
-      game.set_current_player
-      allow(player_1).to receive(:make_move).and_return(10, 1)
+      game.set_current_and_opponent_player
+      allow(game.current_player).to receive(:make_move).and_return(9, 1)
       game.make_move
 
-      expect(board.cells).to eq([  "E", nil, nil,
+      expect(board.cells).to eq([  nil, "E", nil,
                                    nil, nil, nil,
                                    nil, nil, nil ])
     end
 
     it "doesn't let you enter a string" do
       game.players = [player_1, player_2]
-      game.set_current_player
-      allow(player_1).to receive(:make_move).and_return('apple', 1)
+      game.set_current_and_opponent_player
+
+      allow(game.current_player).to receive(:make_move).and_return('apple', 2)
       game.make_move
 
-      expect(board.cells).to eq([  "E", nil, nil,
+      expect(board.cells).to eq([  nil, nil, "E",
                                    nil, nil, nil,
                                    nil, nil, nil ])
     end
 
     it "tells you when your input is invalid" do
       game.players = [player_1, player_2]
-      game.set_current_player
-      allow(player_1).to receive(:make_move).and_return('apple', 1)
+      game.set_current_and_opponent_player
+      allow(game.current_player).to receive(:make_move).and_return('apple', 1)
       game.make_move
 
-      expect(mock_io.printed_strings.include?("That is invalid input.  Please choose open spaces 1 to 9.")).to eq(true)
+      expect(mock_io.printed_strings.include?("That is invalid input.  Please choose open spaces 0 to 8.")).to eq(true)
     end
 
     it "keeps prompting human for input until valid" do
       game.players = [player_1, player_2]
-      game.set_current_player
-      allow(mock_io).to receive(:input).and_return(-1, 123, 'apple', 5)
+      game.set_current_and_opponent_player
+      allow(mock_io).to receive(:input).and_return(-1, 123, 'apple', 4)
       game.make_move
 
       expect(board.cells).to eq([  nil, nil, nil,
                                    nil, "E", nil,
                                    nil, nil, nil ])
-      expect(mock_io.printed_strings.include?("That is invalid input.  Please choose open spaces 1 to 9.")).to eq(true)
+      expect(mock_io.printed_strings.include?("That is invalid input.  Please choose open spaces 0 to 8.")).to eq(true)
     end
   end
 
-  context "make move - testing valid cell" do
+  context "human make move - testing valid cell - " do
     it "does not let you enter a token in a non-valid cell" do
+      board.fill_cell(1, player_2.token)
       game.players = [player_1, player_2]
-      game.set_current_player
-      board.fill_cell(1, player_1.token)
-      allow(player_1).to receive(:make_move).and_return(1, 2)
+      game.set_current_and_opponent_player
+      allow(game.current_player).to receive(:make_move).and_return(1, 0)
       game.make_move
 
-      expect(board.cells).to eq(["E", "E", nil,
+      expect(board.cells).to eq(["E", "V", nil,
                                  nil, nil, nil,
                                  nil, nil, nil])
     end
 
     it "tells you that a cell is invalid" do
-      game.players = [player_1, player_2]
-      game.set_current_player
       board.fill_cell(1, player_2.token)
-      allow(player_1).to receive(:make_move).and_return(1, 2)
+      game.players = [player_1, player_2]
+      game.set_current_and_opponent_player
+      allow(game.current_player).to receive(:make_move).and_return(1, 2)
       game.make_move
 
       expect(mock_io.printed_strings.include?("That spot is already taken.  Please choose an empty spot.")).to eq(true)
@@ -167,11 +174,11 @@ describe Game do
 
     it "keeps prompting human player until a valid cell move is made" do
       game.players = [player_1, player_2]
-      game.set_current_player
+      game.set_current_and_opponent_player
       board.cells = ["E", "V", "E",
                      "V", nil, nil,
                      nil, nil, nil ]
-      allow(player_1).to receive(:make_move).and_return(1, 2, 3, 4, 5)
+      allow(game.current_player).to receive(:make_move).and_return(0, 1, 2, 3, 4)
       game.make_move
 
       expect(board.cells).to eq( ["E", "V", "E",
@@ -180,23 +187,33 @@ describe Game do
     end
   end
 
-  context "ai turn" do
-    it "ai gets random move, sends correct message, and fills the board" do
+  context "ai make move - " do
+    it "uses minimax to find the best move and correctly fills the board" do
       game.players = [player_1, player_2]
       game.current_player = player_2
-      allow(player_2).to receive(:make_move).and_return(5)
+      game.opponent_player = player_1
       game.make_move
 
-      expect(mock_io.printed_strings[0]).to match /Vivian made the move: 5/
+      expect(board.cells).to eq([ "V", nil, nil,
+                                  nil, nil, nil,
+                                  nil, nil, nil ] )
+    end
+
+    it "sends the correct display memo" do
+      game.players = [player_1, player_2]
+      game.current_player = player_2
+      game.opponent_player = player_1
+      game.make_move
+
+      expect(mock_io.printed_strings[0]).to match /Vivian made the move: 0/
       expect(mock_io.printed_strings[1]).to eq(mock_io.display_board_message)
-      expect(board.cells[4]).to eq(player_2.token)
     end
   end
 
   context "set winner: " do
     it "sets the winner of the game" do
       game.players = [player_1, player_2]
-      game.set_current_player
+      game.set_current_and_opponent_player
       board.cells = [ "E", nil, nil,
                       nil, "E", nil,
                       nil, nil, "E" ]
@@ -207,9 +224,9 @@ describe Game do
   end
 
   context 'winner_display: ' do
-    it "displays the winner of the game when there is a winner" do
+    it "displays the memo of winner of the game when there is a winner" do
       game.players = [player_1, player_2]
-      game.set_current_player
+      game.set_current_and_opponent_player
       board.cells = [ "E", "E", "E",
                       nil, nil, nil,
                       nil, nil, nil ]

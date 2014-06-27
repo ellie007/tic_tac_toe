@@ -13,8 +13,12 @@ class Board
     @cells
   end
 
+  def available_spaces(node)
+    available_spaces = []
+    node.each_with_index do |value, index|
+      available_spaces << index if value.nil?
+    end
+    available_spaces
+  end
+
 end
-
-
-
-

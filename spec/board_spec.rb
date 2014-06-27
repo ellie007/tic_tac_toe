@@ -11,7 +11,7 @@ describe Board do
   it "places a move for the player on the board" do
     board.fill_cell(4, "X")
 
-    expect(board.cells[3]).to eq("X")
+    expect(board.cells[4]).to eq("X")
   end
 
 end

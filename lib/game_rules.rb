@@ -15,7 +15,7 @@ class GameRules
   end
 
   def self.is_tie?(board)
-    board.cells.select { |cell| cell.nil? }.empty?
+    board.cells.select { |cell| cell.nil? }.empty? && winner?(board) == false
   end
 
 private

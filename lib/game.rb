@@ -2,7 +2,7 @@ require_relative 'game_rules'
 
 class Game
 
-  attr_accessor :board, :winner, :size, :play_again, :current_player, :players
+  attr_accessor :board, :winner, :size, :play_again, :current_player, :opponent_player, :players
 
   def initialize(options)
     @board = options[:board]
@@ -39,11 +39,12 @@ class Game
       end
       @players << player
     end
-    set_current_player
+    set_current_and_opponent_player
   end
 
-  def set_current_player
+  def set_current_and_opponent_player
     self.current_player = self.players[0]
+    self.opponent_player = self.players[1]
   end
 
   def ask_to_play_again
@@ -59,9 +60,12 @@ class Game
   end
 
   def make_move
-    move = @current_player.make_move(self.current_player, players)
-    if other_player_options?(move)
-    elsif !valid_input?(move.to_i)
+    move = @current_player.make_move(self.current_player.token, self.opponent_player.token, players.count)
+    if move == 'restart'
+      restart_current_game
+    elsif move == 'menu'
+      start_new_game
+    elsif !valid_input?(move)
       invalid_input_response
       make_move
     elsif !valid_cell?(move.to_i)
@@ -90,15 +94,12 @@ private
     self.current_player = players[next_player_index]
   end
 
-  def other_player_options?(move)
-    if move =='restart'
-      restart_current_game
-      return true
-    elsif move == 'menu'
-      start_new_game
-      return true
+  def toggle_opponent_player
+    if players.index(current_player) == players.count - 1
+      self.opponent_player = players.first
+    else
+      self.opponent_player = players[players.index(current_player) + 1]
     end
-    return false
   end
 
   def restart_current_game
@@ -118,10 +119,17 @@ private
     @io.clear_screen
     display_board
     toggle_current_player unless GameRules.game_over?(@board)
+    toggle_opponent_player unless GameRules.game_over?(@board)
   end
 
   def valid_input?(move)
-    (0..board.cells.count - 1).include?(move)
+    if move == ''
+      return false
+    elsif move.is_a?(String) && ('a..z').include?(move.downcase[0])
+      return false
+    elsif (0..board.cells.count - 1).include?(move.to_i)
+      return true
+    end
   end
 
   def valid_cell?(move)
@@ -129,7 +137,7 @@ private
   end
 
   def invalid_input_response
-    invalid_input_comment = "That is invalid input.  Please choose open spaces 1 to #{size**2}."
+    invalid_input_comment = "That is invalid input.  Please choose open spaces 0 to #{size**2 - 1}."
     @io.output(invalid_input_comment)
     display_board
   end
@@ -148,7 +156,7 @@ private
   def get_play_again_response
     play_again_prompt = "Would you like to play again (y/n)?: "
     @play_again_input = nil
-    until @play_again_input == "y" || @play_again_input == "n" do
+    until @play_again_input == "y" || @play_again_input == "n"
       @io.output(play_again_prompt)
       @play_again_input = @io.input.downcase
     end

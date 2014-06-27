@@ -3,14 +3,18 @@ require 'ai_player'
 
 describe AiPlayer do
 
-  let(:ai) { Ai.new({}) }
-  let(:options) { {:name => 'fake_name', :token => 'X', :type => 1} }
-  let(:ai_player) { AiPlayer.new(options, ai) }
+  let(:board) { Board.new }
+  let(:ai) { Ai.new(board) }
 
-  it 'randomly finds an available move' do
-    allow(ai).to receive(:find_move).and_return(5)
+  let(:human_options) { {:name => 'min', :token => 'X'} }
+  let(:human_player) { HumanPlayer.new(human_options, {}) }
 
-    expect(ai_player.make_move).to eq(5)
+  let(:ai_options) { {:name => 'max', :token => 'O'} }
+  let(:ai_player) { AiPlayer.new(ai_options, ai) }
+
+
+  it 'uses minimax to find the best move' do
+    expect(ai_player.make_move(ai_player.token, human_player.token, 2)).to eq(0)
   end
 
 end
