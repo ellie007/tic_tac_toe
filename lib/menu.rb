@@ -12,12 +12,22 @@ class Menu
 
   def get_board_size
     @io.output(board_size_prompt)
-    @io.input.to_i
+    board_size = @io.input.to_i
+    if board_size != 3 && board_size != 4
+      get_board_size
+    else
+      return board_size
+    end
   end
 
   def get_board_dimension
     @io.output(dimension_type_prompt)
-    @io.input.to_i
+    dimension = @io.input.to_i
+    if dimension != 2 && dimension != 3
+      get_board_dimension
+    else
+      return dimension
+    end
   end
 
   def get_number_of_players
@@ -28,21 +38,28 @@ class Menu
 private
 
   def get_player_name(i)
-    player_name_prompt = "Enter NAME for Player #{i}: "
-    @io.output(player_name_prompt)
+    @io.output(player_name_prompt(i))
     @io.input.capitalize
   end
 
   def get_player_token(i)
-    player_token_prompt = "Enter TOKEN for Player #{i}: "
-    @io.output(player_token_prompt)
-    @io.input[0].capitalize
+    @io.output(player_token_prompt(i))
+    player_token = @io.input[0].capitalize
+    if !('A'..'Z').include?(player_token)
+      get_player_token(i)
+    else
+      return player_token
+    end
   end
 
   def get_player_type(i)
-    player_type_prompt = "Enter TYPE for Player #{i} (1 for human : 2 for ai): "
-    @io.output(player_type_prompt)
-    @io.input.to_i
+    @io.output(player_type_prompt(i))
+    player_type = @io.input.to_i
+    if player_type != 1 && player_type != 2
+      get_player_type(i)
+    else
+      return player_type
+    end
   end
 
   def board_size_prompt
@@ -55,6 +72,18 @@ private
 
   def num_of_players_prompt
     "How many players would you like for the game?: "
+  end
+
+  def player_name_prompt(i)
+    "Enter NAME for Player #{i}: "
+  end
+
+  def player_token_prompt(i)
+    "Enter TOKEN for Player #{i} (a to z): "
+  end
+
+  def player_type_prompt(i)
+    "Enter TYPE for Player #{i} (1 for human : 2 for ai): "
   end
 
 end

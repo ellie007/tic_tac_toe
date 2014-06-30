@@ -20,7 +20,7 @@ class Game
 
   def run
     set_players
-    while @play_again == true do
+    while play_again == true
       @io.clear_screen
       @io.display_board(board.cells)
       game_loop
@@ -37,14 +37,14 @@ class Game
       else
         player = AiPlayer.new(player_options, @ai)
       end
-      @players << player
+      players << player
     end
     set_current_and_opponent_player
   end
 
   def set_current_and_opponent_player
-    self.current_player = self.players[0]
-    self.opponent_player = self.players[1]
+    self.current_player = players[0]
+    self.opponent_player = players[1]
   end
 
   def ask_to_play_again
@@ -53,18 +53,20 @@ class Game
   end
 
   def game_loop
-    until GameRules.game_over?(@board) do
+    until GameRules.game_over?(board)
       make_move
     end
     @io.clear_screen
   end
 
   def make_move
-    move = @current_player.make_move(self.current_player.token, self.opponent_player.token, players.count)
-    if move == 'restart'
+    move = current_player.make_move(current_player.token, opponent_player.token, players.count)
+    if move.is_a?(String) && move.downcase == 'restart'
       restart_current_game
-    elsif move == 'menu'
+    elsif move.is_a?(String) && move.downcase == 'menu'
       start_new_game
+    elsif move.is_a?(String) && move.downcase == 'quit'
+      exit
     elsif !valid_input?(move)
       invalid_input_response
       make_move
@@ -79,9 +81,9 @@ class Game
   def display_winner_information
     set_winner
     display_board
-    if GameRules.winner?(@board)
+    if GameRules.winner?(board)
       @io.output("#{current_player.name} Won!")
-    elsif GameRules.is_tie?(@board)
+    elsif GameRules.is_tie?(board)
       @io.output('It was a tie game.')
     end
   end
@@ -114,12 +116,12 @@ private
   end
 
   def play_successful_move(move)
-    @board.fill_cell(move, @current_player.token)
-    @io.output(@current_player.name + " made the move: #{move}.")
+    board.fill_cell(move, current_player.token)
+    @io.output(current_player.name + " made the move: #{move}.")
     @io.clear_screen
     display_board
-    toggle_current_player unless GameRules.game_over?(@board)
-    toggle_opponent_player unless GameRules.game_over?(@board)
+    toggle_current_player unless GameRules.game_over?(board)
+    toggle_opponent_player unless GameRules.game_over?(board)
   end
 
   def valid_input?(move)
@@ -133,7 +135,7 @@ private
   end
 
   def valid_cell?(move)
-    @board.cells[move].nil?
+    board.cells[move].nil?
   end
 
   def invalid_input_response
@@ -149,16 +151,18 @@ private
   end
 
   def set_winner
-    @winner = @current_player.token if GameRules.winner?(@board)
-    self.winner
+    self.winner = current_player.token if GameRules.winner?(board)
+    winner
   end
 
   def get_play_again_response
     play_again_prompt = "Would you like to play again (y/n)?: "
-    @play_again_input = nil
-    until @play_again_input == "y" || @play_again_input == "n"
-      @io.output(play_again_prompt)
-      @play_again_input = @io.input.downcase
+    @io.output(play_again_prompt)
+    @play_again_input = @io.input.downcase
+    if @play_again_input != "y" && @play_again_input != "n"
+      get_play_again_response
+    else
+      return @player_again_input
     end
   end
 
@@ -167,13 +171,13 @@ private
       @io.clear_screen
       clear_board
     elsif @play_again_input == "n"
-      @play_again = false
+      self.play_again = false
     end
   end
 
   def clear_board
-    @board.cells.each_with_index do |cell, index|
-      @board.fill_cell(index, nil)
+    board.cells.each_with_index do |cell, index|
+      board.fill_cell(index, nil)
     end
   end
 

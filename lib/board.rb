@@ -10,7 +10,7 @@ class Board
 
   def fill_cell(value, token)
     @cells[value] = token
-    @cells
+    cells
   end
 
   def available_spaces(node)

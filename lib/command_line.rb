@@ -72,7 +72,7 @@ private
   end
 
   def row_separator
-    puts "---+" * (@size-1) + "---"
+    puts "---+" * (size-1) + "---"
   end
 
   def board_separator
@@ -80,11 +80,11 @@ private
   end
 
   def new_board_row?(index)
-    (index + 1) % @size == 0
+    (index + 1) % size == 0
   end
 
   def end_of_board?(index)
-    (index + 1) % @size**2 == 0
+    (index + 1) % size**2 == 0
   end
 
   def print_new_line
