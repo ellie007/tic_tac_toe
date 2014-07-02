@@ -18,7 +18,12 @@ class CommandLine
     print_new_line
     puts "Legend:"
     cells.each_with_index do |element, index|
-      print " #{index} "
+      if size < 4 && dimension == 2
+        print " #{index} "
+      else 
+        print "  #{index} " if index < 10
+        print " #{index} " if index > 9
+      end
       board_separator if end_of_board?(index)
       print_new_line if new_board_row?(index)
     end
