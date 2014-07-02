@@ -72,7 +72,7 @@ private
   end
 
   def row_separator
-    puts "---+" * (size-1) + "---"
+    puts "---+" * (size - 1) + "---"
   end
 
   def board_separator

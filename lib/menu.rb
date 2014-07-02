@@ -32,7 +32,12 @@ class Menu
 
   def get_number_of_players
     @io.output(num_of_players_prompt)
-    @io.input.to_i
+    num_of_players = @io.input.to_i
+    if num_of_players == 0 
+      get_number_of_players
+    else
+      return num_of_players
+    end
   end
 
 private

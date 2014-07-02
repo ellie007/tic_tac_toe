@@ -170,7 +170,8 @@ private
     if @play_again_input == "y"
       @io.clear_screen
       clear_board
-    elsif @play_again_input == "n"
+      set_current_and_opponent_player 
+   elsif @play_again_input == "n"
       self.play_again = false
     end
   end
