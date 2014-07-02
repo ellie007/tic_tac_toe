@@ -5,7 +5,6 @@ require_relative 'ai_player'
 require_relative 'game'
 require_relative 'command_line'
 require_relative 'menu'
-require './spec/mock_command_line'
 
 class GameInstantiation
 
