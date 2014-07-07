@@ -1,3 +1,5 @@
+require_relative 'game_rules'
+
 class Game
 
   attr_accessor :board, :winner, :size, :play_again, :current_player, :opponent_player, :players

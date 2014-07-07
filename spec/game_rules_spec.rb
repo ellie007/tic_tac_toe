@@ -1,5 +1,5 @@
-require 'game_rules'
 require 'board'
+require 'game_rules'
 
 describe GameRules, "2D board" do
 

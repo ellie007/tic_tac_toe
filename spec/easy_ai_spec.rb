@@ -1,6 +1,6 @@
-require 'easy_ai'
-require 'board'
 require 'ai_player'
+require 'board'
+require 'easy_ai'
 require 'human_player'
 
 describe EasyAi do

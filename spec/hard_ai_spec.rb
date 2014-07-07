@@ -1,6 +1,6 @@
-require 'hard_ai'
-require 'board'
 require 'ai_player'
+require 'board'
+require 'hard_ai'
 require 'human_player'
 
 describe HardAi do

@@ -1,6 +1,6 @@
-require 'hard_ai'
 require 'ai_player'
 require 'board'
+require 'hard_ai'
 require 'human_player'
 
 describe AiPlayer do

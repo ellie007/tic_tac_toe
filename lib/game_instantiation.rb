@@ -1,8 +1,8 @@
 require_relative 'ai_player'
 require_relative 'board'
 require_relative 'command_line'
-require_relative 'game'
 require_relative 'easy_ai'
+require_relative 'game'
 require_relative 'hard_ai'
 require_relative 'human_player'
 require_relative 'menu'
@@ -30,7 +30,7 @@ private
     board = Board.new(menu.get_board_size, menu.get_board_dimension)
     easy_ai = EasyAi.new(board)
     hard_ai = HardAi.new(board)
-    options = { :board => board, :easy_ai => easy_ai, :hard_ai => hard_ai, :io => @io, :menu => menu}
+    options = { :board => board, :hard_ai => hard_ai, :easy_ai => easy_ai, :io => @io, :menu => menu}
     @game = Game.new(options)
   end
 
