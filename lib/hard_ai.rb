@@ -1,6 +1,6 @@
 require_relative 'game_rules'
 
-class Ai
+class HardAi
 
   def initialize(board)
     @board = board
@@ -15,8 +15,6 @@ class Ai
         board.cells[space] = nil
       end
       moves.select { |key, value| value == moves.values.max }.keys[0]
-    else
-      simple_ai
     end
   end
 
@@ -35,16 +33,6 @@ class Ai
       best_score = score if score.send(operator, best_score)
     end
     best_score
-  end
-
-private
-
-  def simple_ai
-    available_cells = []
-    @board.cells.each_with_index do |value, index|
-      available_cells << index if value.nil?
-    end
-    available_cells.sample
   end
 
 end

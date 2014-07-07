@@ -1,14 +1,13 @@
-require_relative 'game_rules'
-
 class Game
 
   attr_accessor :board, :winner, :size, :play_again, :current_player, :opponent_player, :players
 
   def initialize(options)
     @board = options[:board]
-    @ai = options[:ai]
     @io = options[:io]
     @menu = options[:menu]
+    @easy_ai = options[:easy_ai]
+    @hard_ai = options[:hard_ai]
 
     @players = []
     @size = options[:board].size.to_i
@@ -32,10 +31,12 @@ class Game
   def set_players
     (1..@menu.get_number_of_players).each do |i|
       player_options = @menu.get_player_options(i)
-      if player_options[:type] == 1
+      if player_options[:player_type] == 1
         player = HumanPlayer.new(player_options, @io)
-      else
-        player = AiPlayer.new(player_options, @ai)
+      elsif player_options[:player_type] == 2 && player_options[:computer_player_type] == 1
+        player = AiPlayer.new(player_options, EasyAi.new(board))
+      elsif player_options[:player_type] == 2 && player_options[:computer_player_type] == 2
+        player = AiPlayer.new(player_options, HardAi.new(board))
       end
       players << player
     end
@@ -170,7 +171,7 @@ private
     if @play_again_input == "y"
       @io.clear_screen
       clear_board
-      set_current_and_opponent_player 
+      set_current_and_opponent_player
    elsif @play_again_input == "n"
       self.play_again = false
     end

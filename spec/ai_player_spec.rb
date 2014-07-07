@@ -1,4 +1,4 @@
-require 'ai'
+require 'hard_ai'
 require 'ai_player'
 require 'board'
 require 'human_player'
@@ -6,13 +6,13 @@ require 'human_player'
 describe AiPlayer do
 
   let(:board) { Board.new }
-  let(:ai) { Ai.new(board) }
+  let(:hard_ai) { HardAi.new(board) }
 
   let(:human_options) { {:name => 'minnie_mouse', :token => 'X'} }
   let(:human_player) { HumanPlayer.new(human_options, {}) }
 
   let(:ai_options) { {:name => 'maximus_prime', :token => 'O'} }
-  let(:ai_player) { AiPlayer.new(ai_options, ai) }
+  let(:ai_player) { AiPlayer.new(ai_options, hard_ai) }
 
 
   it 'uses minimax to find the best move' do

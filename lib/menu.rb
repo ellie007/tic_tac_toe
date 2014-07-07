@@ -7,7 +7,8 @@ class Menu
   def get_player_options(i)
     { :name => get_player_name(i),
       :token => get_player_token(i),
-      :type => get_player_type(i) }
+      :player_type => get_player_type(i), 
+      :computer_player_type => get_computer_player_type(i) }
   end
 
   def get_board_size
@@ -59,20 +60,32 @@ private
 
   def get_player_type(i)
     @io.output(player_type_prompt(i))
-    player_type = @io.input.to_i
-    if player_type != 1 && player_type != 2
+    @player_type = @io.input.to_i
+    if @player_type != 1 && @player_type != 2
       get_player_type(i)
     else
-      return player_type
+      return @player_type
     end
   end
+
+  def get_computer_player_type(i)
+    return nil if @player_type == 1
+
+    @io.output(computer_player_type_prompt(i))
+    computer_player_type = @io.input.to_i   
+    if computer_player_type != 1 && computer_player_type != 2  
+      get_computer_player_type(i)
+    else
+      computer_player_type
+    end
+  end	
 
   def board_size_prompt
     "What board size would you like?\nPlease enter the base dimension. (3 for 3 by 3; 4 for 4 by 4): "
   end
 
   def dimension_type_prompt
-    "What dimension type do you want for your board (2 for 2D: 3 for 3D): "
+    "What dimension type do you want for your board? (2 for 2D: 3 for 3D): "
   end
 
   def num_of_players_prompt
@@ -84,11 +97,19 @@ private
   end
 
   def player_token_prompt(i)
-    "Enter TOKEN for Player #{i} (a to z): "
+    "Enter TOKEN for Player #{i} (A to Z): "
   end
 
   def player_type_prompt(i)
-    "Enter TYPE for Player #{i} (1 for human : 2 for ai): "
+    "Enter TYPE for Player #{i} (1 for HUMAN, 2 for AI): "
+  end
+  
+  def computer_player_type_prompt(i) 
+    "What computer player type would you like for Player #{i}? (1 for EASY, 2 for HARD): "
   end
 
 end
+ 
+
+
+

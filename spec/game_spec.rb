@@ -1,6 +1,7 @@
 require 'game'
 require 'board'
-require 'ai'
+require 'hard_ai'
+require 'easy_ai'
 require 'human_player'
 require 'ai_player'
 require 'menu'
@@ -11,15 +12,16 @@ describe Game do
   let(:mock_io) { MockCommandLine.new }
   let(:menu) { Menu.new(mock_io) }
   let(:board) { Board.new }
-  let(:ai) { Ai.new(board) }
+  let(:hard_ai) { HardAi.new(board) }
+  let(:easy_ai) { EasyAi.new(board) }
 
   let(:human_options) { { :name => 'Eleanor', :token => 'E' } }
   let(:player_1) { HumanPlayer.new(human_options, mock_io) }
 
   let(:ai_options) { { :name => 'Vivian', :token => 'V' } }
-  let(:player_2) { AiPlayer.new(ai_options, ai) }
+  let(:player_2) { AiPlayer.new(ai_options, hard_ai) }
 
-  let(:game_options) { { :board => board, :ai => ai, :io => mock_io, :menu => menu } }
+  let(:game_options) { { :board => board, :hard_ai => hard_ai, :easy_ai => easy_ai, :io => mock_io, :menu => menu } }
   let(:game) { Game.new(game_options) }
 
   it 'creates a set of players' do
@@ -27,8 +29,10 @@ describe Game do
     allow(menu).to receive(:get_player_name).and_return('fake_name')
     allow(menu).to receive(:get_player_token).and_return('fake_token')
     allow(menu).to receive(:get_player_type).and_return(1, 1, 1, 2, 2)
+    allow(menu).to receive(:get_computer_player_type).and_return(1, 2)
     game.set_players
 
+    print game.players
     expect(game.players.length).to eq(5)
   end
 
