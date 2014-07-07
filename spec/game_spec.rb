@@ -32,7 +32,6 @@ describe Game do
     allow(menu).to receive(:get_computer_player_type).and_return(1, 2)
     game.set_players
 
-    print game.players
     expect(game.players.length).to eq(5)
   end
 
