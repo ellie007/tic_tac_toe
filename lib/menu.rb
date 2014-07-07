@@ -7,37 +7,37 @@ class Menu
   def get_player_options(i)
     { :name => get_player_name(i),
       :token => get_player_token(i),
-      :player_type => get_player_type(i), 
+      :player_type => get_player_type(i),
       :computer_player_type => get_computer_player_type(i) }
   end
 
   def get_board_size
     @io.output(board_size_prompt)
-    board_size = @io.input.to_i
-    if board_size != 3 && board_size != 4
+    @board_size = @io.input.to_i
+    if @board_size != 3 && @board_size != 4
       get_board_size
     else
-      return board_size
+      return @board_size
     end
   end
 
   def get_board_dimension
     @io.output(dimension_type_prompt)
-    dimension = @io.input.to_i
-    if dimension != 2 && dimension != 3
+    @board_dimension = @io.input.to_i
+    if @board_dimension != 2 && @board_dimension != 3
       get_board_dimension
     else
-      return dimension
+      return @board_dimension
     end
   end
 
   def get_number_of_players
     @io.output(num_of_players_prompt)
-    num_of_players = @io.input.to_i
-    if num_of_players == 0 
+    @num_of_players = @io.input.to_i
+    if @num_of_players == 0
       get_number_of_players
     else
-      return num_of_players
+      return @num_of_players
     end
   end
 
@@ -70,10 +70,11 @@ private
 
   def get_computer_player_type(i)
     return nil if @player_type == 1
+    return 1 if @board_size == 4 || @board_dimension == 3 || @num_of_players != 2
 
     @io.output(computer_player_type_prompt(i))
-    computer_player_type = @io.input.to_i   
-    if computer_player_type != 1 && computer_player_type != 2  
+    computer_player_type = @io.input.to_i
+    if computer_player_type != 1 && computer_player_type != 2
       get_computer_player_type(i)
     else
       computer_player_type
@@ -103,13 +104,13 @@ private
   def player_type_prompt(i)
     "Enter TYPE for Player #{i} (1 for HUMAN, 2 for AI): "
   end
-  
+
   def computer_player_type_prompt(i) 
     "What computer player type would you like for Player #{i}? (1 for EASY, 2 for HARD): "
   end
 
 end
- 
+
 
 
 

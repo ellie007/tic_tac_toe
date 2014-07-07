@@ -7,15 +7,13 @@ class HardAi
   end
 
   def find_move(max_token, min_token, num_of_players = 2, board = @board)
-    if board.dimension == 2 && board.size == 3 && num_of_players == 2
-      moves = {}
-      board.available_spaces(@board.cells).each do |space|
-        board.cells[space] = max_token
-        moves[space] = minimax(min_token, max_token, false, board)
-        board.cells[space] = nil
-      end
-      moves.select { |key, value| value == moves.values.max }.keys[0]
+    moves = {}
+    board.available_spaces(@board.cells).each do |space|
+      board.cells[space] = max_token
+      moves[space] = minimax(min_token, max_token, false, board)
+      board.cells[space] = nil
     end
+    moves.select { |key, value| value == moves.values.max }.keys[0]
   end
 
   def minimax(current_player_token, opponent_token, maximizing_player, node)
