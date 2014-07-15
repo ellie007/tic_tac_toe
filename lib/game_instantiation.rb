@@ -1,11 +1,10 @@
-require_relative 'ai_player'
 require_relative 'board'
 require_relative 'command_line'
 require_relative 'easy_ai'
 require_relative 'game'
 require_relative 'hard_ai'
-require_relative 'human_player'
 require_relative 'menu'
+require_relative 'player_factory'
 
 class GameInstantiation
 
@@ -28,9 +27,10 @@ private
   def create_game_objects
     menu = Menu.new(@io)
     board = Board.new(menu.get_board_size, menu.get_board_dimension)
-    easy_ai = EasyAi.new(board)
-    hard_ai = HardAi.new(board)
-    options = { :board => board, :hard_ai => hard_ai, :easy_ai => easy_ai, :io => @io, :menu => menu}
+    easy_ai = EasyAi.new
+    hard_ai = HardAi.new
+    player_factory = PlayerFactory.new(easy_ai, hard_ai, @io)
+    options = { :board => board, :io => @io, :menu => menu, :player_factory => player_factory }
     @game = Game.new(options)
   end
 

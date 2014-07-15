@@ -2,13 +2,9 @@ require_relative 'game_rules'
 
 class HardAi
 
-  def initialize(board)
-    @board = board
-  end
-
-  def find_move(max_token, min_token, num_of_players = 2, board = @board)
+  def find_move(max_token, min_token, num_of_players = 2, board)
     moves = {}
-    board.available_spaces(@board.cells).each do |space|
+    board.available_spaces(board.cells).each do |space|
       board.cells[space] = max_token
       moves[space] = minimax(min_token, max_token, false, board)
       board.cells[space] = nil

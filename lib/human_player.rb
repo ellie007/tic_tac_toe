@@ -2,13 +2,11 @@ class HumanPlayer
 
   attr_accessor :name, :token
 
-  def initialize(options, io)
-    @name = options[:name]
-    @token = options[:token]
+  def initialize(io)
     @io = io
   end
 
-  def make_move(_current_player_token, _opponent_player_token, _num_of_players)
+  def make_move(_current_player_token, _opponent_player_token, _num_of_players, _board)
     @io.output("#{name}'s Turn: ")
     @io.input
   end

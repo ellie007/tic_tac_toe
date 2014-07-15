@@ -8,8 +8,7 @@ class Game
     @board = options[:board]
     @io = options[:io]
     @menu = options[:menu]
-    @easy_ai = options[:easy_ai]
-    @hard_ai = options[:hard_ai]
+    @player_factory = options[:player_factory]
 
     @players = []
     @size = options[:board].size.to_i
@@ -21,7 +20,7 @@ class Game
 
   def run
     set_players
-    while play_again == true
+    while play_again
       @io.clear_screen
       @io.display_board(board.cells)
       game_loop
@@ -32,15 +31,7 @@ class Game
 
   def set_players
     (1..@menu.get_number_of_players).each do |i|
-      player_options = @menu.get_player_options(i)
-      if player_options[:player_type] == 1
-        player = HumanPlayer.new(player_options, @io)
-      elsif player_options[:player_type] == 2 && player_options[:computer_player_type] == 1
-        player = AiPlayer.new(player_options, EasyAi.new(board))
-      elsif player_options[:player_type] == 2 && player_options[:computer_player_type] == 2
-        player = AiPlayer.new(player_options, HardAi.new(board))
-      end
-      players << player
+      players << @player_factory.create_player(i)
     end
     set_current_and_opponent_player
   end
@@ -63,7 +54,7 @@ class Game
   end
 
   def make_move
-    move = current_player.make_move(current_player.token, opponent_player.token, players.count)
+    move = current_player.make_move(current_player.token, opponent_player.token, players.count, board)
     if move.is_a?(String) && move.downcase == 'restart'
       restart_current_game
     elsif move.is_a?(String) && move.downcase == 'menu'

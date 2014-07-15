@@ -5,6 +5,7 @@ require 'game'
 require 'hard_ai'
 require 'human_player'
 require 'menu'
+require 'player_factory'
 require_relative 'mock_command_line'
 
 describe Game do
@@ -12,27 +13,30 @@ describe Game do
   let(:mock_io) { MockCommandLine.new }
   let(:menu) { Menu.new(mock_io) }
   let(:board) { Board.new }
-  let(:hard_ai) { HardAi.new(board) }
-  let(:easy_ai) { EasyAi.new(board) }
+  let(:hard_ai) { HardAi.new }
+  let(:easy_ai) { EasyAi.new }
 
-  let(:human_options) { { :name => 'Eleanor', :token => 'E' } }
-  let(:player_1) { HumanPlayer.new(human_options, mock_io) }
+  let(:player_1) { HumanPlayer.new(mock_io) }
+  let(:player_2) { AiPlayer.new(hard_ai) }
 
-  let(:ai_options) { { :name => 'Vivian', :token => 'V' } }
-  let(:player_2) { AiPlayer.new(ai_options, hard_ai) }
+  before(:each) do
+    player_1.name = 'Eleanor'
+    player_1.token = 'E'
+    player_2.name = 'Vivian'
+    player_2.token = 'V'
+  end
 
-  let(:game_options) { { :board => board, :hard_ai => hard_ai, :easy_ai => easy_ai, :io => mock_io, :menu => menu } }
+  let(:player_factory) { PlayerFactory.new(easy_ai, hard_ai, mock_io) }
+
+  let(:game_options) { { :board => board, :io => mock_io, :menu => menu, :player_factory => player_factory } }
   let(:game) { Game.new(game_options) }
 
   it 'creates a set of players' do
-    allow(menu).to receive(:get_number_of_players).and_return(5)
-    allow(menu).to receive(:get_player_name).and_return('fake_name')
-    allow(menu).to receive(:get_player_token).and_return('fake_token')
-    allow(menu).to receive(:get_player_type).and_return(1, 1, 1, 2, 2)
-    allow(menu).to receive(:get_computer_player_type).and_return(1, 2)
+    allow(menu).to receive(:get_number_of_players).and_return(2)
+    allow(mock_io).to receive(:input).and_return('fake_name_1', 'X', 1,'fake_name_2', 'O', 2, 2)
     game.set_players
 
-    expect(game.players.length).to eq(5)
+    expect(game.players.length).to eq(2)
   end
 
   context "make move" do
