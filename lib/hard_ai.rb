@@ -12,21 +12,30 @@ class HardAi
     moves.select { |key, value| value == moves.values.max }.keys[0]
   end
 
-  def minimax(current_player_token, opponent_token, maximizing_player, node)
+  def minimax(current_player_token, opponent_token, maximizing_player, node, α = -100, β = 100)
     return 0 if GameRules.is_tie?(node)
     return 1 if GameRules.winner?(node) && maximizing_player == false
     return -1 if GameRules.winner?(node) && maximizing_player == true
 
-    maximizing_player ? best_score = -100 : best_score = 100
-    operator = maximizing_player ? '>' : '<'
-
-    node.available_spaces(node.cells).each do |space|
-      node.cells[space] = current_player_token
-      score = minimax(opponent_token, current_player_token, !maximizing_player, node)
-      node.cells[space] = nil
-      best_score = score if score.send(operator, best_score)
+    if maximizing_player == true
+      node.available_spaces(node.cells).each do |space|
+        node.cells[space] = current_player_token
+        score = minimax(opponent_token, current_player_token, false, node, α, β)
+        node.cells[space] = nil
+        α = score if score > α
+        return α if α >= β
+      end
+      return α
+    elsif maximizing_player == false
+      node.available_spaces(node.cells).each do |space|
+        node.cells[space] = current_player_token
+        score = minimax(opponent_token, current_player_token, true, node, α, β)
+        node.cells[space] = nil
+        β = score if score < β
+        return β if α >= β
+      end
+      return β
     end
-    best_score
   end
 
 end
