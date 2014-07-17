@@ -12,10 +12,7 @@ describe HardAi do
   let(:ai_player) { AiPlayer.new(hard_ai) }
 
   before(:each) do
-    human_player.name = 'minnie_mouse'
     human_player.token = 'X'
-
-    ai_player.name = 'maximus_prime'
     ai_player.token = 'O'
   end
 

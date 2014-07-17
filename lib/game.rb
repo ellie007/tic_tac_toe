@@ -4,18 +4,19 @@ class Game
 
   attr_accessor :board, :winner, :size, :play_again, :current_player, :opponent_player, :players
 
-  def initialize(options)
-    @board = options[:board]
-    @io = options[:io]
-    @menu = options[:menu]
-    @player_factory = options[:player_factory]
+  def initialize(game_objects)
+    @board = game_objects[:board]
+    @io = game_objects[:io]
+    @menu = game_objects[:menu]
+    @player_factory = game_objects[:player_factory]
+    @default_mode = game_objects[:default_mode]
 
     @players = []
-    @size = options[:board].size.to_i
+    @size = game_objects[:board].size.to_i
     @play_again = true
 
     @io.size = @size
-    @io.dimension = options[:board].dimension.to_i
+    @io.dimension = game_objects[:board].dimension.to_i
   end
 
   def run
@@ -30,8 +31,12 @@ class Game
   end
 
   def set_players
-    (1..@menu.get_number_of_players).each do |i|
-      players << @player_factory.create_player(i)
+    if @default_mode
+      self.players = @player_factory.create_default_players
+    else
+      (1..@menu.get_number_of_players).each do |i|
+        players << @player_factory.create_player(i)
+      end
     end
     set_current_and_opponent_player
   end
@@ -106,7 +111,7 @@ private
 
   def start_new_game
     @io.clear_screen
-    GameInstantiation.new(@io).start_game
+    GameInstantiation.new(@io, {:default => false}).start_game
   end
 
   def play_successful_move(move)

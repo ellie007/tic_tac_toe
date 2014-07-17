@@ -23,6 +23,12 @@ class PlayerFactory
     player
   end
 
+  def create_default_players
+    human_player, human_player.name, human_player.token = HumanPlayer.new(@io), 'Human', 'X'
+    ai_player, ai_player.name, ai_player.token = AiPlayer.new(@hard_ai), 'Computer', 'O'
+    [human_player, ai_player]
+  end
+
   def get_player_options(i)
     { :name => get_player_name(i),
       :token => get_player_token(i),
