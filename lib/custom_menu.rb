@@ -1,4 +1,4 @@
-class OptionsMenu
+class CustomMenu
 
   def initialize(io)
     @io = io

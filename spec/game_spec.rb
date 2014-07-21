@@ -4,14 +4,14 @@ require 'easy_ai'
 require 'game'
 require 'hard_ai'
 require 'human_player'
-require 'menu'
+require 'custom_menu'
 require 'player_factory'
 require_relative 'mock_command_line'
 
 describe Game do
 
   let(:mock_io) { MockCommandLine.new }
-  let(:menu) { Menu.new(mock_io) }
+  let(:menu) { CustomMenu.new(mock_io) }
   let(:board) { Board.new }
   let(:hard_ai) { HardAi.new }
   let(:easy_ai) { EasyAi.new }

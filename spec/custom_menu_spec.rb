@@ -1,10 +1,10 @@
-require 'menu'
+require 'custom_menu'
 require_relative 'mock_command_line'
 
-describe Menu do
+describe CustomMenu do
 
   let(:mock_io) { MockCommandLine.new }
-  let(:menu) { Menu.new(mock_io) }
+  let(:menu) { CustomMenu.new(mock_io) }
 
   it 'gets and sets board size' do
     allow(mock_io).to receive(:input).and_return(3)

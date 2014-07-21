@@ -74,6 +74,8 @@ class PlayerFactory
     end
   end
 
+private
+
   def player_name_prompt(i)
     "Enter NAME for Player #{i}: "
   end

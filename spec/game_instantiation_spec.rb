@@ -4,7 +4,7 @@ require_relative 'mock_command_line'
 describe GameInstantiation do
 
   let(:mock_io) { MockCommandLine.new }
-  let(:game_instantiation) { GameInstantiation.new(mock_io) }
+  let(:game_instantiation) { GameInstantiation.new(mock_io, {}) }
 
   it 'sends the right welcome message at the beginning of the game' do
     game_instantiation.display_welcome_message
@@ -13,3 +13,4 @@ describe GameInstantiation do
   end
 
 end
+

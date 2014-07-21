@@ -34,6 +34,32 @@ describe PlayerFactory do
     end
   end
 
+  context 'default player settings: ' do
+    it 'creates a set of 2 players' do
+      expect(player_factory.create_default_players.count).to eq(2)
+    end
+
+    it 'the first default player is a human type/human goes first' do
+      expect(player_factory.create_default_players[0].class).to eq(HumanPlayer)
+    end
+
+    it 'the second default player is an ai type/computer goes second' do
+      expect(player_factory.create_default_players[1].class).to eq(AiPlayer)
+    end
+
+    it 'the ai type player implements hard ai' do
+      expect(player_factory.create_default_players[1].ai.class).to eq(HardAi)
+    end
+
+    it "human player gets token of 'X'" do
+      expect(player_factory.create_default_players[0].token).to eq('X')
+    end
+
+    it "ai player gets token of 'O'" do
+      expect(player_factory.create_default_players[1].token).to eq('O')
+    end
+  end
+
   context 'player name: ' do
     it 'prompts for player name and capitalizes' do
       allow(mock_io).to receive(:input).and_return('eleanor', 'e', 2)

@@ -2,18 +2,18 @@ require 'optparse'
 require './lib/game_instantiation'
 require './lib/command_line'
 
-cl_options = {}
+options_parser = {}
 OptionParser.new do |opts|
-  cl_options[:default] = true
+  options_parser[:default] = true
 
   opts.on('-default') do
-    cl_options[:default] = true
+    options_parser[:default] = true
   end
 
-  opts.on('-options') do
-    cl_options[:default] = false
+  opts.on('-custom', '-options') do
+    options_parser[:default] = false
   end
 end.parse!
 
 cl = CommandLine.new
-GameInstantiation.new(cl, cl_options).start_game
+GameInstantiation.new(cl, options_parser).start_game
